@@ -40,7 +40,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # print(self.arr[:,29,3])
         
         # Obtain number of dimensions in the data
-        n_dims = len(self.arr.shape)
+        self.n_dims = len(self.arr.shape)
         
         # Create a figure
         self.figure = Figure()
@@ -67,10 +67,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.addToolBar(NavigationToolbar(self.canvas, self))
         
         # Create a list of horizontal sliders
-        self.sliders = [None for _ in range(n_dims)]
+        self.sliders = [None for _ in range(self.n_dims)]
         self.buttons = []
  
-        for i in range(n_dims):
+        for i in range(self.n_dims):
         
             # Create a slider for dimension-i
             self.sliders[i] = self.create_slider(i)
@@ -120,19 +120,30 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         def slice_changer():
 
+           if self.other_already_pressed(n_dim,n_curr_button):
+               self.buttons[n_dim][n_curr_button].setChecked(False)
+               return
+
            if not self.buttons[n_dim][n_curr_button].isChecked():
 
                # Enable the matching slider
-               self.sliders[n_dim].setEnabled(True)
+               self.sliders[n_dim].setVisible(True)
 
            else:
                # Disable the matching slider
-               self.sliders[n_dim].setEnabled(False)
+               self.sliders[n_dim].setVisible(False)
 
                # Switch off the neighbouring button
                self.buttons[n_dim][n_neigh_button].setChecked(False)
 
         return slice_changer
+
+    def other_already_pressed(self,n_dim,n_curr_button):
+
+        for i in range(self.n_dims):
+            if self.buttons[i][n_curr_button].isChecked() and i != n_dim:
+                return True
+        return False
  
     def value_change(self,n_dim):
    
