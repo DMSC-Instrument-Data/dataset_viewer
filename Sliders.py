@@ -47,7 +47,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         # Create an axis object
         self.ax = self.figure.add_subplot(1,1,1)
-        
+       
+        self.axes = [None, None]
+ 
         # Plot the random array
         self.im = self.ax.imshow(self.arr[0])
         self.figure.colorbar(self.im)
@@ -116,32 +118,38 @@ class ApplicationWindow(QtWidgets.QMainWindow):
    
         return [x_button, y_button]
 
-    def press_button(self, n_curr_dim, n_curr_button, n_neigh_button):
+    def press_button(self, n_curr_dim, n_curr_axis, n_neigh_axis):
 
         def slice_changer():
 
-           if self.other_already_pressed(n_curr_dim,n_curr_button):
-               self.buttons[n_curr_dim][n_curr_button].setChecked(False)
+           if self.other_already_pressed(n_curr_dim,n_curr_axis):
+               self.buttons[n_curr_dim][n_curr_axis].setChecked(False)
                return
 
-           if not self.buttons[n_curr_dim][n_curr_button].isChecked():
+           if not self.buttons[n_curr_dim][n_curr_axis].isChecked():
 
                # Enable the matching slider
                self.sliders[n_curr_dim].setVisible(True)
+
+               # Set axes to none
+               self.axes[n_curr_axis] = None
 
            else:
                # Disable the matching slider
                self.sliders[n_curr_dim].setVisible(False)
 
                # Switch off the neighbouring button
-               self.buttons[n_curr_dim][n_neigh_button].setChecked(False)
+               self.buttons[n_curr_dim][n_neigh_axis].setChecked(False)
+
+               # Set axes to none
+               self.axes[n_curr_axis] = n_curr_dim
 
         return slice_changer
 
-    def other_already_pressed(self,n_curr_dim,n_curr_button):
+    def other_already_pressed(self,n_curr_dim,n_curr_axis):
 
         for i in range(self.n_dims):
-            if self.buttons[i][n_curr_button].isChecked() and i != n_curr_dim:
+            if self.buttons[i][n_curr_axis].isChecked() and i != n_curr_dim:
                 return True
         return False
  
@@ -154,8 +162,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             slider_val = self.sliders[n_curr_dim].value()
       
             # Change plot
-            self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim))
-           
+
+            if self.axes == sorted(self.axes):
+                self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim).transpose())
+            else:
+                self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim))
             # Will this work? 
             self.canvas.draw()
         
