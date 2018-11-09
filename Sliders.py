@@ -86,14 +86,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             layout.addWidget(y_button, i+1, 1)
             layout.addWidget(self.sliders[i], i+1, 2)
         
-    def create_slider(self, n_dim):
+    def create_slider(self, n_dims):
     
         sl = QSlider(Qt.Horizontal)
-        sl.valueChanged.connect(self.value_change(n_dim))
+        sl.valueChanged.connect(self.value_change(n_dims))
       
         # Set slider values
         sl.setMinimum(0)
-        sl.setMaximum(self.arr.shape[n_dim] - 1)
+        sl.setMaximum(self.arr.shape[n_dims] - 1)
         sl.setValue(0)
         
         # Set tick interval
@@ -104,57 +104,57 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         return sl
     
-    def create_buttons(self, n_dim):
+    def create_buttons(self, n_curr_dim):
   
         x_button = QPushButton("X")
         x_button.setCheckable(True)
-        x_button.clicked.connect(self.press_button(n_dim,0,1))
+        x_button.clicked.connect(self.press_button(n_curr_dim,0,1))
  
         y_button = QPushButton("Y") 
         y_button.setCheckable(True)
-        y_button.clicked.connect(self.press_button(n_dim,1,0))
+        y_button.clicked.connect(self.press_button(n_curr_dim,1,0))
    
         return [x_button, y_button]
 
-    def press_button(self, n_dim, n_curr_button, n_neigh_button):
+    def press_button(self, n_curr_dim, n_curr_button, n_neigh_button):
 
         def slice_changer():
 
-           if self.other_already_pressed(n_dim,n_curr_button):
-               self.buttons[n_dim][n_curr_button].setChecked(False)
+           if self.other_already_pressed(n_curr_dim,n_curr_button):
+               self.buttons[n_curr_dim][n_curr_button].setChecked(False)
                return
 
-           if not self.buttons[n_dim][n_curr_button].isChecked():
+           if not self.buttons[n_curr_dim][n_curr_button].isChecked():
 
                # Enable the matching slider
-               self.sliders[n_dim].setVisible(True)
+               self.sliders[n_curr_dim].setVisible(True)
 
            else:
                # Disable the matching slider
-               self.sliders[n_dim].setVisible(False)
+               self.sliders[n_curr_dim].setVisible(False)
 
                # Switch off the neighbouring button
-               self.buttons[n_dim][n_neigh_button].setChecked(False)
+               self.buttons[n_curr_dim][n_neigh_button].setChecked(False)
 
         return slice_changer
 
-    def other_already_pressed(self,n_dim,n_curr_button):
+    def other_already_pressed(self,n_curr_dim,n_curr_button):
 
         for i in range(self.n_dims):
-            if self.buttons[i][n_curr_button].isChecked() and i != n_dim:
+            if self.buttons[i][n_curr_button].isChecked() and i != n_curr_dim:
                 return True
         return False
  
-    def value_change(self,n_dim):
+    def value_change(self,n_curr_dim):
    
         # totally clear names 
         def value_changer():
 
             # Obtain the slider value
-            slider_val = self.sliders[n_dim].value()
+            slider_val = self.sliders[n_curr_dim].value()
       
             # Change plot
-            self.ax.imshow(self.arr.take(indices=slider_val,axis=n_dim))
+            self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim))
            
             # Will this work? 
             self.canvas.draw()
