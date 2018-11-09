@@ -68,7 +68,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         # Create a list of horizontal sliders
         self.sliders = [None for _ in range(n_dims)]
-        
+        self.buttons = []
+ 
         for i in range(n_dims):
         
             # Create a slider for dimension-i
@@ -76,6 +77,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             # Create X and Y buttons for the slider
             x_button, y_button = self.create_buttons(i)
+
+            button_list = [x_button, y_button]
+            self.buttons.append(button_list)            
 
             # Add the buttons and slider to the box
             layout.addWidget(x_button, i+1, 0)
@@ -101,17 +105,42 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return sl
     
     def create_buttons(self, n_dim):
+  
+        x_button = QPushButton("X")
+        x_button.setCheckable(True)
+        x_button.clicked.connect(self.press_button(n_dim,0,1))
+ 
+        y_button = QPushButton("Y") 
+        y_button.setCheckable(True)
+        y_button.clicked.connect(self.press_button(n_dim,1,0))
    
-        # todo - make the buttons do something 
-        return [QPushButton("X"), QPushButton("Y")]
-    
+        return [x_button, y_button]
+
+    def press_button(self, n_dim, n_curr_button, n_neigh_button):
+
+        def slice_changer():
+
+           if not self.buttons[n_dim][n_curr_button].isChecked():
+
+               # Enable the matching slider
+               self.sliders[n_dim].setEnabled(True)
+
+           else:
+               # Disable the matching slider
+               self.sliders[n_dim].setEnabled(False)
+
+               # Switch off the neighbouring button
+               self.buttons[n_dim][n_neigh_button].setChecked(False)
+
+        return slice_changer
+ 
     def value_change(self,n_dim):
    
         # totally clear names 
         def value_changer():
 
             # Obtain the slider value
-            slider_val = self.slider.value()
+            slider_val = self.sliders[n_dim].value()
       
             # Change plot
             self.ax.imshow(self.arr.take(indices=slider_val,axis=n_dim))
