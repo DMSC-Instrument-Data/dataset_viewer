@@ -1,13 +1,58 @@
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushButton, QSlider, QHBoxLayout, QGridLayout, QLabel, QSpinBox
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt,  QCoreApplication
+
 class Dimension:
 
-    def __init__(self,name,size,arr_index):
+    def __init__(self,name,size,dim_num):
 
         self.name = name
+        self.label = None 
         self.size = size
-        self.arr_index = arr_index
+        self.no = dim_num
+        self.slider = None
+        self.buttons = [None, None]
+        self.stepper = None
 
-        self.coords = [None for _ in range(size)]
+    def create_slider(self,change_func):   
+ 
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.valueChanged.connect(change_func)
+      
+        # Set slider values
+        self.slider.setMinimum(0)
+        self.slider.setMaximum(self.size - 1)
+        self.slider.setValue(0)
+        
+        # Set tick interval
+        self.slider.setTickInterval(1)
+            
+        # Disable slider by default
+        # sl.setEnabled(False)
+        
+    def create_buttons(self,x_func,y_func):
+  
+        x_button = QPushButton("X")
+        x_button.setCheckable(True)
+        x_button.clicked.connect(x_func)
+ 
+        y_button = QPushButton("Y") 
+        y_button.setCheckable(True)
+        y_button.clicked.connect(y_func)
+   
+        self.buttons = [x_button, y_button]
 
-        # List of 'units'
-        for i in range(size):
-            self.coords[i] = name + str(i)
+    def create_label(self):
+
+        self.label = QLabel()
+        self.label.setText(self.name)
+
+    def create_stepper(self,change_func):
+
+        self.stepper = QSpinBox()
+
+        self.stepper.setRange(0,self.size-1)
+
+        self.stepper.valueChanged.connect(change_func)
+
+
