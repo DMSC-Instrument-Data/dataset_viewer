@@ -69,7 +69,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.axes = [None, None]
  
         # Plot the random array
-        self.im = self.ax.pcolormesh(arr)
+        self.im = self.ax.imshow(arr)
         self.figure.colorbar(self.im)
 
         # Create a layout
@@ -137,7 +137,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                dim.buttons[neighb_axis_no].setChecked(False)
 
                # Set axes to none
-               self.axes[curr_axis_no] = dim.no
+               self.axes[curr_axis_no] = dim
 
         return slice_changer
 
@@ -176,13 +176,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.stepper.setValue(slider_val)
  
             # Change plot
+            axis_sel = {}
+            axis_sel[dim.name] = slider_val
 
-            if self.axes == sorted(self.axes):
-                self.ax.imshow(self.arr.take(indices=slider_val,axis=dim.no).transpose())
-            else:
-                self.ax.imshow(self.arr.take(indices=slider_val,axis=dim.no))
+            print("x: " + self.axes[0].name)
+            print("y: " + self.axes[1].name)
+
+            fig = self.xarr.isel(axis_sel).plot(x=self.axes[0].name,y=self.axes[1].name)
+            arr = fig.get_array().reshape((self.axes[1].size,self.axes[0].size))
+
+            self.im = self.ax.imshow(arr)
+            # self.figure.colorbar(self.im)
             # Will this work? 
-            self.canvas.repaint()
             self.canvas.draw()
         
         return slider_changer
