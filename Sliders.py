@@ -201,20 +201,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
  
         return step_changer
         
-    def slider_change(self,n_curr_dim):
+    def slider_change(self,dim_no):
    
         # totally clear names 
         def slider_changer():
 
             # Obtain the slider value
-            slider_val = self.sliders[n_curr_dim].value()
-      
+            slider_val = self.sliders[dim_no].value()
+     
+            # Change the stepper value
+            self.steppers[dim_no].setValue(slider_val)
+ 
             # Change plot
 
             if self.axes == sorted(self.axes):
-                self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim).transpose())
+                self.ax.imshow(self.arr.take(indices=slider_val,axis=dim_no).transpose())
             else:
-                self.ax.imshow(self.arr.take(indices=slider_val,axis=n_curr_dim))
+                self.ax.imshow(self.arr.take(indices=slider_val,axis=dim_no))
             # Will this work? 
             self.canvas.draw()
         
