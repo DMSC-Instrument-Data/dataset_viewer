@@ -150,31 +150,33 @@ class ApplicationWindow(QtWidgets.QMainWindow):
    
         return [x_button, y_button]
 
-    def press_button(self, n_curr_dim, n_curr_axis, n_neigh_axis):
+    def press_button(self, dim_no, curr_axis_no, neighb_axis_no):
 
         def slice_changer():
 
-           if self.other_already_pressed(n_curr_dim,n_curr_axis):
-               self.buttons[n_curr_dim][n_curr_axis].setChecked(False)
+           if self.other_already_pressed(dim_no,curr_axis_no):
+               self.buttons[dim_no][curr_axis_no].setChecked(False)
                return
 
-           if not self.buttons[n_curr_dim][n_curr_axis].isChecked():
+           if not self.buttons[dim_no][curr_axis_no].isChecked():
 
-               # Enable the matching slider
-               self.sliders[n_curr_dim].setVisible(True)
+               # Enable the matching slider and stepper
+               self.sliders[dim_no].setVisible(True)
+               self.steppers[dim_no].setVisible(True)
 
                # Set axes to none
-               self.axes[n_curr_axis] = None
+               self.axes[curr_axis_no] = None
 
            else:
-               # Disable the matching slider
-               self.sliders[n_curr_dim].setVisible(False)
+               # Disable the matching slider and stepper
+               self.sliders[dim_no].setVisible(False)
+               self.steppers[dim_no].setVisible(False)
 
                # Switch off the neighbouring button
-               self.buttons[n_curr_dim][n_neigh_axis].setChecked(False)
+               self.buttons[dim_no][neighb_axis_no].setChecked(False)
 
                # Set axes to none
-               self.axes[n_curr_axis] = n_curr_dim
+               self.axes[curr_axis_no] = dim_no
 
         return slice_changer
 
