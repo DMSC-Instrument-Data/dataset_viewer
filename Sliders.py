@@ -51,7 +51,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
 
         axis_sel = {}
-        axis_sel['A'] = 2
+        axis_sel['A'] = 1
 
         fig = self.xarr.isel(axis_sel).plot(x='B',y='C longername')
 
@@ -179,11 +179,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             axis_sel = {}
             axis_sel[dim.name] = slider_val
 
-            print("x: " + self.axes[0].name)
-            print("y: " + self.axes[1].name)
-
-            fig = self.xarr.isel(axis_sel).plot(x=self.axes[0].name,y=self.axes[1].name)
-            arr = fig.get_array().reshape((self.axes[1].size,self.axes[0].size))
+            arr = self.xarr.isel(axis_sel).transpose(self.axes[1].name,self.axes[0].name)
 
             self.im = self.ax.imshow(arr)
             # self.figure.colorbar(self.im)
