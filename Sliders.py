@@ -3,6 +3,7 @@ from numpy import resize
 import xarray as xr
 import hvplot.xarray
 import holoviews as hv
+from random import randint, sample
 
 import sys
  
@@ -36,13 +37,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     
         super().__init__()
 
-        # Initialise dimension inforamtion
-        self.dim_names = ['A','B','C longername']
-        self.dim_sizes = {'A':3,'B':8,'C longername':12} 
-       
-        # Obtain number of dimensions in the data
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+        # self.n_dims = randint(3,6) 
         self.n_dims = 3 
-        
+
+        self.axis_sel = {}
+
+        self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)] 
+        self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
+
+        print(self.dim_names)
+
         self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)] 
 
         # Create a random 2D array
@@ -51,11 +57,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
 
         axis_sel = {}
-        axis_sel['A'] = 1
 
-        fig = self.xarr.isel(axis_sel).plot(x='B',y='C longername')
+        for i in range(self.n_dims - 2):
+            axis_sel[self.dim_names[i]] = 0
 
-        arr = fig.get_array().reshape((self.dim_sizes['B'],self.dim_sizes['C longername']))
+        print(axis_sel)
+        print(self.dim_names[-1])
+        print(self.dim_names[-2])
+
+        arr = self.xarr.isel(axis_sel).transpose(self.dim_names[-2],self.dim_names[-1])
 
         # print(type(fig.plot()))
  
@@ -125,10 +135,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                dim.slider.setVisible(True)
                dim.stepper.setVisible(True)
 
-               # Set axes to none
+               # Set current axis to current dimension
                self.axes[curr_axis_no] = None
 
            else:
+
                # Disable the matching slider and stepper
                dim.slider.setVisible(False)
                dim.stepper.setVisible(False)
@@ -136,7 +147,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                # Switch off the neighbouring button
                dim.buttons[neighb_axis_no].setChecked(False)
 
-               # Set axes to none
+               # Set current axis to none
                self.axes[curr_axis_no] = dim
 
         return slice_changer
@@ -152,6 +163,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
    
         # totally clear names 
         def step_changer():
+
+            if self.single_button_pressed():
+                dim.slider.setValue(0)
+                dim.stepper.setValue(0)
+                return
 
             # Obtain the slider value
             stepper_val = dim.stepper.value()
@@ -169,25 +185,46 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # totally clear names 
         def slider_changer():
 
+            if self.single_button_pressed():
+                dim.slider.setValue(0)
+                dim.stepper.setValue(0)
+                return
+
             # Obtain the slider value
             slider_val = dim.slider.value()
      
             # Change the stepper value
             dim.stepper.setValue(slider_val)
  
-            # Change plot
-            axis_sel = {}
-            axis_sel[dim.name] = slider_val
+            # Create a dictionary for the  
+            self.axis_sel[dim.name] = slider_val
 
-            arr = self.xarr.isel(axis_sel).transpose(self.axes[1].name,self.axes[0].name)
+            print(self.axes)
 
+            # Create a 2D array
+            arr = self.xarr.isel(self.axis_sel).transpose(self.axes[1].name,self.axes[0].name)
+
+            # Plot the reshaped array
             self.im = self.ax.imshow(arr)
-            # self.figure.colorbar(self.im)
-            # Will this work? 
+            
+            # Draw the canvas 
             self.canvas.draw()
         
         return slider_changer
         
+    def single_button_pressed(self):
+
+        n_buttons_pressed = 0
+
+        for dim in self.dims:
+            for i in range(2):
+                if dim.buttons[i].isChecked():
+                    n_buttons_pressed += 1
+
+        print("Call to single_button_pressed gives " + str(n_buttons_pressed))
+ 
+        return n_buttons_pressed == 1
+ 
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)
     app = ApplicationWindow()
