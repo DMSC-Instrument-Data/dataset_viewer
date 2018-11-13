@@ -129,6 +129,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.im = self.ax.imshow(arr)
         self.figure.colorbar(self.im)
 
+        self.ax.set_xlabel(self.axes[0].name)
+        self.ax.set_ylabel(self.axes[1].name)
+
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
         def slice_changer():
@@ -153,6 +156,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                self.slice_selection.pop(dim.name, None)
 
                if self.num_buttons_pressed() == 2:
+                   print(self.axes)
                    self.change_view()
 
            else:
@@ -181,6 +185,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
    
         # totally clear names 
         def step_changer():
+
+
+            print("Step value changed.")
 
             if self.num_buttons_pressed == 1:
                 dim.slider.setValue(self.slice_selection[dim.name])
@@ -238,7 +245,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Plot the reshaped array
         self.im = self.ax.imshow(arr)
-            
+        
+        # Label the axes    
+        self.ax.set_xlabel(self.axes[0].name)
+        self.ax.set_ylabel(self.axes[1].name)
+
         # Draw the canvas 
         self.canvas.draw()
         
