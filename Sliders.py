@@ -46,7 +46,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)] 
         self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
 
-        print(self.dim_names)
+        print(" \ ".join([self.dim_names[i] + ": " + str(self.dim_sizes[self.dim_names[i]]) for i in range(self.n_dims)]))
 
         self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)] 
 
@@ -174,8 +174,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def step_changer():
 
             if self.single_button_pressed():
-                dim.slider.setValue(0)
-                dim.stepper.setValue(0)
+                dim.slider.setValue(self.slice_selection[dim.name])
+                dim.stepper.setValue(self.slice_selection[dim.name])
                 return
 
             # Obtain the slider value
@@ -195,8 +195,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def slider_changer():
 
             if self.single_button_pressed():
-                dim.slider.setValue(0)
-                dim.stepper.setValue(0)
+                dim.slider.setValue(self.slice_selection[dim.name])
+                dim.stepper.setValue(self.slice_selection[dim.name])
                 return
 
             # Obtain the slider value
@@ -231,8 +231,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 if dim.buttons[i].isChecked():
                     n_buttons_pressed += 1
 
-        print("Call to single_button_pressed gives " + str(n_buttons_pressed))
- 
         return n_buttons_pressed == 1
  
 if __name__ == "__main__":
