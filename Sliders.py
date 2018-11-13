@@ -52,20 +52,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Create a random 2D array
         self.arr = np.random.rand(*[self.dim_sizes[key] for key in self.dim_names])
-      
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
-
-        for i in range(self.n_dims - 2):
-            self.slice_selection[self.dim_names[i]] = 0
-
-
-        print(self.dim_names[-1])
-        print(self.dim_names[-2])
-
-        arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-2],self.dim_names[-1])
-
-        for i in range(self.n_dims):
-            self.slice_selection[self.dim_names[i]] = 0
 
         print("Initial axis selection:")
         print(self.slice_selection)
@@ -77,13 +64,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Create an axis object
         self.ax = self.figure.add_subplot(1,1,1)
       
-        # List for storing the index of the current X/Y axes 
-        self.axes = [None, None]
- 
-        # Plot the random array
-        self.im = self.ax.imshow(arr)
-        self.figure.colorbar(self.im)
-
         # Create a layout
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
@@ -122,7 +102,33 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             layout.addWidget(dim.buttons[1], dim.no+1, 2)
             layout.addWidget(dim.slider, dim.no+1, 3)
             layout.addWidget(dim.stepper, dim.no+1, 4)
-        
+       
+        self.prepare_initial_view()
+
+    def prepare_initial_view(self):
+
+	# Use the first n - 2 dimensions for the slice viewer
+        for i in range(self.n_dims - 2):
+            self.slice_selection[self.dim_names[i]] = 0
+
+        # Set the last two dimensions as the x and y axes
+        self.axes = [self.dims[-2], self.dims[-1]]
+
+        # Reshape the array for the initial configuration
+        arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-1],self.dim_names[-2])
+
+        self.axes[0].buttons[0].setChecked(True)
+        self.axes[1].buttons[1].setChecked(True)
+
+        for dim in self.axes:
+
+            dim.slider.setVisible(False)
+            dim.stepper.setVisible(False)
+
+        # Plot the random array
+        self.im = self.ax.imshow(arr)
+        self.figure.colorbar(self.im)
+
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
         def slice_changer():
@@ -145,6 +151,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                # Set current axis to none
                self.axes[curr_axis_no] = dim
                self.slice_selection.pop(dim.name, None)
+
+               if self.num_buttons_pressed() == 2:
+                   self.change_view()
 
            else:
 
@@ -173,7 +182,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # totally clear names 
         def step_changer():
 
-            if self.single_button_pressed():
+            if self.num_buttons_pressed == 1:
                 dim.slider.setValue(self.slice_selection[dim.name])
                 dim.stepper.setValue(self.slice_selection[dim.name])
                 return
@@ -194,7 +203,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # totally clear names 
         def slider_changer():
 
-            if self.single_button_pressed():
+            if self.num_buttons_pressed == 1:
                 dim.slider.setValue(self.slice_selection[dim.name])
                 dim.stepper.setValue(self.slice_selection[dim.name])
                 return
@@ -221,8 +230,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.canvas.draw()
         
         return slider_changer
+       
+    def change_view(self):
+
+        # Create a 2D array
+        arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+
+        # Plot the reshaped array
+        self.im = self.ax.imshow(arr)
+            
+        # Draw the canvas 
+        self.canvas.draw()
         
-    def single_button_pressed(self):
+    def num_buttons_pressed(self):
 
         n_buttons_pressed = 0
 
@@ -231,7 +251,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 if dim.buttons[i].isChecked():
                     n_buttons_pressed += 1
 
-        return n_buttons_pressed == 1
+        return n_buttons_pressed
  
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)
