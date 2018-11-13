@@ -39,10 +39,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-        # self.n_dims = randint(3,6) 
-        self.n_dims = 3 
+        self.n_dims = randint(3,15) 
 
-        self.axis_sel = {}
+        self.slice_selection = {}
 
         self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)] 
         self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
@@ -56,17 +55,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
       
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
 
-        axis_sel = {}
-
         for i in range(self.n_dims - 2):
-            axis_sel[self.dim_names[i]] = 0
+            self.slice_selection[self.dim_names[i]] = 0
 
-        print(axis_sel)
+
         print(self.dim_names[-1])
         print(self.dim_names[-2])
 
-        arr = self.xarr.isel(axis_sel).transpose(self.dim_names[-2],self.dim_names[-1])
+        arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-2],self.dim_names[-1])
 
+        for i in range(self.n_dims):
+            self.slice_selection[self.dim_names[i]] = 0
+
+        print("Initial axis selection:")
+        print(self.slice_selection)
         # print(type(fig.plot()))
  
         # Create a figure
@@ -126,19 +128,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def slice_changer():
 
            if self.axis_already_selected(dim,curr_axis_no):
+               self.slice_selection[dim.name] = 0
+               self.axes[curr_axis_no] = None
                dim.buttons[curr_axis_no].setChecked(False)
                return
 
-           if not dim.buttons[curr_axis_no].isChecked():
-
-               # Enable the matching slider and stepper
-               dim.slider.setVisible(True)
-               dim.stepper.setVisible(True)
-
-               # Set current axis to current dimension
-               self.axes[curr_axis_no] = None
-
-           else:
+           if dim.buttons[curr_axis_no].isChecked():
 
                # Disable the matching slider and stepper
                dim.slider.setVisible(False)
@@ -149,6 +144,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
                # Set current axis to none
                self.axes[curr_axis_no] = dim
+               self.slice_selection.pop(dim.name, None)
+
+           else:
+
+               # Enable the matching slider and stepper
+               dim.slider.setVisible(True)
+               dim.stepper.setVisible(True)
+
+               # Set current axis to current dimension
+               self.axes[curr_axis_no] = None
+               self.slice_selection[dim.name] = 0
+
+       	   print("Slide selection after button press:")
+           print(self.slice_selection)
 
         return slice_changer
 
@@ -197,12 +206,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.stepper.setValue(slider_val)
  
             # Create a dictionary for the  
-            self.axis_sel[dim.name] = slider_val
+            self.slice_selection[dim.name] = slider_val
 
-            print(self.axes)
+            print("Slide selection:")
+            print(self.slice_selection)
 
             # Create a 2D array
-            arr = self.xarr.isel(self.axis_sel).transpose(self.axes[1].name,self.axes[0].name)
+            arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
 
             # Plot the reshaped array
             self.im = self.ax.imshow(arr)
