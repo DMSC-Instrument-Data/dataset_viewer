@@ -39,7 +39,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-        self.n_dims = 5 
+        self.n_dims = 7 
 
         self.slice_selection = {}
 
@@ -63,7 +63,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         # Create an axis object
         self.ax = self.figure.add_subplot(1,1,1)
-      
+
         # Create a layout
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
@@ -128,6 +128,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Plot the random array
         self.im = self.ax.imshow(arr)
         self.cbar = self.figure.colorbar(self.im)
+
+        self.im.autoscale()
 
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
@@ -225,21 +227,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             print("Slide selection:")
             print(self.slice_selection)
 
-            # Create a 2D array
-            arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
-
-            # Plot the reshaped array
-            self.im = self.ax.imshow(arr)
-            
-            min_val = arr.min().values
-            max_val = arr.max().values
-
-            self.cbar.set_clim(min_val,max_val)
-            self.cbar.draw_all()
-
-            # Draw the canvas 
-            self.canvas.draw()
-        
+            self.change_view() 
+ 
         return slider_changer
        
     def change_view(self):
@@ -249,17 +238,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Plot the reshaped array
         self.im.set_data(arr)
-        self.ax.set_aspect(1)
+        print(type(self.im)) 
  
         # Label the axes    
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
+        # Find the minimum and maximum values of the current array 
         min_val = arr.min().values
         max_val = arr.max().values
 
+        # Update the colourbar 
         self.im.set_clim(min_val,max_val)
-        # self.cbar.draw_all()
+        self.cbar.draw_all()
 
         # Draw the canvas 
         self.canvas.draw()
