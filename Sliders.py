@@ -39,7 +39,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-        self.n_dims = randint(3,15) 
+        self.n_dims = 5 
 
         self.slice_selection = {}
 
@@ -127,7 +127,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Plot the random array
         self.im = self.ax.imshow(arr)
-        self.figure.colorbar(self.im)
+        self.cbar = self.figure.colorbar(self.im)
 
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
@@ -137,8 +137,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def slice_changer():
 
            if self.axis_already_selected(dim,curr_axis_no):
-               self.slice_selection[dim.name] = 0
-               self.axes[curr_axis_no] = None
                dim.buttons[curr_axis_no].setChecked(False)
                return
 
@@ -233,6 +231,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Plot the reshaped array
             self.im = self.ax.imshow(arr)
             
+            min_val = arr.min().values
+            max_val = arr.max().values
+
+            self.cbar.set_clim(min_val,max_val)
+            self.cbar.draw_all()
+
             # Draw the canvas 
             self.canvas.draw()
         
@@ -244,11 +248,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
 
         # Plot the reshaped array
-        self.im = self.ax.imshow(arr)
-        
+        self.im.set_data(arr)
+        self.ax.set_aspect(1)
+ 
         # Label the axes    
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
+
+        min_val = arr.min().values
+        max_val = arr.max().values
+
+        self.im.set_clim(min_val,max_val)
+        # self.cbar.draw_all()
 
         # Draw the canvas 
         self.canvas.draw()
