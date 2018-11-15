@@ -2,8 +2,9 @@ import sys
 import numpy as np
 import xarray as xr
 from random import randint, sample
+from numpy import array
 
-from PyQt5.QtWidgets import QGridLayout
+from PyQt5.QtWidgets import QGridLayout, QRadioButton
 
 from matplotlib.backends.qt_compat import QtWidgets, is_pyqt5
 if is_pyqt5():
@@ -61,8 +62,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.canvas = FigureCanvas(self.figure)
 
         # Add the canvas to the layout
-        layout.addWidget(self.canvas,0,0,1,5)
+        height_plot = 1
+        width_plot = 6
+        layout.addWidget(self.canvas,0,0,height_plot,width_plot)
         self.addToolBar(NavigationToolbar(self.canvas, self))
+
+        # Number of rows that are beneath plot and above dimension section 
+        shift = 2
+
+        # Buttons for setting plot scale
+        self.lin_button = QRadioButton("Linear")
+        self.log_button = QRadioButton("Log")
+
+        layout.addWidget(self.lin_button,1,4)
+        layout.addWidget(self.log_button,1,5)
 
         for dim in self.dims:
 
@@ -81,11 +94,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.create_stepper(self.stepper_changer_creator(dim))
 
             # Add the buttons and slider to the box
-            layout.addWidget(dim.label, dim.no+1, 0)
-            layout.addWidget(dim.buttons[0], dim.no+1, 1)
-            layout.addWidget(dim.buttons[1], dim.no+1, 2)
-            layout.addWidget(dim.slider, dim.no+1, 3)
-            layout.addWidget(dim.stepper, dim.no+1, 4)
+            layout.addWidget(dim.label, dim.no+shift, 0)
+            layout.addWidget(dim.buttons[0], dim.no+shift, 1)
+            layout.addWidget(dim.buttons[1], dim.no+shift, 2)
+            layout.addWidget(dim.slider, dim.no+shift, 3)
+            layout.addWidget(dim.stepper, dim.no+shift, 4,1,2)
 
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
@@ -119,6 +132,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Label the axes
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
+
+    def set_scale():
+
+        self.ax.set_xscale('log')
+        self.ax.set_yscale('log')
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
