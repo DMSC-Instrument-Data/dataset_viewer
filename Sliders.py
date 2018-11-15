@@ -3,7 +3,7 @@ import numpy as np
 import xarray as xr
 from random import randint, sample
 from numpy import array
-from matplotlib.colors import LogNorm
+from matplotlib.colors import LogNorm, Normalize
 
 from PyQt5.QtWidgets import QGridLayout, QRadioButton
 
@@ -140,7 +140,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_scale(self, scale):
 
-        self.im.set_norm(LogNorm(*self.get_minmax()))
+        if scale == 'log':
+            self.im.set_norm(LogNorm(*self.get_minmax()))
+        else:
+            self.im.set_norm(Normalize())
 
         # Draw the canvas
         self.canvas.draw()
