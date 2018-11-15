@@ -4,7 +4,7 @@ import xarray as xr
 from random import randint, sample
 
 from PyQt5.QtWidgets import QGridLayout
- 
+
 from matplotlib.backends.qt_compat import QtWidgets, is_pyqt5
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
@@ -19,20 +19,20 @@ from Dimension import Dimension
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
-    
+
         super().__init__()
 
         # Collection of letters used to create random dimension names
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
         # Set number of dimension
-        self.n_dims = 7 
+        self.n_dims = 7
 
         # Create empty dictionary for slice selection
         self.slice_selection = {}
 
         # Generate random dimension names and sizes
-        self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)] 
+        self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)]
         self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
 
         # Print dimension name and size
@@ -40,7 +40,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         print(" / ".join([self.dim_names[i] + ": " + str(self.dim_sizes[self.dim_names[i]]) for i in range(self.n_dims)]))
 
         # Create a list of Dimension objects
-        self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)] 
+        self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)]
 
         # Create a random n-D array
         self.arr = np.random.rand(*[self.dim_sizes[key] for key in self.dim_names])
@@ -48,7 +48,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Create a figure
         self.figure = Figure()
-        
+
         # Create an axis object
         self.ax = self.figure.add_subplot(1,1,1)
 
@@ -59,13 +59,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Create a FigureCanvas
         self.canvas = FigureCanvas(self.figure)
- 
+
         # Add the canvas to the layout
         layout.addWidget(self.canvas,0,0,1,5)
         self.addToolBar(NavigationToolbar(self.canvas, self))
-        
+
         for dim in self.dims:
-        
+
             # Create a label
             dim.create_label()
 
@@ -74,10 +74,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             y_func = self.press_button(dim,1,0)
             dim.create_buttons(x_func,y_func)
 
-            # Create a slider 
+            # Create a slider
             dim.create_slider(self.slider_changer_creator(dim))
 
-            # Create a stepper 
+            # Create a stepper
             dim.create_stepper(self.stepper_changer_creator(dim))
 
             # Add the buttons and slider to the box
@@ -86,7 +86,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             layout.addWidget(dim.buttons[1], dim.no+1, 2)
             layout.addWidget(dim.slider, dim.no+1, 3)
             layout.addWidget(dim.stepper, dim.no+1, 4)
-      
+
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
 
@@ -131,32 +131,32 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             # Set this dimension as an axes
             if dim.buttons[curr_axis_no].isChecked():
- 
+
                 # Disable the matching slider and stepper
                 dim.slider.setVisible(False)
                 dim.stepper.setVisible(False)
- 
+
                 # Switch off the neighbouring button
                 dim.buttons[neighb_axis_no].setChecked(False)
- 
+
                 # Set current axis to this dimension
                 self.axes[curr_axis_no] = dim
 
                 # Remvoe this dimension from the slice dictionary
                 self.slice_selection.pop(dim.name, None)
- 
+
                 # Change the view if both a X and a Y axis have been selected
                 if self.num_buttons_pressed() == 2:
                     self.change_view()
 
-            # Unset this dimension as an axis 
+            # Unset this dimension as an axis
             else:
- 
+
                 # Enable the matching slider and stepper
                 dim.slider.setVisible(True)
                 dim.stepper.setVisible(True)
- 
-                # Set current axis to None 
+
+                # Set current axis to None
                 self.axes[curr_axis_no] = None
 
                 # Place this dimension in the slice dictionary
@@ -171,20 +171,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if dim.buttons[n_curr_axis].isChecked() and dim != curr_dim:
                 return True
         return False
- 
+
     def stepper_changer_creator(self,dim):
-   
-        # Sequence to be carried out when the stepper detects a change 
+
+        # Sequence to be carried out when the stepper detects a change
         def stepper_changer():
 
-            # Don't change the slider/stepper value if less than two buttons have been pressed 
+            # Don't change the slider/stepper value if less than two buttons have been pressed
             if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
 
             # Obtain the stepper value
             stepper_val = dim.stepper.value()
-      
+
             # Change slider value to match the stepper
             dim.slider.setValue(stepper_val)
 
@@ -192,38 +192,38 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.slice_selection[dim.name] = stepper_val
 
             # Change the view
-            self.change_view() 
+            self.change_view()
 
         return stepper_changer
-        
+
     def slider_changer_creator(self,dim):
-   
-        # Sequence to be carried out when the slider detects a change 
+
+        # Sequence to be carried out when the slider detects a change
         def slider_changer():
 
-            # Don't change the slider/stepper value if less than two buttons have been pressed 
+            # Don't change the slider/stepper value if less than two buttons have been pressed
             if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
 
             # Obtain the slider value
             slider_val = dim.slider.value()
-     
-            # Change the stepper value to match the slider 
+
+            # Change the stepper value to match the slider
             dim.stepper.setValue(slider_val)
- 
+
             # Update the slice selection dictionary
             self.slice_selection[dim.name] = slider_val
 
             # Change the view
-            self.change_view() 
- 
+            self.change_view()
+
         return slider_changer
-      
+
     def revert_value_change(self, dim):
 
         # Go back to the previous slider/stepper values when a change isn't wanted
-        # 
+        #
         dim.slider.setValue(self.slice_selection[dim.name])
         dim.stepper.setValue(self.slice_selection[dim.name])
 
@@ -234,23 +234,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Plot the reshaped array
         self.im.set_data(arr)
-        print(type(self.im)) 
- 
-        # Label the axes    
+        print(type(self.im))
+
+        # Label the axes
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
-        # Find the minimum and maximum values of the current array 
+        # Find the minimum and maximum values of the current array
         min_val = arr.min().values
         max_val = arr.max().values
 
-        # Update the colourbar 
+        # Update the colourbar
         self.im.set_clim(min_val,max_val)
         self.cbar.draw_all()
 
-        # Draw the canvas 
+        # Draw the canvas
         self.canvas.draw()
-        
+
     def num_buttons_pressed(self):
 
         # Count the number of axis button that have been pressed
@@ -262,7 +262,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 n_buttons_pressed += 1
 
         return n_buttons_pressed
- 
+
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)
     app = ApplicationWindow()

@@ -1,6 +1,6 @@
 # Python Dataset Viewer Prototype
 ## Summary
-Prototype for viewing slices of n-D datasets. 
+Prototype for viewing slices of n-D datasets.
 ## Usage
 Launching the program:
 ``` python Sliders.py ```
@@ -13,6 +13,6 @@ The prototype generates and plots a random 7D array. By default, the final two d
 ## To-Do
 - Implement 1D plots
 - Add a way of selecting choosing between a log or linear scale
-- Dictionary view 
+- Dictionary view
 - Key properties panel
 - Loading files
