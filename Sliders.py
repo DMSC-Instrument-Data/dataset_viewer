@@ -1,26 +1,11 @@
+import sys
 import numpy as np
-from numpy import resize
 import xarray as xr
-import hvplot.xarray
-import holoviews as hv
 from random import randint, sample
 
-import sys
+from PyQt5.QtWidgets import QGridLayout
  
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushButton, QSlider, QHBoxLayout, QGridLayout, QLabel, QSpinBox
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt,  QCoreApplication
- 
-import sys
-import time
-
-import numpy as np
-
-from Dimension import Dimension
-
-import matplotlib.pyplot as plt
-
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
+from matplotlib.backends.qt_compat import QtWidgets, is_pyqt5
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
@@ -29,35 +14,38 @@ else:
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
 
-renderer = hv.renderer('matplotlib')
-    
+from Dimension import Dimension
+
 class ApplicationWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
     
         super().__init__()
 
+        # Collection of letters used to create random dimension names
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+        # Set number of dimension
         self.n_dims = 7 
 
+        # Create empty dictionary for slice selection
         self.slice_selection = {}
 
+        # Generate random dimension names and sizes
         self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)] 
         self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
 
-        print(" \ ".join([self.dim_names[i] + ": " + str(self.dim_sizes[self.dim_names[i]]) for i in range(self.n_dims)]))
+        # Print dimension name and size
+        print("Dimension sizes: ")
+        print(" / ".join([self.dim_names[i] + ": " + str(self.dim_sizes[self.dim_names[i]]) for i in range(self.n_dims)]))
 
+        # Create a list of Dimension objects
         self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)] 
 
-        # Create a random 2D array
+        # Create a random n-D array
         self.arr = np.random.rand(*[self.dim_sizes[key] for key in self.dim_names])
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
 
-        print("Initial axis selection:")
-        print(self.slice_selection)
-        # print(type(fig.plot()))
- 
         # Create a figure
         self.figure = Figure()
         
@@ -67,33 +55,29 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Create a layout
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
+        layout = QGridLayout(self._main)
 
         # Create a FigureCanvas
         self.canvas = FigureCanvas(self.figure)
-       
-        layout = QGridLayout(self._main)
  
         # Add the canvas to the layout
         layout.addWidget(self.canvas,0,0,1,5)
         self.addToolBar(NavigationToolbar(self.canvas, self))
         
-        # Create a list of horizontal sliders
-        self.sliders = {key:None for key in self.dim_names}
-        self.steppers = {key:None for key in self.dim_names}
-        self.buttons = []
- 
         for dim in self.dims:
         
-            # Create a slider for dimension-i
-            dim.create_slider(self.slider_changer_creator(dim))
+            # Create a label
+            dim.create_label()
 
             # Create X and Y buttons for the slider
             x_func = self.press_button(dim,0,1)
             y_func = self.press_button(dim,1,0)
             dim.create_buttons(x_func,y_func)
 
-            dim.create_label()
+            # Create a slider 
+            dim.create_slider(self.slider_changer_creator(dim))
 
+            # Create a stepper 
             dim.create_stepper(self.stepper_changer_creator(dim))
 
             # Add the buttons and slider to the box
@@ -102,12 +86,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             layout.addWidget(dim.buttons[1], dim.no+1, 2)
             layout.addWidget(dim.slider, dim.no+1, 3)
             layout.addWidget(dim.stepper, dim.no+1, 4)
-       
+      
+        # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
 
     def prepare_initial_view(self):
 
-	# Use the first n - 2 dimensions for the slice viewer
+	# Use the first value of the first n - 2 dimensions for the as the initial slices
         for i in range(self.n_dims - 2):
             self.slice_selection[self.dim_names[i]] = 0
 
@@ -117,18 +102,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Reshape the array for the initial configuration
         arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-1],self.dim_names[-2])
 
+        # Check the X and Y buttons for the initial axes setup
         self.axes[0].buttons[0].setChecked(True)
         self.axes[1].buttons[1].setChecked(True)
 
+        # Disable their sliders and steppers
         for dim in self.axes:
 
             dim.slider.setVisible(False)
             dim.stepper.setVisible(False)
 
-        # Plot the random array
+        # Plot the array
         self.im = self.ax.imshow(arr)
         self.cbar = self.figure.colorbar(self.im)
 
+        # Label the axes
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
@@ -136,44 +124,49 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         def slice_changer():
 
-           if self.axis_already_selected(dim,curr_axis_no):
-               dim.buttons[curr_axis_no].setChecked(False)
-               return
+           # Ignore the instruction if another dimension has already been selected for the same axis
+            if self.axis_already_selected(dim,curr_axis_no):
+                dim.buttons[curr_axis_no].setChecked(False)
+                return
 
-           if dim.buttons[curr_axis_no].isChecked():
+            # Set this dimension as an axes
+            if dim.buttons[curr_axis_no].isChecked():
+ 
+                # Disable the matching slider and stepper
+                dim.slider.setVisible(False)
+                dim.stepper.setVisible(False)
+ 
+                # Switch off the neighbouring button
+                dim.buttons[neighb_axis_no].setChecked(False)
+ 
+                # Set current axis to this dimension
+                self.axes[curr_axis_no] = dim
 
-               # Disable the matching slider and stepper
-               dim.slider.setVisible(False)
-               dim.stepper.setVisible(False)
+                # Remvoe this dimension from the slice dictionary
+                self.slice_selection.pop(dim.name, None)
+ 
+                # Change the view if both a X and a Y axis have been selected
+                if self.num_buttons_pressed() == 2:
+                    self.change_view()
 
-               # Switch off the neighbouring button
-               dim.buttons[neighb_axis_no].setChecked(False)
+            # Unset this dimension as an axis 
+            else:
+ 
+                # Enable the matching slider and stepper
+                dim.slider.setVisible(True)
+                dim.stepper.setVisible(True)
+ 
+                # Set current axis to None 
+                self.axes[curr_axis_no] = None
 
-               # Set current axis to none
-               self.axes[curr_axis_no] = dim
-               self.slice_selection.pop(dim.name, None)
-
-               if self.num_buttons_pressed() == 2:
-                   print(self.axes)
-                   self.change_view()
-
-           else:
-
-               # Enable the matching slider and stepper
-               dim.slider.setVisible(True)
-               dim.stepper.setVisible(True)
-
-               # Set current axis to current dimension
-               self.axes[curr_axis_no] = None
-               self.slice_selection[dim.name] = 0
-
-       	   print("Slide selection after button press:")
-           print(self.slice_selection)
+                # Place this dimension in the slice dictionary
+                self.slice_selection[dim.name] = 0
 
         return slice_changer
 
     def axis_already_selected(self,curr_dim,n_curr_axis):
 
+        # Check that the same axis has already been selected elsewhere (i.e., prevent to difference X buttons from being checked at the same time)
         for dim in self.dims:
             if dim.buttons[n_curr_axis].isChecked() and dim != curr_dim:
                 return True
@@ -181,21 +174,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
  
     def stepper_changer_creator(self,dim):
    
-        # totally clear names 
+        # Sequence to be carried out when the stepper detects a change 
         def stepper_changer():
 
-            # Don't change the slider/stepper value if only one button has been selected
+            # Don't change the slider/stepper value if less than two buttons have been pressed 
             if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
 
-            # Obtain the slider value
+            # Obtain the stepper value
             stepper_val = dim.stepper.value()
       
-            # Change slider value
+            # Change slider value to match the stepper
             dim.slider.setValue(stepper_val)
 
-            # Create a dictionary for the slice selection 
+            # Update the slice selection dictionary
             self.slice_selection[dim.name] = stepper_val
 
             # Change the view
@@ -205,10 +198,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
     def slider_changer_creator(self,dim):
    
-        # totally clear names 
+        # Sequence to be carried out when the slider detects a change 
         def slider_changer():
 
-            # Don't change the slider/stepper value if only one button has been selected
+            # Don't change the slider/stepper value if less than two buttons have been pressed 
             if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
@@ -216,21 +209,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Obtain the slider value
             slider_val = dim.slider.value()
      
-            # Change the stepper value
+            # Change the stepper value to match the slider 
             dim.stepper.setValue(slider_val)
  
-            # Create a dictionary for the  
+            # Update the slice selection dictionary
             self.slice_selection[dim.name] = slider_val
 
-            print("Slide selection:")
-            print(self.slice_selection)
-
+            # Change the view
             self.change_view() 
  
         return slider_changer
       
     def revert_value_change(self, dim):
 
+        # Go back to the previous slider/stepper values when a change isn't wanted
+        # 
         dim.slider.setValue(self.slice_selection[dim.name])
         dim.stepper.setValue(self.slice_selection[dim.name])
 
@@ -260,6 +253,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
     def num_buttons_pressed(self):
 
+        # Count the number of axis button that have been pressed
+        # Used to prevent X being pressed for two different dimensions, etc
         n_buttons_pressed = 0
 
         for dim in self.dims:
