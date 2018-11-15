@@ -12,7 +12,8 @@ The prototype generates and plots a random 7D array. By default, the final two d
 - Using ``` self.im.set_clim(min_val,max_val) ``` updates colourbar but doesn't allow plot shape to change
 ## To-Do
 - Implement 1D plots
-- Add a way of selecting choosing between a log or linear scale
+- ~~Add a way of choosing between a log or linear scale~~
+  - Update colourbar when a difference scale has been chosen
 - Dictionary view
 - Key properties panel
 - Loading files
