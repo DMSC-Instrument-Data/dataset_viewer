@@ -85,7 +85,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for dim in self.dims:
         
             # Create a slider for dimension-i
-            dim.create_slider(self.slider_change(dim))
+            dim.create_slider(self.slider_changer_creator(dim))
 
             # Create X and Y buttons for the slider
             x_func = self.press_button(dim,0,1)
@@ -94,7 +94,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             dim.create_label()
 
-            dim.create_stepper(self.stepper_change(dim))
+            dim.create_stepper(self.stepper_changer_creator(dim))
 
             # Add the buttons and slider to the box
             layout.addWidget(dim.label, dim.no+1, 0)
@@ -128,8 +128,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Plot the random array
         self.im = self.ax.imshow(arr)
         self.cbar = self.figure.colorbar(self.im)
-
-        # self.im.autoscale()
 
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
@@ -181,19 +179,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 return True
         return False
  
-    def stepper_change(self,dim):
+    def stepper_changer_creator(self,dim):
    
         # totally clear names 
-        def step_changer():
+        def stepper_changer():
 
-
+            # Don't change the slider/stepper value if only one button has been selected
             if self.num_buttons_pressed() == 1:
-                dim.slider.setValue(self.slice_selection[dim.name])
-                dim.stepper.setValue(self.slice_selection[dim.name])
+                self.revert_value_change(dim)
                 return
-
-            print("Step value changed.")
-            print("Step value changed.")
 
             # Obtain the slider value
             stepper_val = dim.stepper.value()
@@ -201,19 +195,22 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Change slider value
             dim.slider.setValue(stepper_val)
 
-            # Use value change function 
-            self.slider_change(dim)()
- 
-        return step_changer
+            # Create a dictionary for the slice selection 
+            self.slice_selection[dim.name] = stepper_val
+
+            # Change the view
+            self.change_view() 
+
+        return stepper_changer
         
-    def slider_change(self,dim):
+    def slider_changer_creator(self,dim):
    
         # totally clear names 
         def slider_changer():
 
+            # Don't change the slider/stepper value if only one button has been selected
             if self.num_buttons_pressed() == 1:
-                dim.slider.setValue(self.slice_selection[dim.name])
-                dim.stepper.setValue(self.slice_selection[dim.name])
+                self.revert_value_change(dim)
                 return
 
             # Obtain the slider value
@@ -231,7 +228,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.change_view() 
  
         return slider_changer
-       
+      
+    def revert_value_change(self, dim):
+
+        dim.slider.setValue(self.slice_selection[dim.name])
+        dim.stepper.setValue(self.slice_selection[dim.name])
+
     def change_view(self):
 
         # Create a 2D array
@@ -261,9 +263,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         n_buttons_pressed = 0
 
         for dim in self.dims:
-            for i in range(2):
-                if dim.buttons[i].isChecked():
-                    n_buttons_pressed += 1
+            if any([button.isChecked() for button in dim.buttons]):
+                n_buttons_pressed += 1
 
         return n_buttons_pressed
  
