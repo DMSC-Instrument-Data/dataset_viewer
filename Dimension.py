@@ -26,9 +26,6 @@ class Dimension:
         # Set tick interval
         self.slider.setTickInterval(1)
             
-        # Disable slider by default
-        # sl.setEnabled(False)
-        
     def create_buttons(self,x_func,y_func):
   
         x_button = QPushButton("X")
@@ -51,7 +48,6 @@ class Dimension:
         self.stepper = QSpinBox()
 
         self.stepper.setRange(0,self.size-1)
-
         self.stepper.valueChanged.connect(change_func)
 
 
