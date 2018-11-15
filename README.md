@@ -2,6 +2,9 @@
 ## Summary
 Prototype for viewing slices of n-D datasets.
 ## Usage
+
+The program uses Python 3.  
+
 Launching the program:
 ``` python Sliders.py ```
 
