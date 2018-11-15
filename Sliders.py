@@ -129,7 +129,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.im = self.ax.imshow(arr)
         self.cbar = self.figure.colorbar(self.im)
 
-        self.im.autoscale()
+        # self.im.autoscale()
 
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
@@ -187,12 +187,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def step_changer():
 
 
-            print("Step value changed.")
-
-            if self.num_buttons_pressed == 1:
+            if self.num_buttons_pressed() == 1:
                 dim.slider.setValue(self.slice_selection[dim.name])
                 dim.stepper.setValue(self.slice_selection[dim.name])
                 return
+
+            print("Step value changed.")
+            print("Step value changed.")
 
             # Obtain the slider value
             stepper_val = dim.stepper.value()
@@ -210,7 +211,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # totally clear names 
         def slider_changer():
 
-            if self.num_buttons_pressed == 1:
+            if self.num_buttons_pressed() == 1:
                 dim.slider.setValue(self.slice_selection[dim.name])
                 dim.stepper.setValue(self.slice_selection[dim.name])
                 return
