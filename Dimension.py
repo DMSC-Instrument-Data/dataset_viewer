@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushButton, QSlider, QHBoxLayout, QGridLayout, QLabel, QSpinBox
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt,  QCoreApplication
+from PyQt5.QtWidgets import QPushButton, QSlider, QLabel, QSpinBox
+from PyQt5.QtCore import Qt
 
 class Dimension:
 
