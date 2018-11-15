@@ -185,7 +185,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def stepper_changer():
 
             # Don't change the slider/stepper value if only one button has been selected
-            if self.num_buttons_pressed() == 1:
+            if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
 
@@ -209,7 +209,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         def slider_changer():
 
             # Don't change the slider/stepper value if only one button has been selected
-            if self.num_buttons_pressed() == 1:
+            if self.num_buttons_pressed() <= 1:
                 self.revert_value_change(dim)
                 return
 
