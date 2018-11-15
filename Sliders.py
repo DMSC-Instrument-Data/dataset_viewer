@@ -3,6 +3,7 @@ import numpy as np
 import xarray as xr
 from random import randint, sample
 from numpy import array
+from matplotlib.colors import LogNorm
 
 from PyQt5.QtWidgets import QGridLayout, QRadioButton
 
@@ -117,7 +118,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.axes = [self.dims[-2], self.dims[-1]]
 
         # Reshape the array for the initial configuration
-        arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-1],self.dim_names[-2])
+        self.arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-1],self.dim_names[-2])
 
         # Check the X and Y buttons for the initial axes setup
         self.axes[0].buttons[0].setChecked(True)
@@ -130,7 +131,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.stepper.setVisible(False)
 
         # Plot the array
-        self.im = self.ax.imshow(arr)
+        self.im = self.ax.imshow(self.arr)
         self.cbar = self.figure.colorbar(self.im)
 
         # Label the axes
@@ -139,8 +140,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_scale(self, scale):
 
-        self.ax.set_xscale(scale)
-        self.ax.set_yscale(scale)
+        self.im.set_norm(LogNorm(*self.get_minmax()))
+
+        # Draw the canvas
+        self.canvas.draw()
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
@@ -252,26 +255,30 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def change_view(self):
 
         # Create a 2D array
-        arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+        self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
 
         # Plot the reshaped array
-        self.im.set_data(arr)
+        self.im.set_data(self.arr)
         print(type(self.im))
 
         # Label the axes
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
-        # Find the minimum and maximum values of the current array
-        min_val = arr.min().values
-        max_val = arr.max().values
-
         # Update the colourbar
-        self.im.set_clim(min_val,max_val)
+        self.im.set_clim(*self.get_minmax())
         self.cbar.draw_all()
 
         # Draw the canvas
         self.canvas.draw()
+
+    def get_minmax(self):
+
+        # Find the minimum and maximum values of the current array
+        min_val = self.arr.min().values
+        max_val = self.arr.max().values
+
+        return [min_val,max_val]
 
     def num_buttons_pressed(self):
 
