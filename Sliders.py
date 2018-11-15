@@ -67,12 +67,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.canvas,0,0,height_plot,width_plot)
         self.addToolBar(NavigationToolbar(self.canvas, self))
 
-        # Number of rows that are beneath plot and above dimension section 
+        # Offset to make space for the log/linear buttons 
         shift = 2
 
         # Buttons for setting plot scale
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
+
+        self.lin_button.toggled.connect(lambda: self.change_scale('linear'))
+        self.log_button.toggled.connect(lambda: self.change_scale('log'))
 
         layout.addWidget(self.lin_button,1,4)
         layout.addWidget(self.log_button,1,5)
@@ -98,6 +101,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             layout.addWidget(dim.buttons[0], dim.no+shift, 1)
             layout.addWidget(dim.buttons[1], dim.no+shift, 2)
             layout.addWidget(dim.slider, dim.no+shift, 3)
+            # Have the slider take up two 'cells' so the log/linear buttons are not pushed too far apart
             layout.addWidget(dim.stepper, dim.no+shift, 4,1,2)
 
         # Prepare the initial view (last two dimensions are set to X and Y)
@@ -133,10 +137,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
-    def set_scale():
+    def change_scale(self, scale):
 
-        self.ax.set_xscale('log')
-        self.ax.set_yscale('log')
+        self.ax.set_xscale(scale)
+        self.ax.set_yscale(scale)
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
