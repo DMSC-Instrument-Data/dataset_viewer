@@ -19,29 +19,17 @@ from Dimension import Dimension
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self,n_dims,dim_names,dims,xarr):
 
         super().__init__()
 
-        # Collection of letters used to create random dimension names
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-        # Set number of dimension
-        self.n_dims = 7
+        self.n_dims = n_dims
+        self.dim_names = dim_names
+        self.dims = dims
+        self.xarr = xarr
 
         # Create empty dictionary for slice selection
         self.slice_selection = {}
-
-        # Generate random dimension names and sizes
-        self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)]
-        self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
-
-        # Create a list of Dimension objects
-        self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)]
-
-        # Create a random n-D array
-        self.arr = np.random.rand(*[self.dim_sizes[key] for key in self.dim_names])
-        self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
 
         # Print dimension name and size
         print("Dimension sizes: ")
@@ -298,7 +286,25 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return n_buttons_pressed
 
 if __name__ == "__main__":
+
+    # Collection of letters used to create random dimension names
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    # Set number of dimension
+    n_dims = 7
+
+    # Generate random dimension names and sizes
+    dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
+    dim_sizes = {dim_names[i]: randint(2,10) for i in range(n_dims)}
+
+    # Create a random n-D array
+    arr = np.random.rand(*[dim_sizes[key] for key in dim_names])
+    xarr = xr.DataArray(arr, dims = dim_names)
+
+    # Create a list of Dimension objects
+    dims = [Dimension(dim_names[i],dim_sizes[dim_names[i]],i) for i in range(n_dims)]
+
     qapp = QtWidgets.QApplication(sys.argv)
-    app = ApplicationWindow()
+    app = ApplicationWindow(n_dims,dim_names,dims,xarr)
     app.show()
     qapp.exec_()
