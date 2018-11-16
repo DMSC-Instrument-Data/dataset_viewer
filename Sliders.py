@@ -106,9 +106,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Set the last two dimensions as the x and y axes
         self.axes = [self.dims[-2], self.dims[-1]]
 
-        # Reshape the array for the initial configuration
-        self.arr = self.xarr.isel(self.slice_selection).transpose(self.dim_names[-1],self.dim_names[-2])
-
         # Check the X and Y buttons for the initial axes setup
         self.axes[0].buttons[0].setChecked(True)
         self.axes[1].buttons[1].setChecked(True)
@@ -119,13 +116,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.slider.setVisible(False)
             dim.stepper.setVisible(False)
 
-        # Plot the array
+        # Create the slice array
+        self.create_slice_array()
+
+        # Create the axis plot and colourbar
         self.im = self.ax.imshow(self.arr)
         self.cbar = self.figure.colorbar(self.im)
 
         # Label the axes
-        self.ax.set_xlabel(self.axes[0].name)
-        self.ax.set_ylabel(self.axes[1].name)
+        self.label_axes()
 
     def change_scale(self, scale):
 
@@ -247,23 +246,32 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_view(self):
 
-        # Create a 2D array
-        self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+        # Create the slice array
+        self.create_slice_array()
 
         # Plot the reshaped array
         self.im.set_data(self.arr)
-        print(type(self.im))
-
-        # Label the axes
-        self.ax.set_xlabel(self.axes[0].name)
-        self.ax.set_ylabel(self.axes[1].name)
 
         # Update the colourbar
         self.im.set_clim(*self.get_minmax())
         self.cbar.draw_all()
 
+        # Label the axes
+        self.label_axes()
+
         # Draw the canvas
         self.canvas.draw()
+
+    def create_slice_array(self):
+
+        # Create a 2D array
+        self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+
+    def label_axes(self):
+
+        # Label the axes
+        self.ax.set_xlabel(self.axes[0].name)
+        self.ax.set_ylabel(self.axes[1].name)
 
     def get_minmax(self):
 
