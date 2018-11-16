@@ -149,11 +149,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         def slice_changer():
 
-           # Ignore the instruction if another dimension has already been selected for the same axis
-            if self.axis_already_selected(dim,curr_axis_no):
-                dim.buttons[curr_axis_no].setChecked(False)
-                return
-
             # Set this dimension as an axes
             if dim.buttons[curr_axis_no].isChecked():
 
