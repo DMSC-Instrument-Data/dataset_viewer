@@ -295,14 +295,14 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = {dim_names[i]: randint(2,10) for i in range(n_dims)}
+    dim_sizes = [randint(2,10) for i in range(n_dims)]
 
     # Create a random n-D array
-    arr = np.random.rand(*[dim_sizes[key] for key in dim_names])
+    arr = np.random.rand(*[size for size in dim_sizes])
     xarr = xr.DataArray(arr, dims = dim_names)
 
     # Create a list of Dimension objects
-    dims = [Dimension(dim_names[i],dim_sizes[dim_names[i]],i) for i in range(n_dims)]
+    dims = [Dimension(dim_names[i],dim_sizes[i],i) for i in range(n_dims)]
 
     qapp = QtWidgets.QApplication(sys.argv)
     app = ApplicationWindow(n_dims,dim_names,dims,xarr)
