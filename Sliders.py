@@ -2,7 +2,6 @@ import sys
 import numpy as np
 import xarray as xr
 from random import randint, sample
-from numpy import array
 from matplotlib.colors import LogNorm, Normalize
 
 from PyQt5.QtWidgets import QGridLayout, QRadioButton
@@ -37,16 +36,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dim_names = [alphabet[i] for i in sample(range(26),self.n_dims)]
         self.dim_sizes = {self.dim_names[i]: randint(2,10) for i in range(self.n_dims)}
 
-        # Print dimension name and size
-        print("Dimension sizes: ")
-        print(" / ".join([self.dim_names[i] + ": " + str(self.dim_sizes[self.dim_names[i]]) for i in range(self.n_dims)]))
-
         # Create a list of Dimension objects
         self.dims = [Dimension(self.dim_names[i],self.dim_sizes[self.dim_names[i]],i) for i in range(self.n_dims)]
 
         # Create a random n-D array
         self.arr = np.random.rand(*[self.dim_sizes[key] for key in self.dim_names])
         self.xarr = xr.DataArray(self.arr, dims = self.dim_names)
+
+        # Print dimension name and size
+        print("Dimension sizes: ")
+        print(self.xarr.sizes)
 
         # Create a figure
         self.figure = Figure()
@@ -74,6 +73,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Buttons for setting plot scale
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
+
+        self.lin_button.setChecked(True)
 
         self.lin_button.toggled.connect(lambda: self.change_scale('linear'))
         self.log_button.toggled.connect(lambda: self.change_scale('log'))
@@ -146,6 +147,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.im.set_norm(Normalize())
 
         # Draw the canvas
+        self.cbar.draw_all()
         self.canvas.draw()
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
