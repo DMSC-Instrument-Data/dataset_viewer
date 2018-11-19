@@ -205,11 +205,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Sequence to be carried out when the stepper detects a change
         def stepper_changer():
 
-            # Don't change the slider/stepper value if less than two buttons have been pressed
-            if self.num_buttons_pressed() <= 1:
-                self.revert_value_change(dim)
-                return
-
             # Obtain the stepper value
             stepper_val = dim.stepper.value()
 
@@ -228,11 +223,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Sequence to be carried out when the slider detects a change
         def slider_changer():
-
-            # Don't change the slider/stepper value if less than two buttons have been pressed
-            if self.num_buttons_pressed() <= 1:
-                self.revert_value_change(dim)
-                return
 
             # Obtain the slider value
             slider_val = dim.slider.value()
