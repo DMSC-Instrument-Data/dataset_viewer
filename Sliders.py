@@ -266,7 +266,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if self.cbar.mappable.colorbar is not None:
                 self.cbar.remove()
 
-            self.im.remove()
+            try:
+                self.im.remove()
+            except:
+                pass
 
             self.im = self.ax.imshow(self.arr)
             print(type(self.im))
@@ -284,7 +287,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             if self.cbar.mappable.colorbar is not None:
                 self.cbar.remove()
-            self.im.remove()
+
+            try:
+                self.im.remove()
+            except:
+                pass
+
             self.create_line_array()
             self.ax.plot(self.arr)
 
@@ -294,9 +302,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def plot_line(self):
 
-        if self.cbar is not None:
-            print(self.cbar)
+        try:
             self.cbar.remove()
+        except:
+            pass
 
         self.im.remove()
 
