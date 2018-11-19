@@ -96,6 +96,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Have the slider take up two 'cells' so the log/linear buttons are not pushed too far apart
             layout.addWidget(dim.stepper, dim.no+shift, 4,1,2)
 
+        self.norms = {'log': None, 'linear': Normalize()}
+
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
 
@@ -130,13 +132,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_scale(self, scale):
 
-        norms = {'log': LogNorm(*self.get_minmax()), 'linear': Normalize()}
-
-        self.im.set_norm(norms[scale])
+        self.im.set_norm(self.norms[scale])
 
         # Draw the canvas
-        self.cbar.draw_all()
+        self.update_colourbar()
         self.canvas.draw()
+
+    def update_colourbar(self):
+
+        self.cbar.remove()
+        self.cbar = self.figure.colorbar(self.im)
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
@@ -251,11 +256,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.create_slice_array()
 
         # Plot the reshaped array
-        self.im.set_data(self.arr)
+        self.im = self.ax.imshow(self.arr)
 
         # Update the colourbar
-        self.im.set_clim(*self.get_minmax())
-        self.cbar.draw_all()
+        self.update_colourbar()
 
         # Label the axes
         self.label_axes()
@@ -267,6 +271,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Create a 2D array
         self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+
+        self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
 
