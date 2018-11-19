@@ -55,7 +55,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.canvas,1,0,height_plot,width_plot)
         self.addToolBar(NavigationToolbar(self.canvas, self))
 
-        # Offset to make space for the log/linear buttons 
+        # Offset to make space for the log/linear buttons
         shift = 2
 
         # Buttons for setting plot scale
@@ -102,6 +102,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
+
+        self.ax.format_coord = self.format_coord
 
     def prepare_initial_view(self):
 
@@ -262,7 +264,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Plot the reshaped array
         self.im = self.ax.imshow(self.arr)
 
-        self.change_scale(self.curr_scale)
+        self.im.set_norm(self.norms[self.curr_scale])
 
         # Update the colourbar
         self.update_colourbar()
@@ -272,6 +274,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Draw the canvas
         self.canvas.draw()
+
+        print(self.arr)
 
     def create_slice_array(self):
 
@@ -306,6 +310,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return n_buttons_pressed
 
+    def format_coord(self, x, y):
+
+        # print(self.arr.shape)
+        numrows, numcols = self.arr.shape
+
+        col = int(x + 0.5)
+        row = int(y + 0.5)
+        if col >= 0 and col < numcols and row >= 0 and row < numrows:
+            z = self.arr[row, col]
+            return 'x=%1.4f, y=%1.4f, z=%1.4f' % (x, y, z)
+        else:
+            return 'x=%1.4f, y=%1.4f' % (x, y)
+
 if __name__ == "__main__":
 
     # Collection of letters used to create random dimension names
@@ -316,7 +333,7 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(2,10) for i in range(n_dims)]
+    dim_sizes = [randint(2,5) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
