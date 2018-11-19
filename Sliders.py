@@ -262,12 +262,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.create_slice_array()
 
         # Plot the reshaped array
+        self.cbar.remove()
+        self.im.remove()
         self.im = self.ax.imshow(self.arr)
 
         self.im.set_norm(self.norms[self.curr_scale])
+        self.cbar = self.figure.colorbar(self.im)
 
         # Update the colourbar
-        self.update_colourbar()
+        # self.update_colourbar()
 
         # Label the axes
         self.label_axes()
@@ -312,11 +315,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def format_coord(self, x, y):
 
-        # print(self.arr.shape)
         numrows, numcols = self.arr.shape
 
         col = int(x + 0.5)
         row = int(y + 0.5)
+
         if col >= 0 and col < numcols and row >= 0 and row < numrows:
             z = self.arr[row, col]
             return 'x=%1.4f, y=%1.4f, z=%1.4f' % (x, y, z)
