@@ -103,7 +103,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
 
-        self.ax.format_coord = self.format_coord
+        # self.ax.format_coord = self.format_coord
 
     def prepare_initial_view(self):
 
@@ -175,8 +175,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 self.slice_selection.pop(dim.name, None)
 
                 # Change the view if both a X and a Y axis have been selected
-                if self.num_buttons_pressed() == 2:
-                    self.change_view()
+                self.change_view()
 
             # Unset this dimension as an axis
             else:
@@ -259,32 +258,54 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def change_view(self):
 
         # Create the slice array
-        self.create_slice_array()
 
-        # Plot the reshaped array
-        self.cbar.remove()
+        if self.num_buttons_pressed() == 2:
+
+            self.create_slice_array()
+
+            if self.cbar.mappable.colorbar is not None:
+                self.cbar.remove()
+
+            self.im.remove()
+
+            self.im = self.ax.imshow(self.arr)
+            print(type(self.im))
+            self.im.set_norm(self.norms[self.curr_scale])
+            self.cbar = self.figure.colorbar(self.im)
+
+            # Label the axes
+            self.label_axes()
+
+            # Draw the canvas
+            self.canvas.draw()
+
+        else:
+
+
+            if self.cbar.mappable.colorbar is not None:
+                self.cbar.remove()
+            self.im.remove()
+            self.create_line_array()
+            self.ax.plot(self.arr)
+
+    def create_line_array(self):
+
+        self.arr = self.xarr.isel(self.slice_selection)
+
+    def plot_line(self):
+
+        if self.cbar is not None:
+            print(self.cbar)
+            self.cbar.remove()
+
         self.im.remove()
-        self.im = self.ax.imshow(self.arr)
 
-        self.im.set_norm(self.norms[self.curr_scale])
-        self.cbar = self.figure.colorbar(self.im)
-
-        # Update the colourbar
-        # self.update_colourbar()
-
-        # Label the axes
-        self.label_axes()
-
-        # Draw the canvas
-        self.canvas.draw()
-
-        print(self.arr)
+        self.ax.plot(self.arr)
 
     def create_slice_array(self):
 
         # Create a 2D array
         self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
-
         self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
@@ -336,7 +357,7 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(2,5) for i in range(n_dims)]
+    dim_sizes = [randint(4,5) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
