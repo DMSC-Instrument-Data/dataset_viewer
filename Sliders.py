@@ -125,7 +125,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.stepper.setVisible(False)
 
         # Create the slice array
-        self.create_slice_array()
+        self.create_twodim_array()
 
         # Create the axis plot and colourbar
         self.im = self.ax.imshow(self.arr)
@@ -174,9 +174,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 # Remvoe this dimension from the slice dictionary
                 self.slice_selection.pop(dim.name, None)
 
-                # Change the view if both a X and a Y axis have been selected
-                self.change_view()
-
             # Unset this dimension as an axis
             else:
 
@@ -189,6 +186,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
                 # Place this dimension in the slice dictionary
                 self.slice_selection[dim.name] = 0
+
+            # Change the view if both a X and a Y axis have been selected
+            self.change_view()
 
         return slice_changer
 
@@ -258,47 +258,50 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def change_view(self):
 
         # Create the slice array
+        if self.num_buttons_pressed() == 0:
+            return
 
-        if self.num_buttons_pressed() == 2:
+        self.clear_plot()
 
-            self.create_slice_array()
+        if self.num_buttons_pressed() == 1:
 
-            if self.cbar.mappable.colorbar is not None:
-                self.cbar.remove()
+            self.create_onedim_array()
+            self.ax.plot(self.arr)
 
-            try:
-                self.im.remove()
-            except:
-                pass
+        elif self.num_buttons_pressed() == 2:
 
+            self.create_twodim_array()
             self.im = self.ax.imshow(self.arr)
-            print(type(self.im))
             self.im.set_norm(self.norms[self.curr_scale])
             self.cbar = self.figure.colorbar(self.im)
 
             # Label the axes
             self.label_axes()
 
-            # Draw the canvas
-            self.canvas.draw()
+        # Draw the canvas
+        self.canvas.draw()
 
-        else:
+    def clear_plot(self):
 
+        try:
+            self.plot.remove()
+        except:
+            pass
 
-            if self.cbar.mappable.colorbar is not None:
-                self.cbar.remove()
+        try:
+            self.cbar.remove()
+        except:
+            pass
 
-            try:
-                self.im.remove()
-            except:
-                pass
+        try:
+            self.im.remove()
+        except:
+            pass
 
-            self.create_line_array()
-            self.ax.plot(self.arr)
-
-    def create_line_array(self):
+    def create_onedim_array(self):
 
         self.arr = self.xarr.isel(self.slice_selection)
+        print(self.arr)
 
     def plot_line(self):
 
@@ -311,7 +314,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ax.plot(self.arr)
 
-    def create_slice_array(self):
+    def create_twodim_array(self):
 
         # Create a 2D array
         self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
@@ -366,7 +369,7 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(4,5) for i in range(n_dims)]
+    dim_sizes = [randint(10,15) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
