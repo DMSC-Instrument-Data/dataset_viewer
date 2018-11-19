@@ -275,7 +275,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         try:
             self.line.pop(0).remove()
-            self.line.remove()
         except:
             pass
 
