@@ -62,6 +62,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
 
+        self.curr_scale = 'linear'
+
         # The Linear scale button is checked
         self.lin_button.setChecked(True)
 
@@ -131,6 +133,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.label_axes()
 
     def change_scale(self, scale):
+
+        self.curr_scale = scale
 
         self.im.set_norm(self.norms[scale])
 
@@ -257,6 +261,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Plot the reshaped array
         self.im = self.ax.imshow(self.arr)
+
+        self.change_scale(self.curr_scale)
 
         # Update the colourbar
         self.update_colourbar()
