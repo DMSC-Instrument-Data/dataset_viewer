@@ -256,7 +256,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if self.num_buttons_pressed() == 1:
 
             self.create_onedim_array()
-            self.ax.plot(self.arr)
+            self.line = self.ax.plot(self.arr)
 
         elif self.num_buttons_pressed() == 2:
 
@@ -274,7 +274,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def clear_plot(self):
 
         try:
-            self.plot.remove()
+            self.line.pop(0).remove()
+            self.line.remove()
         except:
             pass
 
