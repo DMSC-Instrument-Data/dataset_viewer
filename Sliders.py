@@ -52,7 +52,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Add the canvas to the layout
         height_plot = 1
         width_plot = 6
-        layout.addWidget(self.canvas,0,0,height_plot,width_plot)
+        layout.addWidget(self.canvas,1,0,height_plot,width_plot)
         self.addToolBar(NavigationToolbar(self.canvas, self))
 
         # Offset to make space for the log/linear buttons 
@@ -62,13 +62,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
 
+        # The Linear scale button is checked
         self.lin_button.setChecked(True)
 
+        # Functions for the Linear/Log buttons
         self.lin_button.toggled.connect(lambda: self.change_scale('linear'))
         self.log_button.toggled.connect(lambda: self.change_scale('log'))
 
-        layout.addWidget(self.lin_button,1,4)
-        layout.addWidget(self.log_button,1,5)
+        layout.addWidget(self.lin_button,0,4)
+        layout.addWidget(self.log_button,0,5)
 
         for dim in self.dims:
 
@@ -128,10 +130,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_scale(self, scale):
 
-        if scale == 'log':
-            self.im.set_norm(LogNorm(*self.get_minmax()))
-        else:
-            self.im.set_norm(Normalize())
+        norms = {'log': LogNorm(*self.get_minmax()), 'linear': Normalize()}
+
+        self.im.set_norm(norms[scale])
 
         # Draw the canvas
         self.cbar.draw_all()
