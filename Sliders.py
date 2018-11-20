@@ -264,7 +264,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ax.set_yscale(self.curr_scale)
 
             if self.curr_scale is 'linear':
-                self.ax.set_aspect(30.0)
+                self.ax.set_aspect('auto')
 
         elif self.num_buttons_pressed() == 2:
 
