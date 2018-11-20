@@ -256,7 +256,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if self.num_buttons_pressed() == 1:
 
             self.create_onedim_array()
-            self.line = self.ax.plot(self.arr)
+            self.line = self.ax.plot(self.arr,color='green')
 
         elif self.num_buttons_pressed() == 2:
 
@@ -359,7 +359,7 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(10,15) for i in range(n_dims)]
+    dim_sizes = [randint(15,20) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
