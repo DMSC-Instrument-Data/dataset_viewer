@@ -138,10 +138,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.curr_scale = scale
 
-        self.im.set_norm(self.norms[scale])
-
+        try:
+            self.im.set_norm(self.norms[scale])
+        except:
+            pass
+        
+        self.ax.set_yscale(scale)
+        
         # Draw the canvas
-        self.update_colourbar()
+        try:
+            self.update_colourbar()
+        except:
+            pass
+
         self.canvas.draw()
 
     def update_colourbar(self):
@@ -258,7 +267,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # self.figure.tight_layout()
             self.create_onedim_array()
             self.line = self.ax.plot(self.arr,color='green')
-            self.ax.get_current_fig_manager()    
 
         elif self.num_buttons_pressed() == 2:
 
