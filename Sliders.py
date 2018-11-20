@@ -140,16 +140,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         try:
             self.im.set_norm(self.norms[scale])
-        except:
-            pass
-
-        self.ax.set_yscale(scale)
-
-        # Draw the canvas
-        try:
             self.update_colourbar()
         except:
-            pass
+            self.ax.set_yscale(scale)
 
         self.canvas.draw()
 
@@ -264,13 +257,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         if self.num_buttons_pressed() == 1:
 
-            # self.figure.tight_layout()
             self.create_onedim_array()
+
             self.line = self.ax.plot(self.arr,color='green')
+
+            self.ax.set_yscale(self.curr_scale)
 
         elif self.num_buttons_pressed() == 2:
 
             self.create_twodim_array()
+
             self.im = self.ax.imshow(self.arr)
             self.im.set_norm(self.norms[self.curr_scale])
             self.cbar = self.figure.colorbar(self.im)
@@ -310,7 +306,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def create_onedim_array(self):
 
         self.arr = self.xarr.isel(self.slice_selection)
-        print(self.arr)
 
     def create_twodim_array(self):
 
