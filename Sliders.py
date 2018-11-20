@@ -142,9 +142,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.im.set_norm(self.norms[scale])
         except:
             pass
-        
+
         self.ax.set_yscale(scale)
-        
+
         # Draw the canvas
         try:
             self.update_colourbar()
@@ -263,7 +263,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.clear_plot()
 
         if self.num_buttons_pressed() == 1:
-        
+
             # self.figure.tight_layout()
             self.create_onedim_array()
             self.line = self.ax.plot(self.arr,color='green')
@@ -282,16 +282,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
 
     def x_button_pressed(self):
-    
+
         return any([dim.buttons[0].isChecked() for dim in self.dims])
-    
+
     def clear_plot(self):
 
         try:
             self.line.pop(0).remove()
         except:
             pass
-            
+
         try:
             self.ax.cla()
         except:
@@ -311,17 +311,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.arr = self.xarr.isel(self.slice_selection)
         print(self.arr)
-
-    def plot_line(self):
-
-        try:
-            self.cbar.remove()
-        except:
-            pass
-
-        self.im.remove()
-
-        self.ax.plot(self.arr)
 
     def create_twodim_array(self):
 
@@ -354,19 +343,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 n_buttons_pressed += 1
 
         return n_buttons_pressed
-
-    def format_coord(self, x, y):
-
-        numrows, numcols = self.arr.shape
-
-        col = int(x + 0.5)
-        row = int(y + 0.5)
-
-        if col >= 0 and col < numcols and row >= 0 and row < numrows:
-            z = self.arr[row, col]
-            return 'x=%1.4f, y=%1.4f, z=%1.4f' % (x, y, z)
-        else:
-            return 'x=%1.4f, y=%1.4f' % (x, y)
 
 if __name__ == "__main__":
 
