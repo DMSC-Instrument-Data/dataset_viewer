@@ -263,6 +263,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             self.ax.set_yscale(self.curr_scale)
 
+            if self.curr_scale is 'linear':
+                self.ax.set_aspect(30.0)
+
         elif self.num_buttons_pressed() == 2:
 
             self.create_twodim_array()
@@ -345,11 +348,11 @@ if __name__ == "__main__":
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     # Set number of dimension
-    n_dims = 7
+    n_dims = 6
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(15,20) for i in range(n_dims)]
+    dim_sizes = [randint(20,30) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
