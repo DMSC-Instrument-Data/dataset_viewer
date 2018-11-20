@@ -4,7 +4,7 @@ import xarray as xr
 from random import randint, sample
 from matplotlib.colors import LogNorm, Normalize
 
-from PyQt5.QtWidgets import QGridLayout, QRadioButton, QButtonGroup
+from PyQt5.QtWidgets import QGridLayout, QRadioButton
 
 from matplotlib.backends.qt_compat import QtWidgets, is_pyqt5
 if is_pyqt5():
@@ -74,9 +74,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         layout.addWidget(self.lin_button,0,4)
         layout.addWidget(self.log_button,0,5)
 
-        x_buttons = QButtonGroup(self.canvas)
-        y_buttons = QButtonGroup(self.canvas)
-
         for dim in self.dims:
 
             # Create a label
@@ -92,11 +89,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             # Create a stepper
             dim.create_stepper(self.stepper_changer_creator(dim))
-
-            x_buttons.addButton(dim.buttons[0])
-            x_buttons.setId(dim.buttons[0],dim.no)
-            y_buttons.addButton(dim.buttons[1])
-            y_buttons.setId(dim.buttons[1],dim.no)
 
             # Add the buttons and slider to the box
             layout.addWidget(dim.label, dim.no+shift, 0)
@@ -161,6 +153,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         def slice_changer():
 
+           # Ignore the instruction if another dimension has already been selected for the same axis
+            if self.axis_already_selected(dim,curr_axis_no):
+                dim.buttons[curr_axis_no].setChecked(False)
+                return
+
             # Set this dimension as an axes
             if dim.buttons[curr_axis_no].isChecked():
 
@@ -169,7 +166,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 dim.stepper.setVisible(False)
 
                 # Switch off the neighbouring button
-                # dim.buttons[neighb_axis_no].setChecked(False)
+                dim.buttons[neighb_axis_no].setChecked(False)
 
                 # Set current axis to this dimension
                 self.axes[curr_axis_no] = dim
