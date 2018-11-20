@@ -248,15 +248,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def change_view(self):
 
         # Create the slice array
-        if self.num_buttons_pressed() == 0:
+        if self.num_buttons_pressed() == 0 or not self.x_button_pressed():
             return
 
         self.clear_plot()
 
         if self.num_buttons_pressed() == 1:
-
+        
+            # self.figure.tight_layout()
             self.create_onedim_array()
             self.line = self.ax.plot(self.arr,color='green')
+            self.ax.get_current_fig_manager()    
 
         elif self.num_buttons_pressed() == 2:
 
@@ -271,10 +273,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Draw the canvas
         self.canvas.draw()
 
+    def x_button_pressed(self):
+    
+        return any([dim.buttons[0].isChecked() for dim in self.dims])
+    
     def clear_plot(self):
 
         try:
             self.line.pop(0).remove()
+        except:
+            pass
+            
+        try:
+            self.ax.cla()
         except:
             pass
 
