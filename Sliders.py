@@ -52,23 +52,27 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Add the canvas to the layout
         height_plot = 1
         width_plot = 6
-        layout.addWidget(self.canvas,0,0,height_plot,width_plot)
+        layout.addWidget(self.canvas,1,0,height_plot,width_plot)
         self.addToolBar(NavigationToolbar(self.canvas, self))
 
-        # Offset to make space for the log/linear buttons 
+        # Offset to make space for the log/linear buttons
         shift = 2
 
         # Buttons for setting plot scale
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
 
+        self.curr_scale = 'linear'
+
+        # The Linear scale button is checked
         self.lin_button.setChecked(True)
 
+        # Functions for the Linear/Log buttons
         self.lin_button.toggled.connect(lambda: self.change_scale('linear'))
         self.log_button.toggled.connect(lambda: self.change_scale('log'))
 
-        layout.addWidget(self.lin_button,1,4)
-        layout.addWidget(self.log_button,1,5)
+        layout.addWidget(self.lin_button,0,4)
+        layout.addWidget(self.log_button,0,5)
 
         x_buttons = QButtonGroup(self.canvas)
         y_buttons = QButtonGroup(self.canvas)
@@ -102,8 +106,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Have the slider take up two 'cells' so the log/linear buttons are not pushed too far apart
             layout.addWidget(dim.stepper, dim.no+shift, 4,1,2)
 
+        self.norms = {'log': None, 'linear': Normalize()}
+
         # Prepare the initial view (last two dimensions are set to X and Y)
         self.prepare_initial_view()
+
+        # self.ax.format_coord = self.format_coord
 
     def prepare_initial_view(self):
 
@@ -125,7 +133,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.stepper.setVisible(False)
 
         # Create the slice array
-        self.create_slice_array()
+        self.create_twodim_array()
 
         # Create the axis plot and colourbar
         self.im = self.ax.imshow(self.arr)
@@ -136,14 +144,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_scale(self, scale):
 
-        if scale == 'log':
-            self.im.set_norm(LogNorm(*self.get_minmax()))
-        else:
-            self.im.set_norm(Normalize())
+        self.curr_scale = scale
+
+        self.im.set_norm(self.norms[scale])
 
         # Draw the canvas
-        self.cbar.draw_all()
+        self.update_colourbar()
         self.canvas.draw()
+
+    def update_colourbar(self):
+
+        self.cbar.remove()
+        self.cbar = self.figure.colorbar(self.im)
 
     def press_button(self, dim, curr_axis_no, neighb_axis_no):
 
@@ -165,10 +177,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 # Remvoe this dimension from the slice dictionary
                 self.slice_selection.pop(dim.name, None)
 
-                # Change the view if both a X and a Y axis have been selected
-                if self.num_buttons_pressed() == 2:
-                    self.change_view()
-
             # Unset this dimension as an axis
             else:
 
@@ -181,6 +189,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
                 # Place this dimension in the slice dictionary
                 self.slice_selection[dim.name] = 0
+
+            # Change the view if both a X and a Y axis have been selected
+            self.change_view()
 
         return slice_changer
 
@@ -196,11 +207,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Sequence to be carried out when the stepper detects a change
         def stepper_changer():
-
-            # Don't change the slider/stepper value if less than two buttons have been pressed
-            if self.num_buttons_pressed() <= 1:
-                self.revert_value_change(dim)
-                return
 
             # Obtain the stepper value
             stepper_val = dim.stepper.value()
@@ -220,11 +226,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Sequence to be carried out when the slider detects a change
         def slider_changer():
-
-            # Don't change the slider/stepper value if less than two buttons have been pressed
-            if self.num_buttons_pressed() <= 1:
-                self.revert_value_change(dim)
-                return
 
             # Obtain the slider value
             slider_val = dim.slider.value()
@@ -250,25 +251,67 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def change_view(self):
 
         # Create the slice array
-        self.create_slice_array()
+        if self.num_buttons_pressed() == 0:
+            return
 
-        # Plot the reshaped array
-        self.im.set_data(self.arr)
+        self.clear_plot()
 
-        # Update the colourbar
-        self.im.set_clim(*self.get_minmax())
-        self.cbar.draw_all()
+        if self.num_buttons_pressed() == 1:
 
-        # Label the axes
-        self.label_axes()
+            self.create_onedim_array()
+            self.line = self.ax.plot(self.arr,color='green')
+
+        elif self.num_buttons_pressed() == 2:
+
+            self.create_twodim_array()
+            self.im = self.ax.imshow(self.arr)
+            self.im.set_norm(self.norms[self.curr_scale])
+            self.cbar = self.figure.colorbar(self.im)
+
+            # Label the axes
+            self.label_axes()
 
         # Draw the canvas
         self.canvas.draw()
 
-    def create_slice_array(self):
+    def clear_plot(self):
+
+        try:
+            self.line.pop(0).remove()
+        except:
+            pass
+
+        try:
+            self.cbar.remove()
+        except:
+            pass
+
+        try:
+            self.im.remove()
+        except:
+            pass
+
+    def create_onedim_array(self):
+
+        self.arr = self.xarr.isel(self.slice_selection)
+        print(self.arr)
+
+    def plot_line(self):
+
+        try:
+            self.cbar.remove()
+        except:
+            pass
+
+        self.im.remove()
+
+        self.ax.plot(self.arr)
+
+    def create_twodim_array(self):
 
         # Create a 2D array
         self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+        self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
 
@@ -296,6 +339,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return n_buttons_pressed
 
+    def format_coord(self, x, y):
+
+        numrows, numcols = self.arr.shape
+
+        col = int(x + 0.5)
+        row = int(y + 0.5)
+
+        if col >= 0 and col < numcols and row >= 0 and row < numrows:
+            z = self.arr[row, col]
+            return 'x=%1.4f, y=%1.4f, z=%1.4f' % (x, y, z)
+        else:
+            return 'x=%1.4f, y=%1.4f' % (x, y)
+
 if __name__ == "__main__":
 
     # Collection of letters used to create random dimension names
@@ -306,7 +362,7 @@ if __name__ == "__main__":
 
     # Generate random dimension names and sizes
     dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(2,10) for i in range(n_dims)]
+    dim_sizes = [randint(15,20) for i in range(n_dims)]
 
     # Create a random n-D array
     arr = np.random.rand(*[size for size in dim_sizes])
