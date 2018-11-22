@@ -107,7 +107,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def prepare_initial_view(self):
 
-	# Use the first value of the first n - 2 dimensions for the as the initial slices
+    # Use the first value of the first n - 2 dimensions for the as the initial slices
         for i in range(self.n_dims - 2):
             self.slice_selection[self.dim_names[i]] = 0
 
@@ -173,7 +173,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 # Set current axis to this dimension
                 self.axes[curr_axis_no] = dim
 
-                # Remvoe this dimension from the slice dictionary
+                # Remove this dimension from the slice dictionary
                 self.slice_selection.pop(dim.name, None)
 
             # Unset this dimension as an axis
@@ -249,11 +249,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def change_view(self):
 
+        self.clear_plot()
+
         # Create the slice array
         if self.num_buttons_pressed() == 0 or not self.x_button_pressed():
             return
-
-        self.clear_plot()
 
         if self.num_buttons_pressed() == 1:
 
@@ -263,8 +263,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             self.ax.set_yscale(self.curr_scale)
 
-            if self.curr_scale is 'linear':
-                self.ax.set_aspect('auto')
+            self.ax.set_aspect('auto')
 
         elif self.num_buttons_pressed() == 2:
 
