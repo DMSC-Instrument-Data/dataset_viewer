@@ -40,7 +40,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         # Create plot components
         self.figure = Figure()
-        self.ax = self.figure.add_subplot(1,1,1)
+        self.ax = self.figure.add_subplot(1, 1, 1)
         self.canvas = FigureCanvas(self.figure)
 
         # Create the layout
@@ -208,15 +208,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def stepper_changer_creator(self, dim):
 
         # SeqUence to be carried out when the stepper detects a change
-        def stepper_changer():
-
-            stepper_val = dim.stepper.value()
+        def stepper_changer(value):
 
             # Change slider value to match the stepper
-            dim.slider.setValue(stepper_val)
+            dim.slider.setValue(value)
 
             # Update the slice selection dictionary
-            self.slice_selection[dim.name] = stepper_val
+            self.slice_selection[dim.name] = value
 
             # Update view in light of slice-selection change
             self.change_view()
@@ -226,15 +224,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def slider_changer_creator(self, dim):
 
         # Sequence to be carried out when the slider detects a change
-        def slider_changer():
-
-            slider_val = dim.slider.value()
+        def slider_changer(value):
 
             # Change the stepper value to match the slider
-            dim.stepper.setValue(slider_val)
+            dim.stepper.setValue(value)
 
             # Update the slice selection dictionary
-            self.slice_selection[dim.name] = slider_val
+            self.slice_selection[dim.name] = value
 
             # Update view in light of slice-selection change
             self.change_view()
@@ -323,7 +319,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def get_minmax(self):
 
-        # Find the minimum and maximum values of the current array in order to configure the colourbar
+        '''
+        Find the minimum and maximum values of the current array in order to configure the
+        colourbar
+        '''
         min_val = self.arr.min().values
         max_val = self.arr.max().values
 
