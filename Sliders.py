@@ -21,6 +21,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def __init__(self,n_dims,dim_names,dims,xarr):
 
+        if n_dims < 2:
+            raise Exception("Data does not have enough dimensions.")
+
         super().__init__()
 
         self.n_dims = n_dims
