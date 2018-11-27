@@ -49,9 +49,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         layout = QGridLayout(self._main)
 
         # Define grid size
-        height_plot = 1
-        width_plot = 6
-        layout.addWidget(self.canvas,1,0,height_plot,width_plot)
+        plot_cols = 6
+        plot_rows = 1
+
+        # Have the plot take up one row and multiple columns so it fills the window
+        layout.addWidget(self.canvas,1,0,plot_rows,plot_cols)
         self.addToolBar(NavigationToolbar(self.canvas, self))
 
         # Offset to make space for the log/linear buttons
@@ -205,7 +207,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def stepper_changer_creator(self, dim):
 
-        # Sequence to be carried out when the stepper detects a change
+        # SeqUence to be carried out when the stepper detects a change
         def stepper_changer():
 
             stepper_val = dim.stepper.value()
@@ -221,7 +223,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return stepper_changer
 
-    def slider_changer_creator(self,dim):
+    def slider_changer_creator(self, dim):
 
         # Sequence to be carried out when the slider detects a change
         def slider_changer():
@@ -325,7 +327,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         min_val = self.arr.min().values
         max_val = self.arr.max().values
 
-        return [min_val,max_val]
+        return [min_val, max_val]
 
     def num_buttons_pressed(self):
 
@@ -342,23 +344,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
 
     # Collection of letters used to create random dimension names
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     # Set number of dimensions
-    n_dims = 6
+    N_DIMS = 6
 
     # Generate random dimension names and sizes
-    dim_names = [alphabet[i] for i in sample(range(26),n_dims)]
-    dim_sizes = [randint(20,30) for i in range(n_dims)]
+    DIM_NAMES = [ALPHABET[i] for i in sample(range(26), N_DIMS)]
+    DIM_SIZES = [randint(20, 30) for i in range(N_DIMS)]
 
     # Create a random n-D array
-    arr = np.random.rand(*[size for size in dim_sizes])
-    xarr = xr.DataArray(arr, dims = dim_names)
+    ARR = np.random.rand(*[size for size in DIM_SIZES])
+    XARR = xr.DataArray(ARR, dims=DIM_NAMES)
 
     # Create a list of Dimension objects
-    dims = [Dimension(dim_names[i],dim_sizes[i],i) for i in range(n_dims)]
+    DIMS = [Dimension(DIM_NAMES[i], DIM_SIZES[i], i) for i in range(N_DIMS)]
 
-    qapp = QtWidgets.QApplication(sys.argv)
-    app = ApplicationWindow(n_dims,dim_names,dims,xarr)
-    app.show()
-    qapp.exec_()
+    QAPP = QtWidgets.QApplication(sys.argv)
+    APP = ApplicationWindow(N_DIMS, DIM_NAMES, DIMS, XARR)
+    APP.show()
+    QAPP.exec_()
