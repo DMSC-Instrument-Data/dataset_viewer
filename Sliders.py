@@ -240,55 +240,63 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.clear_plot()
 
-        # Create the slice array
+        # Do nothing if zero buttons are pressed
         if self.num_buttons_pressed() == 0 or not self.x_button_pressed():
             return
 
+        # Create a 1D plot if a single X button has been pressed
         if self.num_buttons_pressed() == 1:
 
             self.create_onedim_array()
-
             self.line = self.ax.plot(self.arr,color='green')
 
+            # Set the appropriate scale based on the status of the log/linear buttons
             self.ax.set_yscale(self.curr_scale)
 
+            # Prevent the plot from being squashed
             self.ax.set_aspect('auto')
 
+        # Create a colourmap plot if an X and a Y button have been pressed
         elif self.num_buttons_pressed() == 2:
 
             self.create_twodim_array()
-
             self.im = self.ax.imshow(self.arr)
-            self.im.set_norm(self.norms[self.curr_scale])
-            self.cbar = self.figure.colorbar(self.im)
 
-            # Label the axes
+            # Set the appropriate scale based on the status of the log/linear buttons
+            self.im.set_norm(self.norms[self.curr_scale])
+
+            self.cbar = self.figure.colorbar(self.im)
             self.label_axes()
 
-        # Draw the canvas
         self.canvas.draw()
 
     def x_button_pressed(self):
 
+        # Check if any of the X buttons have been pressed for all dimension
         return any([dim.buttons[0].isChecked() for dim in self.dims])
 
     def clear_plot(self):
 
+        # Try to delete a line plot if it exists
         try:
             self.line.pop(0).remove()
         except:
+            # Exception - plot being displayed is a colourmap
             pass
 
+        # Prevent next plot from taking shape of the previous plot
         try:
             self.ax.cla()
         except:
             pass
 
+        # Try to delete a colourbar if it exists
         try:
             self.cbar.remove()
         except:
             pass
 
+        # Try to delete a colormap if it exists
         try:
             self.im.remove()
         except:
@@ -300,19 +308,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def create_twodim_array(self):
 
-        # Create a 2D array
         self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
         self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
 
-        # Label the axes
         self.ax.set_xlabel(self.axes[0].name)
         self.ax.set_ylabel(self.axes[1].name)
 
     def get_minmax(self):
 
-        # Find the minimum and maximum values of the current array
+        # Find the minimum and maximum values of the current array in order to configure the colourbar
         min_val = self.arr.min().values
         max_val = self.arr.max().values
 
@@ -321,7 +327,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def num_buttons_pressed(self):
 
         # Count the number of axis button that have been pressed
-        # Used to prevent X being pressed for two different dimensions, etc
+        # Used to prevent X being pressed for two different dimensions
         n_buttons_pressed = 0
 
         for dim in self.dims:
@@ -335,7 +341,7 @@ if __name__ == "__main__":
     # Collection of letters used to create random dimension names
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    # Set number of dimension
+    # Set number of dimensions
     n_dims = 6
 
     # Generate random dimension names and sizes
