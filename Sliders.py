@@ -35,21 +35,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         print("Dimension sizes: ")
         print(self.xarr.sizes)
 
-        # Create a figure
+        # Create plot components
         self.figure = Figure()
-
-        # Create an axis object
         self.ax = self.figure.add_subplot(1,1,1)
+        self.canvas = FigureCanvas(self.figure)
 
-        # Create a layout
+        # Create the layout
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
         layout = QGridLayout(self._main)
 
-        # Create a FigureCanvas
-        self.canvas = FigureCanvas(self.figure)
-
-        # Add the canvas to the layout
+        # Define grid size
         height_plot = 1
         width_plot = 6
         layout.addWidget(self.canvas,1,0,height_plot,width_plot)
@@ -62,21 +58,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.lin_button = QRadioButton("Linear")
         self.log_button = QRadioButton("Log")
 
+        # Starting scale for initial plot
         self.curr_scale = 'linear'
-
-        # The Linear scale button is checked
         self.lin_button.setChecked(True)
 
         # Functions for the Linear/Log buttons
         self.lin_button.toggled.connect(lambda: self.change_scale('linear'))
         self.log_button.toggled.connect(lambda: self.change_scale('log'))
 
+        # Insert log/linear buttons in top row of GridLayout
         layout.addWidget(self.lin_button,0,4)
         layout.addWidget(self.log_button,0,5)
 
         for dim in self.dims:
 
-            # Create a label
+            # Create dimension label that appears to the left of the button
             dim.create_label()
 
             # Create X and Y buttons for the slider
@@ -90,20 +86,20 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Create a stepper
             dim.create_stepper(self.stepper_changer_creator(dim))
 
-            # Add the buttons and slider to the box
+            # Add dimension components to the layout
             layout.addWidget(dim.label, dim.no+shift, 0)
             layout.addWidget(dim.buttons[0], dim.no+shift, 1)
             layout.addWidget(dim.buttons[1], dim.no+shift, 2)
             layout.addWidget(dim.slider, dim.no+shift, 3)
+
             # Have the slider take up two 'cells' so the log/linear buttons are not pushed too far apart
             layout.addWidget(dim.stepper, dim.no+shift, 4,1,2)
 
+        # Dictionary of norms to use when log/linear button is pressed
         self.norms = {'log': None, 'linear': Normalize()}
 
-        # Prepare the initial view (last two dimensions are set to X and Y)
+        # Prepare the initial view (this sets the last two dimensions as X and Y)
         self.prepare_initial_view()
-
-        # self.ax.format_coord = self.format_coord
 
     def prepare_initial_view(self):
 
@@ -118,7 +114,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.axes[0].buttons[0].setChecked(True)
         self.axes[1].buttons[1].setChecked(True)
 
-        # Disable their sliders and steppers
+        # Disable sliders and steppers of the last two dimensions
         for dim in self.axes:
 
             dim.slider.setVisible(False)
@@ -131,23 +127,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.im = self.ax.imshow(self.arr)
         self.cbar = self.figure.colorbar(self.im)
 
-        # Label the axes
         self.label_axes()
 
     def change_scale(self, scale):
 
+        # Update current scale
         self.curr_scale = scale
 
         try:
+            # Try to change the scale of the colormap plot
             self.im.set_norm(self.norms[scale])
             self.update_colourbar()
         except:
+            # Exception occurs becase colormap does not exist - instead change the scale of the 1D plot
             self.ax.set_yscale(scale)
 
         self.canvas.draw()
 
     def update_colourbar(self):
 
+        # Remove previous colorbar and create a new updated one
         self.cbar.remove()
         self.cbar = self.figure.colorbar(self.im)
 
@@ -163,7 +162,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Set this dimension as an axes
             if dim.buttons[curr_axis_no].isChecked():
 
-                # Disable the matching slider and stepper
+                # Disable the corresponding slider and stepper
                 dim.slider.setVisible(False)
                 dim.stepper.setVisible(False)
 
@@ -189,25 +188,23 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 # Place this dimension in the slice dictionary
                 self.slice_selection[dim.name] = 0
 
-            # Change the view if both a X and a Y axis have been selected
             self.change_view()
 
         return slice_changer
 
     def axis_already_selected(self,curr_dim,n_curr_axis):
 
-        # Check that the same axis has already been selected elsewhere (i.e., prevent to difference X buttons from being checked at the same time)
+        # Check that the same axis has already been selected elsewhere (this prevents two different X buttons from being checked at the same time)
         for dim in self.dims:
             if dim.buttons[n_curr_axis].isChecked() and dim != curr_dim:
                 return True
         return False
 
-    def stepper_changer_creator(self,dim):
+    def stepper_changer_creator(self, dim):
 
         # Sequence to be carried out when the stepper detects a change
         def stepper_changer():
 
-            # Obtain the stepper value
             stepper_val = dim.stepper.value()
 
             # Change slider value to match the stepper
@@ -216,7 +213,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Update the slice selection dictionary
             self.slice_selection[dim.name] = stepper_val
 
-            # Change the view
+            # Update view in light of slice-selection change
             self.change_view()
 
         return stepper_changer
@@ -226,7 +223,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Sequence to be carried out when the slider detects a change
         def slider_changer():
 
-            # Obtain the slider value
             slider_val = dim.slider.value()
 
             # Change the stepper value to match the slider
@@ -235,17 +231,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Update the slice selection dictionary
             self.slice_selection[dim.name] = slider_val
 
-            # Change the view
+            # Update view in light of slice-selection change
             self.change_view()
 
         return slider_changer
-
-    def revert_value_change(self, dim):
-
-        # Go back to the previous slider/stepper values when a change isn't wanted
-        #
-        dim.slider.setValue(self.slice_selection[dim.name])
-        dim.stepper.setValue(self.slice_selection[dim.name])
 
     def change_view(self):
 
