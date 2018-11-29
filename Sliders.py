@@ -174,24 +174,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 # Switch off the neighbouring button
                 dim.buttons[neighb_axis_no].setChecked(False)
 
-                # Set current axis to this dimension
-                self.axes[curr_axis_no] = dim
-
-                # Remove this dimension from the slice dictionary
-                self.slice_selection.pop(dim.name, None)
-
             # Unset this dimension as an axis
             else:
 
                 # Enable the matching slider and stepper
                 dim.slider.setVisible(True)
                 dim.stepper.setVisible(True)
-
-                # Set current axis to None
-                self.axes[curr_axis_no] = None
-
-                # Place this dimension in the slice dictionary
-                self.slice_selection[dim.name] = 0
 
             self.change_view()
 
@@ -235,6 +223,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             if not any([button.isChecked() for button in dim.buttons]):
                 self.slice_selection[dim.name] = dim.slider.value()
 
+    def update_axes(self):
+
+        self.axes = [None, None]
+
+        for dim in self.dims:
+            for i in range(len(dim.buttons)):
+                if dim.buttons[i].isChecked():
+                    self.axes[i] = dim
+
     def change_view(self):
 
         # Determine the slice needed from the current value of the steppers
@@ -261,6 +258,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Create a colourmap plot if an X and a Y button have been pressed
         elif self.num_buttons_pressed() == 2:
 
+            self.update_axes()
             self.create_twodim_array()
             self.im = self.ax.imshow(self.arr)
 
