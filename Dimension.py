@@ -13,10 +13,12 @@ class Dimension:
         self.buttons = [None, None]
         self.stepper = None
 
-    def create_slider(self,change_func):
+    def create_slider(self,change_funcs):
 
         self.slider = QSlider(Qt.Horizontal)
-        self.slider.valueChanged.connect(change_func)
+
+        for change_function in change_funcs:
+            self.slider.valueChanged.connect(change_function)
 
         # Set slider values
         self.slider.setMinimum(0)
@@ -43,11 +45,13 @@ class Dimension:
         self.label = QLabel()
         self.label.setText(self.name)
 
-    def create_stepper(self,change_func):
+    def create_stepper(self,change_funcs):
 
         self.stepper = QSpinBox()
 
         self.stepper.setRange(0,self.size-1)
-        self.stepper.valueChanged.connect(change_func)
+
+        for change_function in change_funcs:
+            self.stepper.valueChanged.connect(change_function)
 
 

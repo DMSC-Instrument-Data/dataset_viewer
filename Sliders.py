@@ -86,10 +86,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.create_buttons(x_func,y_func)
 
             # Create a slider
-            dim.create_slider(self.stepper_changer_creator(dim))
+            dim.create_slider([self.stepper_changer_creator(dim), self.change_view])
 
             # Create a stepper
-            dim.create_stepper(self.stepper_changer_creator(dim))
+            dim.create_stepper([self.stepper_changer_creator(dim), self.change_view])
 
             # Add dimension components to the layout
             layout.addWidget(dim.label, dim.no+shift, 0)
@@ -213,9 +213,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Change slider value to match the stepper
             dim.slider.setValue(value)
 
-            # Update view in light of slice-selection change
-            self.change_view()
-
         return stepper_changer
 
     def slider_changer_creator(self, dim):
@@ -225,9 +222,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             # Change the stepper value to match the slider
             dim.stepper.setValue(value)
-
-            # Update view in light of slice-selection change
-            self.change_view()
 
         return slider_changer
 
