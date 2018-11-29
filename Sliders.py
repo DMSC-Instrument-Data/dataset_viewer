@@ -86,7 +86,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             dim.create_buttons(x_func,y_func)
 
             # Create a slider
-            dim.create_slider(self.slider_changer_creator(dim))
+            dim.create_slider(self.stepper_changer_creator(dim))
 
             # Create a stepper
             dim.create_stepper(self.stepper_changer_creator(dim))
@@ -213,9 +213,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Change slider value to match the stepper
             dim.slider.setValue(value)
 
-            # Update the slice selection dictionary
-            self.slice_selection[dim.name] = value
-
             # Update view in light of slice-selection change
             self.change_view()
 
@@ -229,15 +226,25 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             # Change the stepper value to match the slider
             dim.stepper.setValue(value)
 
-            # Update the slice selection dictionary
-            self.slice_selection[dim.name] = value
-
             # Update view in light of slice-selection change
             self.change_view()
 
         return slider_changer
 
+    def get_slice_selection(self):
+
+        # Rebuild the slice selection dictionary based on the current value of the sliders
+        self.slice_selection = {}
+
+        for dim in self.dims:
+            # Ignore the dimensions that have been selected as an X/Y axis
+            if not any([button.isChecked() for button in dim.buttons]):
+                self.slice_selection[dim.name] = dim.slider.value()
+
     def change_view(self):
+
+        # Determine the slice needed from the current value of the steppers
+        self.get_slice_selection()
 
         self.clear_plot()
 
