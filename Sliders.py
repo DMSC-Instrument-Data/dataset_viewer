@@ -31,9 +31,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.dims = dims
         self.xarr = xarr
 
-        # Create empty dictionary for slice selection
-        self.slice_selection = {}
-
         # Print dimension name and size
         print("Dimension sizes: ")
         print(self.xarr.sizes)
@@ -107,10 +104,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.prepare_initial_view()
 
     def prepare_initial_view(self):
-
-    # Use the first value of the first n - 2 dimensions for the as the initial slices
-        for i in range(self.n_dims - 2):
-            self.slice_selection[self.dim_names[i]] = 0
 
         # Set the last two dimensions as the x and y axes
         self.axes = [self.dims[-2], self.dims[-1]]
@@ -215,13 +208,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def get_slice_selection(self):
 
-        # Rebuild the slice selection dictionary based on the current value of the sliders
-        self.slice_selection = {}
+        slice_selection = {}
 
         for dim in self.dims:
             # Ignore the dimensions that have been selected as an X/Y axis
             if not any([button.isChecked() for button in dim.buttons]):
-                self.slice_selection[dim.name] = dim.slider.value()
+                slice_selection[dim.name] = dim.slider.value()
+
+        return slice_selection
 
     def update_axes(self):
 
@@ -233,9 +227,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.axes[i] = dim
 
     def change_view(self):
-
-        # Determine the slice needed from the current value of the steppers
-        self.get_slice_selection()
 
         self.clear_plot()
 
@@ -304,11 +295,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def create_onedim_array(self):
 
-        self.arr = self.xarr.isel(self.slice_selection)
+        self.arr = self.xarr.isel(self.get_slice_selection())
 
     def create_twodim_array(self):
 
-        self.arr = self.xarr.isel(self.slice_selection).transpose(self.axes[1].name,self.axes[0].name)
+        self.arr = self.xarr.isel(self.get_slice_selection()).transpose(self.axes[1].name,self.axes[0].name)
         self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
