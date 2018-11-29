@@ -72,15 +72,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         for dim in self.dims:
 
-            # Create X and Y buttons for the slider
             x_func = self.press_button(dim,0,1)
             y_func = self.press_button(dim,1,0)
             dim.prepare_buttons(x_func,y_func)
 
-            # Create a slider
+            # Give the value change functions to the slider
             dim.prepare_slider([dim.stepper.setValue, self.change_view])
 
-            # Create a stepper
+            # Give the value change functions to the stepper
             dim.prepare_stepper([dim.slider.setValue, self.change_view])
 
             # Add dimension components to the layout
