@@ -105,18 +105,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def prepare_initial_view(self):
 
-        # Set the last two dimensions as the x and y axes
-        self.axes = [self.dims[-2], self.dims[-1]]
-
         # Check the X and Y buttons for the initial axes setup
-        self.axes[0].buttons[0].setChecked(True)
-        self.axes[1].buttons[1].setChecked(True)
+        self.dims[-2].buttons[0].setChecked(True)
+        self.dims[-1].buttons[1].setChecked(True)
 
         # Disable sliders and steppers of the last two dimensions
-        for dim in self.axes:
+        for i in [-2,-1]:
 
-            dim.slider.setVisible(False)
-            dim.stepper.setVisible(False)
+            self.dims[i].slider.setVisible(False)
+            self.dims[i].stepper.setVisible(False)
 
         # Create the slice array
         self.create_twodim_array()
@@ -219,12 +216,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def update_axes(self):
 
-        self.axes = [None, None]
+        axes = [None, None]
 
         for dim in self.dims:
             for i in range(len(dim.buttons)):
                 if dim.buttons[i].isChecked():
-                    self.axes[i] = dim
+                    axes[i] = dim
+
+        return axes
 
     def change_view(self):
 
@@ -249,7 +248,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Create a colourmap plot if an X and a Y button have been pressed
         elif self.num_buttons_pressed() == 2:
 
-            self.update_axes()
             self.create_twodim_array()
             self.im = self.ax.imshow(self.arr)
 
@@ -299,13 +297,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def create_twodim_array(self):
 
-        self.arr = self.xarr.isel(self.get_slice_selection()).transpose(self.axes[1].name,self.axes[0].name)
+        axes = self.update_axes()
+
+        self.arr = self.xarr.isel(self.get_slice_selection()).transpose(axes[1].name,axes[0].name)
         self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
 
-        self.ax.set_xlabel(self.axes[0].name)
-        self.ax.set_ylabel(self.axes[1].name)
+        axes = self.update_axes()
+
+        self.ax.set_xlabel(axes[0].name)
+        self.ax.set_ylabel(axes[1].name)
 
     def get_minmax(self):
 
