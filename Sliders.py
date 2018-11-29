@@ -19,16 +19,14 @@ from Dimension import Dimension
 
 class ApplicationWindow(QtWidgets.QMainWindow):
 
-    def __init__(self,n_dims,dim_names,dims,xarr):
+    def __init__(self,n_dims,dim_names,dim_sizes,xarr):
 
         if n_dims < 2:
             raise Exception("Data does not have enough dimensions.")
 
         super().__init__()
 
-        self.n_dims = n_dims
-        self.dim_names = dim_names
-        self.dims = dims
+        self.dims = [Dimension(dim_names[i], dim_sizes[i], i) for i in range(n_dims)]
         self.xarr = xarr
 
         # Print dimension name and size
@@ -74,19 +72,16 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         for dim in self.dims:
 
-            # Create dimension label that appears to the left of the button
-            dim.create_label()
-
             # Create X and Y buttons for the slider
             x_func = self.press_button(dim,0,1)
             y_func = self.press_button(dim,1,0)
-            dim.create_buttons(x_func,y_func)
+            dim.prepare_buttons(x_func,y_func)
 
             # Create a slider
-            dim.create_slider([self.stepper_changer_creator(dim), self.change_view])
+            dim.prepare_slider([dim.stepper.setValue, self.change_view])
 
             # Create a stepper
-            dim.create_stepper([self.stepper_changer_creator(dim), self.change_view])
+            dim.prepare_stepper([dim.slider.setValue, self.change_view])
 
             # Add dimension components to the layout
             layout.addWidget(dim.label, dim.no+shift, 0)
@@ -183,26 +178,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 return True
         return False
 
-    def stepper_changer_creator(self, dim):
-
-        # SeqUence to be carried out when the stepper detects a change
-        def stepper_changer(value):
-
-            # Change slider value to match the stepper
-            dim.slider.setValue(value)
-
-        return stepper_changer
-
-    def slider_changer_creator(self, dim):
-
-        # Sequence to be carried out when the slider detects a change
-        def slider_changer(value):
-
-            # Change the stepper value to match the slider
-            dim.stepper.setValue(value)
-
-        return slider_changer
-
     def get_slice_selection(self):
 
         slice_selection = {}
@@ -214,7 +189,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         return slice_selection
 
-    def update_axes(self):
+    def get_axes_selection(self):
 
         axes = [None, None]
 
@@ -297,14 +272,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def create_twodim_array(self):
 
-        axes = self.update_axes()
+        axes = self.get_axes_selection()
 
         self.arr = self.xarr.isel(self.get_slice_selection()).transpose(axes[1].name,axes[0].name)
         self.norms['log'] = LogNorm(*self.get_minmax())
 
     def label_axes(self):
 
-        axes = self.update_axes()
+        axes = self.get_axes_selection()
 
         self.ax.set_xlabel(axes[0].name)
         self.ax.set_ylabel(axes[1].name)
@@ -337,21 +312,17 @@ if __name__ == "__main__":
     # Collection of letters used to create random dimension names
     ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    # Set number of dimensions
     N_DIMS = 6
 
     # Generate random dimension names and sizes
     DIM_NAMES = [ALPHABET[i] for i in sample(range(26), N_DIMS)]
-    DIM_SIZES = [randint(20, 30) for i in range(N_DIMS)]
+    DIM_SIZES = [randint(10, 30) for i in range(N_DIMS)]
 
     # Create a random n-D array
     ARR = np.random.rand(*[size for size in DIM_SIZES])
     XARR = xr.DataArray(ARR, dims=DIM_NAMES)
 
-    # Create a list of Dimension objects
-    DIMS = [Dimension(DIM_NAMES[i], DIM_SIZES[i], i) for i in range(N_DIMS)]
-
     QAPP = QtWidgets.QApplication(sys.argv)
-    APP = ApplicationWindow(N_DIMS, DIM_NAMES, DIMS, XARR)
+    APP = ApplicationWindow(N_DIMS, DIM_NAMES, DIM_SIZES, XARR)
     APP.show()
     QAPP.exec_()
