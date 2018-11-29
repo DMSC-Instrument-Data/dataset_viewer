@@ -1,0 +1,5 @@
+*.swp
+*pycache*
+[#]*[#]
+*.pyc
+flycheck_*
