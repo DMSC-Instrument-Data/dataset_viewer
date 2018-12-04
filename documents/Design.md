@@ -4,6 +4,11 @@ Programming Language: Python 3
 Coding Style: PEP8  
 Design Pattern: Model View Presenter (Passive View)
 ## Class Diagram
+DimensionView: Contains the slider, buttons, and stepper for an individual dimension.  
+DimensionPresenter: Manages the behaviour of the DimensionView.  
+MainView: Contains the individual DimensionViews and the central plot.  
+MainPresenter: Manages the behaviour of the MainView.  
+MainModel: Contains the data array. 
 ## Sequence Diagrams
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
