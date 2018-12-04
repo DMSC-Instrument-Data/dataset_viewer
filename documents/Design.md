@@ -5,9 +5,9 @@ Coding Style: PEP8
 Design Pattern: Model View Presenter (Passive View)
 ## Class Diagram
 DimensionView: Contains the slider, buttons, and stepper for an individual dimension.  
-DimensionPresenter: Manages the behaviour of the DimensionView.  
+DimensionPresenter: Manages the behavior of the DimensionView.  
 MainView: Contains the individual DimensionViews and the central plot.  
-MainPresenter: Manages the behaviour of the MainView.  
+MainPresenter: Manages the behavior of the MainView and retrieves data from the MainModel.  
 MainModel: Contains the data array. 
 ## Sequence Diagrams
 ### Pressing an X Button
