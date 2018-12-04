@@ -2,13 +2,13 @@
 
 Programming Language: Python 3  
 Coding Style: PEP8  
-Design Pattern: Model View Presenter (Passive View)  
+Design Pattern: Model View Presenter (Passive View)
+## Class Diagram
 ## Sequence Diagrams
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
 ### Stepper Change
 ![Stepper Change Sequence Diagram](StepperChange.png)
-## UML Diagram
 ## Development Principles
 * Testing must take place alongside development
 * Reviewing must take place before code is merged into the master branch
