@@ -11,3 +11,5 @@ Design Pattern: Model View Presenter (Passive View)
 * The reviewer must be someone other than the main developer
 * Merging can only take place if all tests pass and the reviewer finds the code satisfactory
 ## Testing and QA
+* Use the `unittest` library
+* `mock` the View
