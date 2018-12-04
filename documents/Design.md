@@ -6,6 +6,8 @@ Design Pattern: Model View Presenter (Passive View)
 ## Sequence Diagrams
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
+### Stepper Change
+![Stepper Change Sequence Diagram](StepperChange.png)
 ## UML Diagram
 ## Development Principles
 * Testing must take place alongside development
