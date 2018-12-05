@@ -14,7 +14,7 @@ MainView: Contains the individual DimensionViews and the central plot.
 MainPresenter: Manages the behavior of the MainView and retrieves data from the MainModel.  
 MainModel: Contains the data array. 
 ## Sequence Diagrams
-These sequence diagrams illustrate the object interations that occur in the case of the following user actions: 
+These sequence diagrams illustrate the object interactions that occur in the case of the following user actions: 
 * Pressing an X button for one of the dimensions
 * Changing the stepper value for one of the dimensions
 ### Pressing an X Button
@@ -22,10 +22,17 @@ These sequence diagrams illustrate the object interations that occur in the case
 ### Stepper Change
 ![Stepper Change Sequence Diagram](StepperChange.png)
 ## Development Principles
-* Testing must take place alongside development
-* Reviewing must take place before code is merged into the master branch
-* The reviewer must be someone other than the developer
-* Merging can only take place if all tests pass and the reviewer(s) finds the code satisfactory
-## Testing and QA
-* Use the `unittest` library
-* `mock` the View
+* All programming will follow a test-driven development approach
+* At least one reviewer must examine the code and this reviewer cannot be a developer on the project
+## Testing and QA Principles
+* Testing will be done with the `unittest` library
+* `mock`s will be created for the the View
+* Test coverage will be measured with the aim to achieve a coverage of at least 85%
+* All tests will be executed by the CI build server
+* Tests should be written to the same quality as the rest of the codebase
+* Tests must not be changed without good justification
+* Destructive and happy-path tests will be put in place
+## Merging Conditions
+* All tests pass
+* All builds pass
+* All reviewers find the code satisfactory
