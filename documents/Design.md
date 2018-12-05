@@ -14,6 +14,9 @@ MainView: Contains the individual DimensionViews and the central plot.
 MainPresenter: Manages the behavior of the MainView and retrieves data from the MainModel.  
 MainModel: Contains the data array. 
 ## Sequence Diagrams
+These sequence diagrams illustrate the object interations that occur in the case of the following user actions: 
+* Pressing an X button for one of the dimensions
+* Changing the stepper value for one of the dimensions
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
 ### Stepper Change
