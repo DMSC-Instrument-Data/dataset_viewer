@@ -23,7 +23,7 @@ These sequence diagrams illustrate the object interactions that occur in the cas
 ![Stepper Change Sequence Diagram](StepperChange.png)
 ## Development Principles
 * All programming will follow a test-driven development approach
-* At least one reviewer must examine the code and this reviewer cannot be a developer on the project
+* At least one reviewer must examine the code and this reviewer cannot be the developer of the feature
 * All presenters and tests will be created prior to the development of any concrete views
 ## Testing and QA Principles
 * Testing will be done with the `unittest` library
