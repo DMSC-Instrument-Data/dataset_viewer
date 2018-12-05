@@ -3,6 +3,9 @@
 Programming Language: Python 3  
 Coding Style: PEP8  
 Design Pattern: Model View Presenter (Passive View)
+
+The [MSlice](https://github.com/mantidproject/mslice) tool served as a guideline when designing the Dataset Viewer and informed the choice of design pattern.
+
 ## Class Diagram
 ![Class Diagram](ClassDiagram.png)  
 DimensionView: Contains the slider, buttons, and stepper for an individual dimension.  
