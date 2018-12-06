@@ -1,3 +1,6 @@
 *pycache*
 *~
 *.pyc
+build/*
+dist/*
+*.egg-info/*
