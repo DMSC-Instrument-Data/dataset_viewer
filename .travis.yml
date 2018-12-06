@@ -3,6 +3,6 @@ python: "3.6"
 
 install: pip3 install -r requirements.txt
 
-script: nosetests
+script: nosetests datasetviewer
 
 after_sucess: coveralls

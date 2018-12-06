@@ -1,5 +1,7 @@
 import unittest
-from StringReverse import reverse_string
+
+def reverse_string(word):
+    return word[::-1] 
 
 class BasicTestCase(unittest.TestCase):
 
