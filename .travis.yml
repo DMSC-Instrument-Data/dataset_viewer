@@ -7,4 +7,6 @@ script:
     - nosetests datasetviewer --with-coverage
     - coverage report --omit "*virtualenv/*"
 
+# script: nosetests datasetviewer --with-coverage --cover-package=datasetviewer
+
 after_sucess: coveralls
