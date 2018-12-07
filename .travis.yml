@@ -1,12 +1,10 @@
 language: python
 python: "3.6"
 
-install: pip3 install -r requirements.txt
+install:
+    - python3 setup.py install
+    - pip3 install -r requirements.txt
 
-script: 
-    - nosetests datasetviewer --with-coverage
-    - coverage report --omit "*virtualenv/*"
-
-# script: nosetests datasetviewer --with-coverage --cover-package=datasetviewer
+script: nosetests datasetviewer --with-coverage --cover-package=datasetviewer
 
 after_sucess: coveralls
