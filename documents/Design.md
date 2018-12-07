@@ -5,6 +5,17 @@ Coding Style: PEP8
 Design Pattern: Model View Presenter (Passive View)
 
 The [MSlice](https://github.com/mantidproject/mslice) tool served as a guideline when designing the Dataset Viewer and informed the choice of design pattern.
+## Mockups
+These mockups illustrate the interface for the following cases:
+* The basic layout
+* Colour scheme selection
+* Zooming using a region of interest
+### Basic Layout
+![Basic alyout for the dataset viewer](BasicLayout.png)
+### Selecting a Colour Scheme
+![Selecting a colour scheme](ColourScheme.png)
+### Zooming
+![Zooming with a region of interest](Zoom.png)
 
 ## Class Diagram
 ![Class Diagram](ClassDiagram.png)  
