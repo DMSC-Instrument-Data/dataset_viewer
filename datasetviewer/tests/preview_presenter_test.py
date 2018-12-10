@@ -1,9 +1,9 @@
 import unittest
 import mock
 
-from datasetviewer.preview import PreviewPresenter
-from datasetviewer.preview import PreviewView
-from datasetviewer.source import DataSetSource
+from datasetviewer.preview.PreviewPresenter import PreviewPresenter
+from datasetviewer.preview.PreviewView import PreviewView
+from datasetviewer.source.DataSetSource import DataSetSource
 
 
 class PreviewPresenterTest(unittest.TestCase):
