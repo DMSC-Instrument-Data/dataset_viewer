@@ -8,3 +8,6 @@ class DataSetSource(object):
 
     def get_element(self, name):
         pass
+
+    def get_data(self):
+        return [None]

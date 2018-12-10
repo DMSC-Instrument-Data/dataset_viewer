@@ -55,3 +55,10 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter.add_preview_entry(self.fake_data.name)
 
         self.view.add_entry_to_list.assert_called_once_with(self.fake_preview_text)
+
+    def test_populate_preview_list(self):
+
+        prev_presenter = PreviewPresenter(view=self.view, source=self.source)
+        prev_presenter.populate_preview_list()
+
+        self.source.get_data.assert_called_once()

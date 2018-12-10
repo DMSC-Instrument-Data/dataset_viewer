@@ -25,5 +25,12 @@ class PreviewPresenter(object):
         entry_text = self.create_preview_text(name)
         self._view.add_entry_to_list(entry_text)
 
+    def populate_preview_list(self):
+
+        data = self._source.get_data()
+
+        for item in data:
+            self.add_preview_entry(item.key())
+
     def notify(self, command):
         pass
