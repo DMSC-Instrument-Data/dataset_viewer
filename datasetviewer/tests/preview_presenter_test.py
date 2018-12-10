@@ -12,6 +12,12 @@ class PreviewPresenterTest(unittest.TestCase):
         self.view = mock.create_autospec(PreviewView)
         self.source = mock.create_autospec(DataSetSource)
 
+    def test_presenter_assignment(self):
+        prev_presenter = PreviewPresenter(view=self.view, source=self.source)
+
+        self.assertEqual(prev_presenter._view, self.view)
+        self.assertEqual(prev_presenter._source, self.source)
+        
     def test_presenter_throws_if_view_none(self):
         with self.assertRaises(ValueError):
             prev_presenter = PreviewPresenter(view=None, source=self.source)
