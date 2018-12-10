@@ -29,8 +29,8 @@ class PreviewPresenter(object):
 
         data = self._source.get_data()
 
-        for item in data:
-            self.add_preview_entry(item.key())
+        for key,_ in data.items():
+            self.add_preview_entry(key)
 
     def notify(self, command):
         pass
