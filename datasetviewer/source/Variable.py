@@ -1,0 +1,2 @@
+class Variable(object):
+    pass
