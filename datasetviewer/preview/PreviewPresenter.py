@@ -21,7 +21,9 @@ class PreviewPresenter(object):
         return name + "\n" + str(dims)
 
     def add_preview_entry(self, name):
-        pass
+
+        entry_text = self.create_preview_text(name)
+        self._view.add_entry_to_list(entry_text)
 
     def notify(self, command):
         pass
