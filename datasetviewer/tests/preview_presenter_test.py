@@ -80,11 +80,9 @@ class PreviewPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             prev_presenter.notify("BADCOMMAND")
 
-        good_commands = [c for c in Command]
-
         try:
-            for command in good_commands:
-                prev_presenter.notify(command)
+            for c in Command:
+                prev_presenter.notify(c)
 
         except ValueError:
-            self.fail("Command " + command + " raised an Exception.")
+            self.fail("Command " + c + " raised an Exception.")
