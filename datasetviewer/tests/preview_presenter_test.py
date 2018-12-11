@@ -7,8 +7,8 @@ from collections import OrderedDict as DataSet
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
-from datasetviewer.source.DataSetSource import DataSetSource
-from datasetviewer.source.Variable import Variable
+from datasetviewer.datasource.DataSetSource import DataSetSource
+from datasetviewer.datasource.Variable import Variable
 
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -73,12 +73,16 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_presenter.populate_preview_list()
             add_prev.assert_called_once_with(self.fake_data.name)
 
-    def test_notify_exceptions(self):
+    def test_notify_thows_exceptions(self):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
         with self.assertRaises(ValueError):
             prev_presenter.notify("BADCOMMAND")
+
+    def test_notify_doesnt_throw_exception(self):
+
+        prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
         try:
             for c in Command:
