@@ -78,13 +78,15 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             prev_presenter.notify("BADCOMMAND")
 
+        # Have to add to this list as Command class is expanded
         good_commands = [Command.Selection]
 
         try:
             for command in good_commands:
                 prev_presenter.notify(command)
-        except Exception:
+                
+        except ValueError:
             self.fail("Command " + command + " raised an Exception.")

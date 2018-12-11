@@ -37,4 +37,4 @@ class PreviewPresenter(object):
         if command == Command.Selection:
             pass
         else:
-            raise Exception("Error: Command " + command + " not recognised in PreviewPresenter.")
+            raise ValueError("Error: Command " + command + " not recognised in PreviewPresenter.")
