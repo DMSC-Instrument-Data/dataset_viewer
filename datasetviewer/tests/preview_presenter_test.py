@@ -4,6 +4,8 @@ from mock import MagicMock, patch
 
 from collections import OrderedDict as DataSet
 
+from enum import Enum
+
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
@@ -77,8 +79,10 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
+        fake_enum = Enum(value='invalid',names=[('bad_command',-200000)])
+
         with self.assertRaises(ValueError):
-            prev_presenter.notify("BADCOMMAND")
+            prev_presenter.notify(fake_enum.bad_command)
 
     def test_notify_doesnt_throw_exception(self):
 

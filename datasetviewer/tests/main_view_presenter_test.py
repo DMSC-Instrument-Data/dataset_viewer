@@ -2,6 +2,8 @@ import unittest
 import mock
 from mock import MagicMock, patch, Mock
 
+from enum import Enum
+
 from datasetviewer.mainview.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
@@ -25,8 +27,10 @@ class MainViewPresenterTest(unittest.TestCase):
         subpresenters = [Mock() for i in range(10)]
         main_view_presenter = MainViewPresenter(self.mainview, *subpresenters)
 
+        fake_enum = Enum(value='invalid',names=[('bad_command',-200000)])
+        
         with self.assertRaises(ValueError):
-            main_view_presenter.notify("BADCOMMAND")
+            main_view_presenter.notify(fake_enum.bad_command)
 
     def test_notify_doesnt_throw_exception(self):
 

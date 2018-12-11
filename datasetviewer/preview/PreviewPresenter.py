@@ -35,6 +35,7 @@ class PreviewPresenter(object):
     def notify(self, command):
 
         if command == Command.ARRAYSELECTION:
+            # Load the array into the plot
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

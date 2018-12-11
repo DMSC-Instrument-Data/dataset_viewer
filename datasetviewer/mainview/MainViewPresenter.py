@@ -13,8 +13,10 @@ class MainViewPresenter(object):
     def notify(self, command):
 
         if command == PreviewCommand.ARRAYSELECTION:
+            # Tell PlotView to plot this element in the dictionary
             pass
         elif command == DataCommand.FILESELECTION:
+            # Load the file into the preview
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
