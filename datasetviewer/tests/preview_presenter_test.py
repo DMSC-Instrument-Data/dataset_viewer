@@ -80,7 +80,7 @@ class PreviewPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             prev_presenter.notify("BADCOMMAND")
 
-        good_commands = [Command.__dict__[i] for i in Command.__dict__ if not i.startswith('__')]
+        good_commands = [c for c in Command]
 
         try:
             for command in good_commands:

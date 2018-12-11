@@ -34,7 +34,7 @@ class PreviewPresenter(object):
 
     def notify(self, command):
 
-        if command == Command.Selection:
+        if command == Command.SELECTION:
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

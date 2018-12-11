@@ -1,2 +1,5 @@
-class Command:
-    Selection = -999
+from enum import Enum
+
+class Command(Enum):
+    
+    SELECTION = 100
