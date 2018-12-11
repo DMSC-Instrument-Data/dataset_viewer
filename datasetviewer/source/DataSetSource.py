@@ -1,10 +1,14 @@
+from abc import abstractmethod
+
 class DataSetSource(object):
 
-    def __init__(self, data):
-        self.data = data
+    def __init__(self):
+        pass
 
+    @abstractmethod
     def get_element(self, name):
-        return self.data[name]
+        pass
 
+    @abstractmethod
     def get_data(self):
-        return data
+        pass

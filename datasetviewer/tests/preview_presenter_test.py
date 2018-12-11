@@ -11,7 +11,6 @@ from datasetviewer.source.DataSetSource import DataSetSource
 from datasetviewer.source.Variable import Variable
 
 
-
 class PreviewPresenterTest(unittest.TestCase):
 
     def setUp(self):
@@ -46,7 +45,7 @@ class PreviewPresenterTest(unittest.TestCase):
         self.assertEqual(prev_presenter.create_preview_text(self.fake_data.name), self.fake_preview_text)
 
     def test_call_to_create_preview_text(self):
-        
+
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
         with patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.create_preview_text') as prev_text:
@@ -81,12 +80,11 @@ class PreviewPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             prev_presenter.notify("BADCOMMAND")
 
-        # Have to add to this list as Command class is expanded
-        good_commands = [Command.Selection]
+        good_commands = [Command.__dict__[i] for i in Command.__dict__ if not i.startswith('__')]
 
         try:
             for command in good_commands:
                 prev_presenter.notify(command)
-                
+
         except ValueError:
             self.fail("Command " + command + " raised an Exception.")
