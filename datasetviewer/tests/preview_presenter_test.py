@@ -6,8 +6,10 @@ from collections import OrderedDict as DataSet
 
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.PreviewView import PreviewView
+from datasetviewer.preview.Command import Command
 from datasetviewer.source.DataSetSource import DataSetSource
 from datasetviewer.source.Variable import Variable
+
 
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -51,7 +53,7 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_presenter.add_preview_entry(self.fake_data.name)
             prev_text.assert_called_once()
 
-    def text_create_preview_calls_add_to_list(self):
+    def test_create_preview_calls_add_to_list(self):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
         prev_presenter.add_preview_entry(self.fake_data.name)
@@ -71,3 +73,18 @@ class PreviewPresenterTest(unittest.TestCase):
         with patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.add_preview_entry') as add_prev:
             prev_presenter.populate_preview_list()
             add_prev.assert_called_once_with(self.fake_data.name)
+
+    def test_notify_exceptions(self):
+
+        prev_presenter = PreviewPresenter(view=self.view, source=self.source)
+
+        with self.assertRaises(Exception):
+            prev_presenter.notify("BADCOMMAND")
+
+        good_commands = [Command.Selection]
+
+        try:
+            for command in good_commands:
+                prev_presenter.notify(command)
+        except Exception:
+            self.fail("Command " + command + " raised an Exception.")

@@ -1,13 +1,10 @@
 class DataSetSource(object):
 
-    def __init__(self):
-        pass
-
-    def load(self):
-        pass
+    def __init__(self, data):
+        self.data = data
 
     def get_element(self, name):
-        pass
+        return self.data[name]
 
     def get_data(self):
-        return [None]
+        return data
