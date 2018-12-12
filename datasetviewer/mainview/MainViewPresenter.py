@@ -13,10 +13,17 @@ class MainViewPresenter(object):
     def notify(self, command):
 
         if command == PreviewCommand.ARRAYSELECTION:
-            # Tell PlotView to plot this element in the dictionary
+            # Retrieve key of current selection from preview view
+            # Get data corresponding with key from data source model
+            # Send data to plot view
             pass
         elif command == DataCommand.FILESELECTION:
-            # Load the file into the preview
+            # Get file location from view
+            # Load/validate file?
+            # Convert to xarray format
+            # Validate array?
+            # Send array to model
+            # Tell preview presenter to update preview view
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

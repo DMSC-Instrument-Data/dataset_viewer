@@ -15,10 +15,11 @@ class MainViewPresenterTest(unittest.TestCase):
 
         self.mainview = mock.create_autospec(MainView)
 
-    def test_constructor_sucess(self):
+    def test_constructor_success(self):
 
         subpresenters = [Mock() for i in range(10)]
         main_view_presenter = MainViewPresenter(self.mainview, *subpresenters)
+
         for presenter in subpresenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
@@ -43,4 +44,4 @@ class MainViewPresenterTest(unittest.TestCase):
             for c in valid_commands:
                 main_view_presenter.notify(c)
         except ValueError:
-            self.fail("Exception thrown my MainViewPresenter.notify for command: " + c)
+            self.fail("Exception thrown by MainViewPresenter.notify for command: " + c)
