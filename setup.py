@@ -13,9 +13,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/DMSC-Instrument-Data/dataset_viewer",
     packages=['datasetviewer'],
-    tests_require=['nose>=1'],
-    test_suite='datasetviewer.tests',
     classifiers=[
         "Programming Language :: Python :: 3"
     ],
+    tests_require=['nose>=1'],
+    test_suite='datasetviewer.tests',
 )

@@ -7,7 +7,7 @@ from mock import Mock
 from datasetviewer.mainview.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
-from datasetviewer.datasource.Command import Command as DataCommand
+from datasetviewer.dataset.Command import Command as DataCommand
 
 
 class MainViewPresenterTest(unittest.TestCase):

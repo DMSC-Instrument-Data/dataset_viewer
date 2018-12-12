@@ -1,5 +1,5 @@
 from datasetviewer.preview.Command import Command as PreviewCommand
-from datasetviewer.datasource.Command import Command as DataCommand
+from datasetviewer.dataset.Command import Command as DataCommand
 
 
 class MainViewPresenter(object):
@@ -10,6 +10,9 @@ class MainViewPresenter(object):
 
         for presenter in subpresenters:
             presenter.register_master(self)
+
+    def subscribe_subpresenter(self, *sub_presenter):
+        pass
 
     def notify(self, command):
 

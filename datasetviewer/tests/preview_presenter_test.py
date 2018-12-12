@@ -9,7 +9,7 @@ from enum import Enum
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
-from datasetviewer.datasource.DataSetSource import DataSetSource
+from datasetviewer.dataset.DataSetSource import DataSetSource
 
 
 class PreviewPresenterTest(unittest.TestCase):
