@@ -22,7 +22,7 @@ class PreviewPresenterTest(unittest.TestCase):
 
         self.fake_data = Variable()
         self.fake_data.name = "Key"
-        self.fake_data.dimension_size = (8,5)
+        self.fake_data.dimension_size = (8, 5)
         self.fake_preview_text = self.fake_data.name + "\n" + str(self.fake_data.dimension_size)
 
         fake_dict = DataSet()
@@ -89,8 +89,8 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
         try:
-            for c in Command:
-                prev_presenter.notify(c)
+            for command in Command:
+                prev_presenter.notify(command)
 
         except ValueError:
-            self.fail("Command " + c + " raised an Exception.")
+            self.fail("Command " + command + " raised an Exception.")

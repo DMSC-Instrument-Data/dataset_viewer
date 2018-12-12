@@ -5,6 +5,8 @@ install:
     - pip3 install -r requirements.txt
     - python3 setup.py install
 
-script: python3 setup.py nosetests
+script: 
+    - python3 setup.py nosetests
+    - python3 setup.py flake8
 
 after_sucess: coveralls

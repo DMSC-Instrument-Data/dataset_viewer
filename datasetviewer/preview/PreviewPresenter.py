@@ -29,7 +29,7 @@ class PreviewPresenter(object):
 
         data = self._source.get_data()
 
-        for key,_ in data.items():
+        for key, _ in data.items():
             self.add_preview_entry(key)
 
     def notify(self, command):

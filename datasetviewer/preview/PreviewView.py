@@ -6,5 +6,9 @@ class PreviewView(object):
         pass
 
     @abstractmethod
+    def register_master(self):
+        pass
+
+    @abstractmethod
     def add_entry_to_list(self, entry_text):
         pass
