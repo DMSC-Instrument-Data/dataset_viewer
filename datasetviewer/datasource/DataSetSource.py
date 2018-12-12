@@ -1,6 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-class DataSetSource(object):
+
+class DataSetSource(ABC):
 
     def __init__(self):
         pass

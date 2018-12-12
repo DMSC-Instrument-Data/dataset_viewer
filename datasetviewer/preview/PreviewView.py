@@ -1,6 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-class PreviewView(object):
+
+class PreviewView(ABC):
 
     def __init__(self):
         pass

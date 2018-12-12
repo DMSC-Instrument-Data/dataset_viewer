@@ -1,6 +1,6 @@
 import unittest
 import mock
-from mock import MagicMock, patch
+from mock import MagicMock, patch, Mock, PropertyMock
 
 from collections import OrderedDict as DataSet
 
@@ -10,7 +10,6 @@ from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
 from datasetviewer.datasource.DataSetSource import DataSetSource
-from datasetviewer.datasource.Variable import Variable
 
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -20,10 +19,12 @@ class PreviewPresenterTest(unittest.TestCase):
         self.view = mock.create_autospec(PreviewView)
         self.source = mock.create_autospec(DataSetSource)
 
-        self.fake_data = Variable()
-        self.fake_data.name = "Key"
-        self.fake_data.dimension_size = (8, 5)
-        self.fake_preview_text = self.fake_data.name + "\n" + str(self.fake_data.dimension_size)
+        mock_var_name = "Key"
+        mock_var_dims = (8, 5)
+
+        self.fake_data = Mock(dimension_size=mock_var_dims)
+        type(self.fake_data).name = PropertyMock(return_value=mock_var_name)
+        self.fake_preview_text = mock_var_name + "\n" + str(mock_var_dims)
 
         fake_dict = DataSet()
         fake_dict[self.fake_data.name] = self.fake_data
@@ -33,12 +34,12 @@ class PreviewPresenterTest(unittest.TestCase):
     def test_presenter_throws_if_view_none(self):
 
         with self.assertRaises(ValueError):
-            prev_presenter = PreviewPresenter(view=None, source=self.source)
+            PreviewPresenter(view=None, source=self.source)
 
     def test_presenter_throws_if_source_none(self):
 
         with self.assertRaises(ValueError):
-            prev_presenter = PreviewPresenter(view=self.view, source=None)
+            PreviewPresenter(view=self.view, source=None)
 
     def test_create_preview_text(self):
 
@@ -75,11 +76,12 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_presenter.populate_preview_list()
             add_prev.assert_called_once_with(self.fake_data.name)
 
-    def test_notify_thows_exceptions(self):
+    def test_notify_throws_exceptions(self):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        fake_enum = Enum(value='invalid',names=[('bad_command',-200000)])
+        # noinspection PyArgumentList
+        fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
 
         with self.assertRaises(ValueError):
             prev_presenter.notify(fake_enum.bad_command)
@@ -88,9 +90,10 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        try:
-            for command in Command:
+        for command in Command:
+
+            try:
                 prev_presenter.notify(command)
 
-        except ValueError:
-            self.fail("Command " + command + " raised an Exception.")
+            except ValueError:
+                self.fail("Command " + command + " raised an Exception.")

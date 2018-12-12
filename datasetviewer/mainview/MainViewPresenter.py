@@ -1,6 +1,7 @@
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.datasource.Command import Command as DataCommand
 
+
 class MainViewPresenter(object):
 
     def __init__(self, mainview, *subpresenters):

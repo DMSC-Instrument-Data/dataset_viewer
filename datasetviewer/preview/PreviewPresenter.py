@@ -1,5 +1,6 @@
 from datasetviewer.preview.Command import Command
 
+
 class PreviewPresenter(object):
 
     def __init__(self, view, source):

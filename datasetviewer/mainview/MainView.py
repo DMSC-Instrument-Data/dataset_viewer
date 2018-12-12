@@ -1,6 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-class MainView(object):
+
+class MainView(ABC):
 
     def __init__(self):
         pass
