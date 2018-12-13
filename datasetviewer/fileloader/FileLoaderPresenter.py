@@ -15,7 +15,7 @@ class FileLoaderPresenter(SubPresenter):
     def register_master(self, master):
 
         self._main_presenter = master
-        master.subscribe_subpresenter(self)
+        self._main_presenter.subscribe_subpresenter(self)
 
     def notify(self, command):
         pass
