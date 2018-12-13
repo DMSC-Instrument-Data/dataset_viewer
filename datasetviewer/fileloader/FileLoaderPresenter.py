@@ -9,11 +9,14 @@ class FileLoaderPresenter(SubPresenter):
         self._model = data_set_source
         self._main_presenter = None
         self._view = preview_view
+        self._file_reader = FileReader()
 
     def register_master(self, master):
 
         self._main_presenter = master
         master.subscribe_subpresenter(self)
 
-    def load_dictionary_to_model(self, file_path):
-        pass
+    def load_data_to_model(self, file_path):
+
+        dict = self._file_reader.file_to_dict(file_path)
+        self._model.set_data(dict)

@@ -18,3 +18,6 @@ class DataSetSource(ABC):
     def get_keys(self):
         pass
 
+    @abstractmethod
+    def set_data(self, data):
+        pass
