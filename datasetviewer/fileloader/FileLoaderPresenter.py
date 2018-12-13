@@ -18,5 +18,9 @@ class FileLoaderPresenter(SubPresenter):
 
     def load_data_to_model(self, file_path):
 
-        dict = self._file_reader.file_to_dict(file_path)
-        self._model.set_data(dict)
+        try:
+            dict = self._file_reader.file_to_dict(file_path)
+            self._model.set_data(dict)
+
+        except ValueError as e:
+            self._view.show_reject_file_message(str(e))

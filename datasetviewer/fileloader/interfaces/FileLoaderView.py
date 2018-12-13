@@ -12,3 +12,7 @@ class FileLoaderView(ABC):
     @abstractmethod
     def file_selected(self):
         pass
+
+    @abstractmethod
+    def show_reject_file_message(self, error_msg):
+        pass
