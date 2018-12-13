@@ -18,7 +18,12 @@ class FileLoaderPresenter(SubPresenter):
         self._main_presenter.subscribe_subpresenter(self)
 
     def notify(self, command):
-        pass
+
+        if command == Command.FILEOPENREQUEST:
+            file_path = self._view.get_selected_file_path()
+            self.load_data_to_model(file_path)
+
+
 
     def load_data_to_model(self, file_path):
 

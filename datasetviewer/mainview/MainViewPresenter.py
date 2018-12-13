@@ -21,14 +21,14 @@ class MainViewPresenter(object):
             # Get data corresponding with key from data source model
             # Send data to plot view
             pass
-        elif command == FileCommand.FILESELECTION:
+        # elif command == FileCommand.FILESELECTION:
             # Get file location from view
             # Load/validate file?
             # Convert to xarray format
             # Validate array?
             # Send array to model
             # Tell preview presenter to update preview view
-            pass
+            # pass
         elif command == FileCommand.FILEREADSUCCESS:
             #
             pass
