@@ -3,7 +3,7 @@ from datasetviewer.dataset.Variable import Variable
 from collections import OrderedDict as DataSet
 
 
-class FileReader(object):
+class FileLoaderTool(object):
 
     def __init__(self):
         pass
@@ -21,9 +21,9 @@ class FileReader(object):
         data = open_dataset(file_path)
 
         if len(data.variables) < 1:
-            raise ValueError("Error in FileReader: Dataset is empty.")
+            raise ValueError("Error in FileLoader: Dataset is empty.")
 
         if self.invalid_dataset(data):
-            raise ValueError("Error in FileReader: Dataset contains one or more elements with <2 dimensions.")
+            raise ValueError("Error in FileLoader: Dataset contains one or more elements with <2 dimensions.")
 
         return data.variables

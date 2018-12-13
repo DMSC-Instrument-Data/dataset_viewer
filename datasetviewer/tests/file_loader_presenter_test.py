@@ -3,9 +3,10 @@ import unittest
 import mock
 from mock import MagicMock, patch, Mock, PropertyMock
 
-from datasetviewer.fileloader.FileReader import FileReader
+from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
 from datasetviewer.fileloader.interfaces.FileLoaderView import FileLoaderView
+from datasetviewer.fileloader.Command import Command
 from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 
@@ -33,8 +34,9 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         fl_presenter = FileLoaderPresenter(self.source, self.view)
 
-        with patch("datasetviewer.fileloader.FileReader.FileReader.file_to_dict",
+        with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
                    side_effect = lambda path: self.dummy_data.variables) as dummy_file_reader:
+
             fl_presenter.load_data_to_model(self.fake_file_path)
             self.source.set_data.assert_called_once_with(self.dummy_data.variables)
 
@@ -42,7 +44,18 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         fl_presenter = FileLoaderPresenter(self.source, self.view)
 
-        with patch("datasetviewer.fileloader.FileReader.open_dataset",
+        with patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
                    side_effect = lambda path: self.dummy_data) as dummy_file_reader:
+
             fl_presenter.load_data_to_model(self.fake_file_path)
             self.view.show_reject_file_message.assert_called_once()
+
+    def test_file_open_success_notifies_main_presenter(self):
+
+        fl_presenter = FileLoaderPresenter(self.source, self.view)
+        fl_presenter.register_master(self.main_presenter)
+
+        with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
+                   side_effect = lambda path: self.dummy_data.variables) as dummy_file_reader:
+            fl_presenter.load_data_to_model(self.fake_file_path)
+            self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)

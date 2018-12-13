@@ -29,5 +29,8 @@ class MainViewPresenter(object):
             # Send array to model
             # Tell preview presenter to update preview view
             pass
+        elif command == FileCommand.FILEREADSUCCESS:
+            #
+            pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

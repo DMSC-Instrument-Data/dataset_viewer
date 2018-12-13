@@ -1,16 +1,16 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from datasetviewer.fileloader.FileReader import FileReader
+from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 import sys
 
 import xarray as xr
 import numpy as np
 
-class FileReaderTest(unittest.TestCase):
+class FileLoaderTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.file_reader = FileReader()
+        self.file_reader = FileLoaderTool()
 
         # Bad data in which one of the elements only has a single dimension
         self.bad_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)), 'bad': np.random.rand(2)})
@@ -26,7 +26,7 @@ class FileReaderTest(unittest.TestCase):
 
         empty_data = xr.Dataset()
 
-        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: empty_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: empty_data) as dummy_data_loader:
             with self.assertRaises(ValueError):
                 self.file_reader.file_to_dict(self.fake_data_path)
 
@@ -38,12 +38,12 @@ class FileReaderTest(unittest.TestCase):
 
     def test_file_read_success(self):
 
-        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: self.good_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.good_data) as dummy_data_loader:
             self.file_reader.file_to_dict(self.fake_data_path)
             dummy_data_loader.assert_called_once_with(self.fake_data_path)
 
     def test_bad_data_raises(self):
 
-        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: self.bad_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.bad_data) as dummy_data_loader:
             with self.assertRaises(ValueError):
                 self.file_reader.file_to_dict(self.fake_data_path)
