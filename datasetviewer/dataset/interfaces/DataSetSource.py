@@ -13,3 +13,8 @@ class DataSetSource(ABC):
     @abstractmethod
     def get_array(self):
         pass
+
+    @abstractmethod
+    def get_keys(self):
+        pass
+

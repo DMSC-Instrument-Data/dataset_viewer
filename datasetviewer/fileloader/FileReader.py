@@ -6,7 +6,12 @@ class FileReader(object):
         pass
 
     def invalid_dataset(self, data):
-        pass
+
+        for key in data.variables:
+            if len(data[key].sizes) < 2:
+                return True
+
+        return False
 
     def dataset_to_ordered_dict(self, dataset):
         pass

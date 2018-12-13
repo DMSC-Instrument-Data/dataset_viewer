@@ -11,10 +11,10 @@ from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 class FileLoaderPresenterTest(unittest.TestCase):
 
     def setUp(self):
-
         self.main_presenter = mock.create_autospec(MainViewPresenter)
 
     def test_file_to_model(self):
+        # Test that the presenter correctly loads a file and passes this data to the model
         pass
 
     def test_register_main_presenter(self):
