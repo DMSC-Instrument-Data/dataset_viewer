@@ -9,6 +9,7 @@ import numpy as np
 class FileReaderTest(unittest.TestCase):
 
     def setUp(self):
+
         self.file_reader = FileReader()
 
         # Bad data in which one of the elements only has a single dimension
@@ -19,28 +20,30 @@ class FileReaderTest(unittest.TestCase):
                                      'valid': (['a', 'b'], np.random.rand(3, 4)),
                                       'alsogood': (['c', 'd', 'e', 'f'], np.random.rand(3, 4, 5, 6))})
 
-    def test_empty_file_throws(self):
-        # Test that a file that contains an empty dictionary isn't accepted
-        pass
+        self.fake_data_path = "madeuppath"
 
-    def test_bad_dimensions(self):
+    def test_empty_file_throws(self):
+
+        empty_data = xr.Dataset()
+
+        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: empty_data) as dummy_data_loader:
+            with self.assertRaises(ValueError):
+                self.file_reader.file_to_dict(self.fake_data_path)
+
+    def test_bad_dimensions_rejected(self):
         self.assertTrue(self.file_reader.invalid_dataset(self.bad_data))
 
-    def test_good_dimensions(self):
+    def test_good_dimensions_accepted(self):
         self.assertFalse(self.file_reader.invalid_dataset(self.good_data))
 
     def test_file_read_success(self):
 
-        fake_data_path = "madeuppath"
-
         with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: self.good_data) as dummy_data_loader:
-            self.file_reader.file_to_dict(fake_data_path)
-            dummy_data_loader.assert_called_once_with(fake_data_path)
+            self.file_reader.file_to_dict(self.fake_data_path)
+            dummy_data_loader.assert_called_once_with(self.fake_data_path)
 
     def test_bad_data_raises(self):
 
-        fake_data_path = "madeuppath"
-
-        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect=lambda path: self.bad_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileReader.open_dataset', side_effect = lambda path: self.bad_data) as dummy_data_loader:
             with self.assertRaises(ValueError):
-                self.file_reader.file_to_dict(fake_data_path)
+                self.file_reader.file_to_dict(self.fake_data_path)

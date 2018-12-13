@@ -20,6 +20,9 @@ class FileReader(object):
 
         data = open_dataset(file_path)
 
+        if len(data.variables) < 1:
+            raise ValueError("Error in FileReader: Dataset is empty.")
+
         if self.invalid_dataset(data):
             raise ValueError("Error in FileReader: Dataset contains one or more elements with <2 dimensions.")
 
