@@ -1,7 +1,7 @@
 from datasetviewer.dataset.FileReader import FileReader
+from datasetviewer.presenter.SubPresenter import SubPresenter
 
-
-class DataSetPresenter(object):
+class DataSetPresenter(SubPresenter):
 
     def __init__(self, data_set_source, preview_view):
 

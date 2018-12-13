@@ -11,7 +11,7 @@ class MainViewPresenter(object):
         for presenter in subpresenters:
             presenter.register_master(self)
 
-    def subscribe_subpresenter(self, *sub_presenter):
+    def subscribe_subpresenter(self, *subpresenter):
         pass
 
     def notify(self, command):

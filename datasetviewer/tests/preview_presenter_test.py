@@ -7,9 +7,9 @@ from collections import OrderedDict as DataSet
 from enum import Enum
 
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
-from datasetviewer.preview.PreviewView import PreviewView
+from datasetviewer.preview.interfaces.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
-from datasetviewer.dataset.DataSetSource import DataSetSource
+from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
 
 
 class PreviewPresenterTest(unittest.TestCase):

@@ -4,7 +4,7 @@ from enum import Enum
 import mock
 from mock import Mock
 
-from datasetviewer.mainview.MainView import MainView
+from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.dataset.Command import Command as DataCommand

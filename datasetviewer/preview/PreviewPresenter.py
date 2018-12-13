@@ -1,7 +1,8 @@
 from datasetviewer.preview.Command import Command
+from datasetviewer.presenter.SubPresenter import SubPresenter
 
 
-class PreviewPresenter(object):
+class PreviewPresenter(SubPresenter):
 
     def __init__(self, view, source):
 
@@ -40,3 +41,6 @@ class PreviewPresenter(object):
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
+
+    def register_master(self, main_presenter):
+        pass

@@ -11,5 +11,5 @@ class DataSetSource(ABC):
         pass
 
     @abstractmethod
-    def get_data(self):
+    def get_array(self):
         pass
