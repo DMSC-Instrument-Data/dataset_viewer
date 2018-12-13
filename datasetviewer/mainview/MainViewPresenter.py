@@ -1,5 +1,5 @@
 from datasetviewer.preview.Command import Command as PreviewCommand
-from datasetviewer.dataset.Command import Command as DataCommand
+from datasetviewer.fileloader.Command import Command as FileCommand
 
 
 class MainViewPresenter(object):
@@ -21,7 +21,7 @@ class MainViewPresenter(object):
             # Get data corresponding with key from data source model
             # Send data to plot view
             pass
-        elif command == DataCommand.FILESELECTION:
+        elif command == FileCommand.FILESELECTION:
             # Get file location from view
             # Load/validate file?
             # Convert to xarray format

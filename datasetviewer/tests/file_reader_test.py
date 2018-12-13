@@ -1,5 +1,5 @@
 import unittest
-import datasetviewer.dataset.FileReader
+from datasetviewer.fileloader.FileReader import FileReader
 
 class FileReaderTest(unittest.TestCase):
 

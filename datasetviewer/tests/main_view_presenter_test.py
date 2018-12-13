@@ -7,7 +7,7 @@ from mock import Mock
 from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
-from datasetviewer.dataset.Command import Command as DataCommand
+from datasetviewer.fileloader.Command import Command as FileCommand
 
 
 class MainViewPresenterTest(unittest.TestCase):
@@ -37,7 +37,7 @@ class MainViewPresenterTest(unittest.TestCase):
     def test_notify_doesnt_throw_exception(self):
 
         main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
-        valid_commands = [c for c in PreviewCommand] + [c for c in DataCommand]
+        valid_commands = [c for c in PreviewCommand] + [c for c in FileCommand]
 
         for command in valid_commands:
             try:
