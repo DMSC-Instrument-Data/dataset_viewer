@@ -1,4 +1,5 @@
-from datasetviewer.preview.Command import Command
+from datasetviewer.preview.Command import Command as PreviewCommand
+from datasetviewer.fileloader.Command import Command as FileCommand
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
@@ -44,8 +45,12 @@ class PreviewPresenter(SubPresenter):
 
     def notify(self, command):
 
-        if command == Command.ARRAYSELECTION:
+        if command == PreviewCommand.ARRAYSELECTION:
             # Load the selected array into the plot
             pass
+
+        elif command == FileCommand.FILEREADSUCCESS:
+            self.populate_preview_list()
+
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

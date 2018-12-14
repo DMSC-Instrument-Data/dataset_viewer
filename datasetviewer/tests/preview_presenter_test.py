@@ -8,9 +8,10 @@ from enum import Enum
 
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.interfaces.PreviewView import PreviewView
-from datasetviewer.preview.Command import Command
+from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
+from datasetviewer.fileloader.Command import Command as FileCommand
 
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -93,16 +94,24 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        for command in Command:
+        for command in PreviewCommand:
 
             try:
                 prev_presenter.notify(command)
 
             except ValueError:
-                self.fail("Command " + command + " raised an Exception.")
+                self.fail("Command " + str(command) + " raised an Exception.")
 
     def test_register_master(self):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
         prev_presenter.register_master(self.master)
         self.master.subscribe_subpresenter.assert_called_once_with(prev_presenter)
+
+    def test_notify_file_read_generates_preview(self):
+
+        prev_presenter = PreviewPresenter(view = self.view, source=self.source)
+
+        with patch("datasetviewer.preview.PreviewPresenter.PreviewPresenter.populate_preview_list") as pop_prev:
+            prev_presenter.notify(FileCommand.FILEREADSUCCESS)
+            pop_prev.assert_called_once()
