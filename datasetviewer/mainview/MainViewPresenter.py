@@ -6,29 +6,23 @@ class MainViewPresenter(object):
 
     def __init__(self, mainview, *subpresenters):
 
+        if mainview is None:
+            raise ValueError("Error: Cannot create MainViewPresenter when MainView is None.")
+
         self._main_view = mainview
+        self._subpresenters = []
 
         for presenter in subpresenters:
             presenter.register_master(self)
 
     def subscribe_subpresenter(self, *subpresenter):
-        pass
+        self._subpresenters.append(subpresenter)
 
     def notify(self, command):
 
         if command == PreviewCommand.ARRAYSELECTION:
-            # Retrieve key of current selection from preview view
-            # Get data corresponding with key from data source model
-            # Send data to plot view
             pass
-        # elif command == FileCommand.FILESELECTION:
-            # Get file location from view
-            # Load/validate file?
-            # Convert to xarray format
-            # Validate array?
-            # Send array to model
-            # Tell preview presenter to update preview view
-            # pass
+
         elif command == FileCommand.FILEREADSUCCESS:
             #
             pass
