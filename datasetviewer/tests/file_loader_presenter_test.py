@@ -73,7 +73,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
                    side_effect = lambda path: self.dummy_data.variables) as dummy_file_reader:
 
-            self.fl_presenter.load_data_to_model(self.fake_file_path)
+            self.fl_presenter.notify(Command.FILEOPENREQUEST)
             self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)
 
     def test_unknown_command_raises(self):

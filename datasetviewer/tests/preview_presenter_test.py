@@ -9,6 +9,7 @@ from enum import Enum
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.interfaces.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command
+from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
 
 
@@ -18,6 +19,8 @@ class PreviewPresenterTest(unittest.TestCase):
 
         self.view = mock.create_autospec(PreviewView)
         self.source = mock.create_autospec(DataSetSource)
+
+        self.master = mock.create_autospec(MainViewPresenter)
 
         mock_var_name = "Key"
         mock_var_dims = (8, 5)
@@ -97,3 +100,9 @@ class PreviewPresenterTest(unittest.TestCase):
 
             except ValueError:
                 self.fail("Command " + command + " raised an Exception.")
+
+    def test_register_master(self):
+
+        prev_presenter = PreviewPresenter(view=self.view, source=self.source)
+        prev_presenter.register_master(self.master)
+        self.master.subscribe_subpresenter.assert_called_once_with(prev_presenter)

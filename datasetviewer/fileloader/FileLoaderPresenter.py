@@ -22,6 +22,7 @@ class FileLoaderPresenter(SubPresenter):
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()
             self.load_data_to_model(file_path)
+            self._main_presenter.notify(Command.FILEREADSUCCESS)
         else:
             raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
 
@@ -30,7 +31,6 @@ class FileLoaderPresenter(SubPresenter):
         try:
             dict = self._file_reader.file_to_dict(file_path)
             self._model.set_data(dict)
-            self._main_presenter.notify(Command.FILEREADSUCCESS)
 
         except ValueError as e:
             self._view.show_reject_file_message(str(e))

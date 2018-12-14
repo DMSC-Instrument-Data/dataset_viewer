@@ -42,5 +42,7 @@ class PreviewPresenter(SubPresenter):
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
 
-    def register_master(self, main_presenter):
-        pass
+    def register_master(self, master):
+
+        self._main_presenter = master
+        self._main_presenter.subscribe_subpresenter(self)
