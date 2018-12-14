@@ -2,7 +2,6 @@ import unittest
 from enum import Enum
 
 import mock
-from mock import Mock
 
 from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter

@@ -65,7 +65,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def test_read_file_to_model(self):
 
         with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
-                   side_effect = lambda path: self.dummy_data.variables) as dummy_file_reader:
+                   side_effect = lambda path: self.dummy_data.variables):
 
             self.fl_presenter.load_data_to_model(self.fake_file_path)
             self.source.set_data.assert_called_once_with(self.dummy_data.variables)
@@ -73,7 +73,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def test_bad_file_shows_message(self):
 
         with patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
-                   side_effect = lambda path: self.dummy_data) as dummy_file_reader:
+                   side_effect = lambda path: self.dummy_data):
 
             self.fl_presenter.load_data_to_model(self.fake_file_path)
             self.view.show_reject_file_message.assert_called_once()
@@ -81,7 +81,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def test_file_open_success_notifies_main_presenter(self):
 
         with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
-                   side_effect = lambda path: self.dummy_data.variables) as dummy_file_reader:
+                   side_effect = lambda path: self.dummy_data.variables):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
             self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)

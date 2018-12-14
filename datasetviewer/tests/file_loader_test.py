@@ -1,7 +1,6 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
-import sys
 
 import xarray as xr
 import numpy as np
@@ -18,7 +17,7 @@ class FileLoaderTest(unittest.TestCase):
         # Good data for which all of the elements have 2+ dimensions
         self.good_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)),
                                      'valid': (['a', 'b'], np.random.rand(3, 4)),
-                                      'alsogood': (['c', 'd', 'e', 'f'], np.random.rand(3, 4, 5, 6))})
+                                     'alsogood': (['c', 'd', 'e', 'f'], np.random.rand(3, 4, 5, 6))})
 
         self.fake_data_path = "madeuppath"
 
@@ -26,7 +25,7 @@ class FileLoaderTest(unittest.TestCase):
 
         empty_data = xr.Dataset()
 
-        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: empty_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: empty_data):
             with self.assertRaises(ValueError):
                 self.file_reader.file_to_dict(self.fake_data_path)
 
@@ -44,6 +43,6 @@ class FileLoaderTest(unittest.TestCase):
 
     def test_bad_data_raises(self):
 
-        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.bad_data) as dummy_data_loader:
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.bad_data):
             with self.assertRaises(ValueError):
                 self.file_reader.file_to_dict(self.fake_data_path)

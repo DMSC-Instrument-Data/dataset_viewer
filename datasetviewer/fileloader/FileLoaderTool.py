@@ -1,6 +1,4 @@
 from xarray import open_dataset
-from datasetviewer.dataset.Variable import Variable
-from collections import OrderedDict as DataSet
 
 
 class FileLoaderTool(object):

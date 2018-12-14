@@ -41,5 +41,3 @@ class FileLoaderPresenter(SubPresenter):
 
         except (ValueError, TypeError) as e:
             self._view.show_reject_file_message(str(e))
-
-
