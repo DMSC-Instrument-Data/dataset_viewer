@@ -26,6 +26,16 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.fl_presenter = FileLoaderPresenter(self.source, self.view)
         self.fl_presenter.register_master(self.main_presenter)
 
+    def test_presenter_throws_if_source_none(self):
+
+        with self.assertRaises(ValueError):
+            FileLoaderPresenter(None, self.view)
+
+    def test_presenter_throws_if_view_none(self):
+
+        with self.assertRaises(ValueError):
+            FileLoaderPresenter(self.source, None)
+
     def test_register_master(self):
 
         fl_presenter = FileLoaderPresenter(self.source, self.view)
