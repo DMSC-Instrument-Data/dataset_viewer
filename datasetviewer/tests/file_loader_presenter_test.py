@@ -3,6 +3,8 @@ import unittest
 import mock
 from mock import patch, MagicMock
 
+from enum import Enum
+
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
 from datasetviewer.fileloader.interfaces.FileLoaderView import FileLoaderView
 from datasetviewer.fileloader.Command import Command
@@ -73,3 +75,12 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
             self.fl_presenter.load_data_to_model(self.fake_file_path)
             self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)
+
+    def test_unknown_command_raises(self):
+
+        fl_presenter = FileLoaderPresenter(self.source, self.view)
+
+        fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
+
+        with self.assertRaises(ValueError):
+            fl_presenter.notify(fake_enum.bad_command)

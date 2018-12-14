@@ -22,8 +22,8 @@ class FileLoaderPresenter(SubPresenter):
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()
             self.load_data_to_model(file_path)
-
-
+        else:
+            raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
 
     def load_data_to_model(self, file_path):
 
