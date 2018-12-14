@@ -1,5 +1,6 @@
 from datasetviewer.preview.Command import Command
 from datasetviewer.presenter.SubPresenter import SubPresenter
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 
 class PreviewPresenter(SubPresenter):
@@ -14,6 +15,13 @@ class PreviewPresenter(SubPresenter):
 
         self._view = view
         self._source = source
+
+    def register_master(self, master):
+
+        assert (isinstance(master, MainViewPresenterInterface))
+
+        self._main_presenter = master
+        self._main_presenter.subscribe_subpresenter(self)
 
     def create_preview_text(self, name):
 
@@ -41,8 +49,3 @@ class PreviewPresenter(SubPresenter):
             pass
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
-
-    def register_master(self, master):
-
-        self._main_presenter = master
-        self._main_presenter.subscribe_subpresenter(self)

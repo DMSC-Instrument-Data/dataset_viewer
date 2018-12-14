@@ -1,8 +1,9 @@
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.fileloader.Command import Command as FileCommand
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 
-class MainViewPresenter(object):
+class MainViewPresenter(MainViewPresenterInterface):
 
     def __init__(self, mainview, *subpresenters):
 
