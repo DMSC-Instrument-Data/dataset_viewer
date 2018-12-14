@@ -7,6 +7,7 @@ class FileLoaderPresenter(SubPresenter):
 
     def __init__(self, data_set_source, preview_view):
 
+        super().__init__()
         if preview_view is None:
             raise ValueError("Error: Cannot create FileLoaderPresenter when View is None.")
 
@@ -38,7 +39,7 @@ class FileLoaderPresenter(SubPresenter):
             dict = self._file_reader.file_to_dict(file_path)
             self._model.set_data(dict)
 
-        except ValueError as e:
+        except (ValueError, TypeError) as e:
             self._view.show_reject_file_message(str(e))
 
 
