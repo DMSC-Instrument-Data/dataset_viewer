@@ -12,6 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DMSC-Instrument-Data/dataset_viewer",
+    install_requires=['xarray'],
     packages=['datasetviewer'],
     classifiers=[
         "Programming Language :: Python :: 3"

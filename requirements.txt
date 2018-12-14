@@ -2,3 +2,4 @@ coverage
 python-coveralls
 nose
 flake8
+xarray
