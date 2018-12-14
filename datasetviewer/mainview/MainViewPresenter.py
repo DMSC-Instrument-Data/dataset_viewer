@@ -13,6 +13,10 @@ class MainViewPresenter(object):
         self._subpresenters = []
 
         for presenter in subpresenters:
+
+            if presenter is None:
+                raise ValueError("Error: Cannot create MainViewPresenter when a SubPresenter is None.")
+
             presenter.register_master(self)
 
     def subscribe_subpresenter(self, *subpresenter):

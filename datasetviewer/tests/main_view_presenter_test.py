@@ -23,20 +23,19 @@ class MainViewPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             MainViewPresenter(None, *self.sub_presenters)
 
+    def test_main_throws_if_sub_none(self):
+
+        badsubpresenters = self.sub_presenters + [None]
+
+        with self.assertRaises(ValueError):
+            MainViewPresenter(self.main_view, *badsubpresenters)
+
     def test_constructor_success(self):
 
         main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
 
         for presenter in self.sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
-
-    def test_subscribe_subpresenter(self):
-
-        main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
-        subpresenter = mock.create_autospec(SubPresenter)
-        main_view_presenter.subscribe_subpresenter(subpresenter)
-
-        # self.assertIn(subpresenter, )
 
     def test_notify_throws_exception(self):
 
