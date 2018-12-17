@@ -12,6 +12,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         self._main_view = mainview
         self._subpresenters = []
+        self._preview_presenter = None
 
         for presenter in subpresenters:
 
@@ -20,16 +21,22 @@ class MainViewPresenter(MainViewPresenterInterface):
 
             presenter.register_master(self)
 
+    def subscribe_preview_presenter(self, prev):
+
+        self._preview_presenter = prev
+
     def subscribe_subpresenter(self, *subpresenter):
+
         self._subpresenters.append(subpresenter)
 
     def notify(self, command):
 
         if command == PreviewCommand.ARRAYSELECTION:
+            # selection_key = self._preview_presenter.get_array_key()
+            # self._plot_presenter.generate_plot()
             pass
 
         elif command == FileCommand.FILEREADSUCCESS:
-            #
-            pass
+            self._preview_presenter.populate_preview_list()
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

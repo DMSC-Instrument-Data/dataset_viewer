@@ -23,6 +23,7 @@ class PreviewPresenter(SubPresenter):
 
         self._main_presenter = master
         self._main_presenter.subscribe_subpresenter(self)
+        self._main_presenter.subscribe_preview_presenter(self)
 
     def create_preview_text(self, name):
 

@@ -6,6 +6,7 @@ import mock
 from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
+from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.fileloader.Command import Command as FileCommand
 
@@ -16,6 +17,7 @@ class MainViewPresenterTest(unittest.TestCase):
 
         self.main_view = mock.create_autospec(MainView)
         self.sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
+        self.preview_presenter = PreviewPresenter(mock.Mock(), mock.Mock())
 
     def test_presenter_throws_if_view_none(self):
 
@@ -48,7 +50,9 @@ class MainViewPresenterTest(unittest.TestCase):
 
     def test_notify_doesnt_throw_exception(self):
 
-        main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
+        self.preview_presenter.populate_preview_list = mock.MagicMock()
+        subpresenters = self.sub_presenters + [self.preview_presenter]
+        main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
         valid_commands = [c for c in PreviewCommand] + [FileCommand.FILEREADSUCCESS]
 
         for command in valid_commands:
@@ -56,3 +60,11 @@ class MainViewPresenterTest(unittest.TestCase):
                 main_view_presenter.notify(command)
             except ValueError:
                 self.fail("Exception thrown by MainViewPresenter.notify for command: " + str(command))
+
+    def test_file_read_generates_preview(self):
+
+        self.preview_presenter.populate_preview_list = mock.MagicMock()
+        subpresenters = self.sub_presenters + [self.preview_presenter]
+        main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
+        main_view_presenter.notify(FileCommand.FILEREADSUCCESS)
+        subpresenters[-1].populate_preview_list.assert_called_once()
