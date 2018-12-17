@@ -5,12 +5,13 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 
 class MainViewPresenter(MainViewPresenterInterface):
 
-    def __init__(self, mainview, *subpresenters):
+    def __init__(self, mainview, data_set_source, *subpresenters):
 
         if mainview is None:
             raise ValueError("Error: Cannot create MainViewPresenter when MainView is None.")
 
         self._main_view = mainview
+        self._model = data_set_source
         self._subpresenters = []
         self._preview_presenter = None
         self._file_reader = FileLoaderTool()

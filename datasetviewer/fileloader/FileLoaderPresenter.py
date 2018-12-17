@@ -14,7 +14,7 @@ class FileLoaderPresenter(SubPresenter):
         if data_set_source is None:
             raise ValueError("Error: Cannot create FileLoaderPresenter when Source is None.")
 
-        self._model = data_set_source
+
         self._main_presenter = None
         self._view = preview_view
 

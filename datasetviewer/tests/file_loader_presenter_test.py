@@ -48,9 +48,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         main_presenter.subscribe_subpresenter.assert_called_once_with(fl_presenter)
 
-    @mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
-                side_effect=lambda path: xr.Dataset().variables)
-    def test_notify_file_selection(self, file_to_dict):
+    def test_notify_file_selection(self):
 
         self.fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
