@@ -18,6 +18,7 @@ class MainViewPresenterTest(unittest.TestCase):
         self.main_view = mock.create_autospec(MainView)
         self.sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
         self.preview_presenter = PreviewPresenter(mock.Mock(), mock.Mock())
+        self.preview_presenter.populate_preview_list = mock.MagicMock()
 
     def test_presenter_throws_if_view_none(self):
 
@@ -50,7 +51,6 @@ class MainViewPresenterTest(unittest.TestCase):
 
     def test_notify_doesnt_throw_exception(self):
 
-        self.preview_presenter.populate_preview_list = mock.MagicMock()
         subpresenters = self.sub_presenters + [self.preview_presenter]
         main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
         valid_commands = [c for c in PreviewCommand] + [FileCommand.FILEREADSUCCESS]
@@ -63,7 +63,6 @@ class MainViewPresenterTest(unittest.TestCase):
 
     def test_file_read_generates_preview(self):
 
-        self.preview_presenter.populate_preview_list = mock.MagicMock()
         subpresenters = self.sub_presenters + [self.preview_presenter]
         main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
         main_view_presenter.notify(FileCommand.FILEREADSUCCESS)
