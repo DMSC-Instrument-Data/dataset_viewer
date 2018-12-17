@@ -78,13 +78,14 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.fl_presenter.load_data_to_model(self.fake_file_path)
             self.view.show_reject_file_message.assert_called_once()
 
-    def test_file_open_success_notifies_main_presenter(self):
+    def test_file_open_success_informs_main_presenter(self):
 
         with patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
                    side_effect = lambda path: self.dummy_data.variables):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
-            self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)
+            self.main_presenter.create_preview.assert_called_once()
+            # self.main_presenter.notify.assert_called_once_with(Command.FILEREADSUCCESS)
 
     def test_unknown_command_raises(self):
 

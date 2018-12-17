@@ -29,6 +29,10 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         self._subpresenters.append(subpresenter)
 
+    def create_preview(self):
+
+        self._preview_presenter.populate_preview_list()
+
     def notify(self, command):
 
         if command == PreviewCommand.ARRAYSELECTION:
