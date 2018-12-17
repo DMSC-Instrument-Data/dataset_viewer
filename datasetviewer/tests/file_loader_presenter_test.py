@@ -17,10 +17,14 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.main_presenter = mock.create_autospec(MainViewPresenter)
+        self.main_presenter.load_file_to_model = mock.MagicMock()
         self.source = mock.create_autospec(DataSetSource)
         self.view = mock.create_autospec(FileLoaderView)
+
         self.dummy_data = xr.Dataset()
         self.fake_file_path = "filepath"
+
+        self.view.get_selected_file_path = mock.MagicMock(side_effect=lambda: self.fake_file_path)
 
         self.fl_presenter = FileLoaderPresenter(self.source, self.view)
         self.fl_presenter.register_master(self.main_presenter)
@@ -51,6 +55,12 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
 
+    def test_notify_file_selection(self):
+
+        self.fl_presenter.notify(Command.FILEOPENREQUEST)
+        self.main_presenter.load_file_to_model.assert_called_once_with(self.fake_file_path)
+
+    '''
     @mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
                 side_effect = lambda path: xr.Dataset().variables)
     def test_file_selection_loads_file(self, file_to_dict):
@@ -60,6 +70,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         with mock.patch("datasetviewer.fileloader.FileLoaderPresenter.FileLoaderPresenter.load_data_to_model") as load_data:
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
             load_data.assert_called_once()
+
 
     def test_read_file_to_model(self):
 
@@ -84,6 +95,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
             self.main_presenter.create_preview.assert_called_once()
+    '''
 
     def test_unknown_command_raises(self):
 

@@ -20,6 +20,9 @@ class MainViewPresenter(MainViewPresenterInterface):
 
             presenter.register_master(self)
 
+    def load_file_to_model(self, file_path):
+        pass
+
     def subscribe_preview_presenter(self, prev):
 
         self._preview_presenter = prev

@@ -18,12 +18,13 @@ class FileLoaderPresenter(SubPresenter):
         self._model = data_set_source
         self._main_presenter = None
         self._view = preview_view
-        self._file_reader = FileLoaderTool()
+        # self._file_reader = FileLoaderTool()
 
     def register_master(self, master):
 
         assert (isinstance(master, MainViewPresenterInterface))
 
+        # Register master must be called a subpresenter can call notify on the main presenter
         self._main_presenter = master
         self._main_presenter.subscribe_subpresenter(self)
 
@@ -31,8 +32,10 @@ class FileLoaderPresenter(SubPresenter):
 
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()
-            self.load_data_to_model(file_path)
-            self._main_presenter.create_preview()
+            # self.load_data_to_model(file_path)
+            # self._main_presenter.create_preview()
+            self._main_presenter.load_file_to_model(file_path)
+
         else:
             raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
 
