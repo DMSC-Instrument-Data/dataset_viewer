@@ -1,6 +1,5 @@
 import unittest
 import mock
-from mock import MagicMock, patch, Mock, PropertyMock
 
 from collections import OrderedDict as DataSet
 
@@ -25,14 +24,14 @@ class PreviewPresenterTest(unittest.TestCase):
         mock_var_name = "Key"
         mock_var_dims = (8, 5)
 
-        self.fake_data = Mock(dimension_size=mock_var_dims)
-        type(self.fake_data).name = PropertyMock(return_value=mock_var_name)
+        self.fake_data = mock.Mock(dimension_size=mock_var_dims)
+        type(self.fake_data).name = mock.PropertyMock(return_value=mock_var_name)
         self.fake_preview_text = mock_var_name + "\n" + str(mock_var_dims)
 
         fake_dict = DataSet()
         fake_dict[self.fake_data.name] = self.fake_data
-        self.source.get_element = MagicMock(side_effect=lambda key: fake_dict[key])
-        self.source.get_data = MagicMock(return_value=fake_dict)
+        self.source.get_element = mock.MagicMock(side_effect=lambda key: fake_dict[key])
+        self.source.get_data = mock.MagicMock(return_value=fake_dict)
 
     def test_presenter_throws_if_view_none(self):
 
@@ -54,7 +53,7 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        with patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.create_preview_text') as prev_text:
+        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.create_preview_text') as prev_text:
             prev_presenter.add_preview_entry(self.fake_data.name)
             prev_text.assert_called_once()
 
@@ -75,7 +74,7 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
 
-        with patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.add_preview_entry') as add_prev:
+        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.add_preview_entry') as add_prev:
             prev_presenter.populate_preview_list()
             add_prev.assert_called_once_with(self.fake_data.name)
 
