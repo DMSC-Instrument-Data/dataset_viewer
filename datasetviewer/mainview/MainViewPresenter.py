@@ -38,12 +38,3 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         self._preview_presenter.populate_preview_list()
 
-    def notify(self, command):
-
-        if command == PreviewCommand.ARRAYSELECTION:
-            # selection_key = self._preview_presenter.get_array_key()
-            # self._plot_presenter.generate_plot()
-            pass
-
-        else:
-            raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

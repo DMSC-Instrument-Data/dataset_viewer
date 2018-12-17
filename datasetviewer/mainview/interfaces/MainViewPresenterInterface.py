@@ -12,7 +12,3 @@ class MainViewPresenterInterface(ABC):
     @abstractmethod
     def subscribe_subpresenter(self, *subpresenter):
         pass
-
-    @abstractmethod
-    def notify(self, command):
-        pass

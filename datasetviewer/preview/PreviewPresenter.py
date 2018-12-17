@@ -13,7 +13,10 @@ class PreviewPresenter(SubPresenter):
         if source is None:
             raise ValueError("Error: Cannot create PreviewPresenter when Source is None.")
 
+        # View that contains the elements of the Preview Pane
         self._view = view
+
+        # Data Source containing the Dictionary that has been loaded by a User
         self._source = source
 
     def register_master(self, master):
