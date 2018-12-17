@@ -1,3 +1,4 @@
+from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
@@ -12,6 +13,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._main_view = mainview
         self._subpresenters = []
         self._preview_presenter = None
+        self._file_reader = FileLoaderTool()
 
         for presenter in subpresenters:
 

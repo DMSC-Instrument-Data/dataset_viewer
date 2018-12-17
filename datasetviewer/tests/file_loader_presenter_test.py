@@ -55,7 +55,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
 
-    def test_notify_file_selection(self):
+    def test_load_file_in_main_presenter(self):
 
         self.fl_presenter.notify(Command.FILEOPENREQUEST)
         self.main_presenter.load_file_to_model.assert_called_once_with(self.fake_file_path)

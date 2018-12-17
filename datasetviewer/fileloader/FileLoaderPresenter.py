@@ -1,4 +1,3 @@
-from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.fileloader.Command import Command
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
@@ -18,7 +17,6 @@ class FileLoaderPresenter(SubPresenter):
         self._model = data_set_source
         self._main_presenter = None
         self._view = preview_view
-        # self._file_reader = FileLoaderTool()
 
     def register_master(self, master):
 
