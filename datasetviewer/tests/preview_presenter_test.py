@@ -11,7 +11,6 @@ from datasetviewer.preview.interfaces.PreviewView import PreviewView
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
-from datasetviewer.fileloader.Command import Command as FileCommand
 
 
 class PreviewPresenterTest(unittest.TestCase):

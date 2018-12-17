@@ -1,5 +1,4 @@
 from datasetviewer.preview.Command import Command as PreviewCommand
-from datasetviewer.fileloader.Command import Command as FileCommand
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 

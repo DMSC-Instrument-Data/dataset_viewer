@@ -8,7 +8,6 @@ from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.presenter.SubPresenter import SubPresenter
-from datasetviewer.fileloader.Command import Command as FileCommand
 
 
 class MainViewPresenterTest(unittest.TestCase):
