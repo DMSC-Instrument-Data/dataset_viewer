@@ -107,11 +107,3 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(view=self.view, source=self.source)
         prev_presenter.register_master(self.master)
         self.master.subscribe_subpresenter.assert_called_once_with(prev_presenter)
-
-    def test_notify_file_read_generates_preview(self):
-
-        prev_presenter = PreviewPresenter(view = self.view, source=self.source)
-
-        with patch("datasetviewer.preview.PreviewPresenter.PreviewPresenter.populate_preview_list") as pop_prev:
-            prev_presenter.notify(FileCommand.FILEREADSUCCESS)
-            pop_prev.assert_called_once()

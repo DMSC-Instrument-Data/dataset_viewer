@@ -53,17 +53,10 @@ class MainViewPresenterTest(unittest.TestCase):
 
         subpresenters = self.sub_presenters + [self.preview_presenter]
         main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
-        valid_commands = [c for c in PreviewCommand] + [FileCommand.FILEREADSUCCESS]
+        valid_commands = [c for c in PreviewCommand]
 
         for command in valid_commands:
             try:
                 main_view_presenter.notify(command)
             except ValueError:
                 self.fail("Exception thrown by MainViewPresenter.notify for command: " + str(command))
-
-    def test_file_read_generates_preview(self):
-
-        subpresenters = self.sub_presenters + [self.preview_presenter]
-        main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
-        main_view_presenter.notify(FileCommand.FILEREADSUCCESS)
-        subpresenters[-1].populate_preview_list.assert_called_once()

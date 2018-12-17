@@ -40,7 +40,5 @@ class MainViewPresenter(MainViewPresenterInterface):
             # self._plot_presenter.generate_plot()
             pass
 
-        elif command == FileCommand.FILEREADSUCCESS:
-            self._preview_presenter.populate_preview_list()
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

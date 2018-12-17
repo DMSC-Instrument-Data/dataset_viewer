@@ -50,8 +50,5 @@ class PreviewPresenter(SubPresenter):
             # Load the selected array into the plot
             pass
 
-        elif command == FileCommand.FILEREADSUCCESS:
-            self.populate_preview_list()
-
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
