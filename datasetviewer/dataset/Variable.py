@@ -1,8 +1,9 @@
 class Variable(object):
 
     def __init__(self, name, data):
-        self.name = name
-        self.data = data
+
+        self._name = name
+        self._data = data
 
     @property
     def name(self):
