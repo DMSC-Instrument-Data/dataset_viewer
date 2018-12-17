@@ -38,6 +38,13 @@ class MainViewPresenterTest(unittest.TestCase):
         for presenter in self.sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
+    def test_create_preview(self):
+
+        subpresenters = self.sub_presenters + [self.preview_presenter]
+        main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
+        main_view_presenter.create_preview()
+        subpresenters[-1].populate_preview_list.assert_called_once()
+
     def test_notify_throws_exception(self):
 
         main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
