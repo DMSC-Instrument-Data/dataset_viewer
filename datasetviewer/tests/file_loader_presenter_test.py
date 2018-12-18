@@ -7,7 +7,6 @@ from enum import Enum
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
 from datasetviewer.fileloader.interfaces.FileLoaderView import FileLoaderView
 from datasetviewer.fileloader.Command import Command
-from datasetviewer.dataset.interfaces.DataSetSource import DataSetSource
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 
 import xarray as xr
@@ -42,9 +41,11 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         main_presenter.subscribe_subpresenter.assert_called_once_with(fl_presenter)
 
-    def test_notify_file_selection(self):
+    def test_file_selection_calls_get_path(self):
 
-        self.fl_presenter.notify(Command.FILEOPENREQUEST)
+        fl_presenter = FileLoaderPresenter(self.view)
+        fl_presenter.load_data = mock.MagicMock()
+        fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
 
     def test_bad_file_shows_message(self):
@@ -76,17 +77,6 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
             load_data.assert_called_once()
 
-
-    def test_read_file_to_model(self):
-
-        with mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
-                        side_effect = lambda path: self.dummy_data.variables):
-
-            self.fl_presenter.load_data_to_model(self.fake_file_path)
-            self.source.set_data.assert_called_once_with(self.dummy_data.variables)
-    '''
-
-
     '''
     def test_file_open_success_informs_main_presenter(self):
 
@@ -94,8 +84,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
                         side_effect = lambda path: self.dummy_data.variables):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
-            self.main_presenter.create_preview.assert_called_once()
-    '''
+            self.main_presenter.set_data.assert_called_once_with(self.dummy_data.variables)
 
     def test_unknown_command_raises(self):
 
