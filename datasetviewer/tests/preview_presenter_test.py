@@ -24,9 +24,6 @@ class PreviewPresenterTest(unittest.TestCase):
         self.fake_data = DataSet()
         self.fake_data[self.var_name] = Variable(self.var_name, np.random.rand(*self.var_dims))
 
-        # self.source.get_element = mock.MagicMock(side_effect=lambda key: fake_dict[key])
-        # self.source.get_data = mock.MagicMock(return_value=fake_dict)
-
         self.fake_preview_text = self.var_name + "\n" + str(self.var_dims)
 
     def test_presenter_throws_if_view_none(self):

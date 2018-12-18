@@ -28,8 +28,8 @@ class PreviewPresenter(SubPresenter):
 
     def create_preview_text(self, name):
 
-        array = self._data[name]
-        dims = array.get_dimensions()
+        var = self._data[name]
+        dims = var.get_dimensions()
 
         return name + "\n" + str(dims)
 
