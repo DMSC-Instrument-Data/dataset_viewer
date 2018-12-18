@@ -29,13 +29,13 @@ class FileLoaderPresenter(SubPresenter):
 
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()
-            dict = self.load_data(file_path)
+            dict = self._load_data(file_path)
             self._main_presenter.set_data(dict)
 
         else:
             raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
 
-    def load_data(self, file_path):
+    def _load_data(self, file_path):
 
         try:
             dict = self._file_reader.file_to_dict(file_path)

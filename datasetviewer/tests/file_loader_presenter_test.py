@@ -45,7 +45,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         fl_presenter = FileLoaderPresenter(self.view)
         fl_presenter.register_master(self.main_presenter)
-        fl_presenter.load_data = mock.MagicMock()
+        fl_presenter._load_data = mock.MagicMock()
         fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
 
@@ -54,17 +54,17 @@ class FileLoaderPresenterTest(unittest.TestCase):
         with mock.patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
                         side_effect=lambda path: self.dummy_data):
 
-            self.fl_presenter.load_data(self.fake_file_path)
+            self.fl_presenter._load_data(self.fake_file_path)
             self.view.show_reject_file_message.assert_called_once()
 
     def test_load_file(self):
 
         fl_presenter = FileLoaderPresenter(self.view)
         fl_presenter.register_master(self.main_presenter)
-        fl_presenter.load_data = mock.MagicMock(side_effect = lambda path: self.dummy_data.variables)
+        fl_presenter._load_data = mock.MagicMock(side_effect = lambda path: self.dummy_data.variables)
 
         fl_presenter.notify(Command.FILEOPENREQUEST)
-        fl_presenter.load_data.assert_called_once_with(self.fake_file_path)
+        fl_presenter._load_data.assert_called_once_with(self.fake_file_path)
 
     def test_file_open_success_informs_main_presenter(self):
 
