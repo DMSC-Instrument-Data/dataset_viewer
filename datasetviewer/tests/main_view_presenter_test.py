@@ -2,6 +2,8 @@ import unittest
 
 import mock
 
+import xarray as xr
+
 from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
@@ -16,7 +18,8 @@ class MainViewPresenterTest(unittest.TestCase):
         self.source = mock.Mock()
         self.sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
         self.preview_presenter = PreviewPresenter(mock.Mock(), mock.Mock())
-        self.preview_presenter.populate_preview_list = mock.MagicMock()
+        self.preview_presenter.set_data = mock.MagicMock()
+        self.fake_data = xr.Dataset().variables
 
     def test_presenter_throws_if_view_none(self):
 
@@ -37,12 +40,13 @@ class MainViewPresenterTest(unittest.TestCase):
         for presenter in self.sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
-    def test_create_preview(self):
+    def test_set_data_to_preview_presenter(self):
 
-        subpresenters = self.sub_presenters + [self.preview_presenter]
-        main_view_presenter = MainViewPresenter(self.main_view, *subpresenters)
-        main_view_presenter.create_preview()
-        subpresenters[-1].populate_preview_list.assert_called_once()
+        sub_presenters = self.sub_presenters + [self.preview_presenter]
+        main_view_presenter = MainViewPresenter(self.main_view, *sub_presenters)
+
+        main_view_presenter.set_data(self.fake_data)
+        self.preview_presenter.set_data.assert_called_once_with(self.fake_data)
 
     '''
     def test_notify_throws_exception(self):

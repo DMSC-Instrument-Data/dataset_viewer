@@ -6,16 +6,15 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 
 class FileLoaderPresenter(SubPresenter):
 
-    def __init__(self, preview_view):
+    def __init__(self, file_loader_view):
 
         super().__init__()
 
-        if preview_view is None:
+        if file_loader_view is None:
             raise ValueError("Error: Cannot create FileLoaderPresenter when View is None.")
 
-
         self._main_presenter = None
-        self._view = preview_view
+        self._view = file_loader_view
         self._file_reader = FileLoaderTool()
 
     def register_master(self, master):

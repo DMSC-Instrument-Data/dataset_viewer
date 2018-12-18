@@ -24,6 +24,7 @@ class MainViewPresenter(MainViewPresenterInterface):
     def set_data(self, dict):
 
         self._data = dict
+        self._preview_presenter.set_data(dict)
 
     def subscribe_preview_presenter(self, prev):
 
@@ -32,7 +33,3 @@ class MainViewPresenter(MainViewPresenterInterface):
     def subscribe_subpresenter(self, *subpresenter):
 
         self._subpresenters.append(subpresenter)
-
-    def create_preview(self):
-
-        self._preview_presenter.populate_preview_list()
