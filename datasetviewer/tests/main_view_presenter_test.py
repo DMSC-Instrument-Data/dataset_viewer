@@ -1,11 +1,9 @@
 import unittest
-from enum import Enum
 
 import mock
 
 from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
-from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.presenter.SubPresenter import SubPresenter
 
@@ -15,6 +13,7 @@ class MainViewPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.main_view = mock.create_autospec(MainView)
+        self.source = mock.Mock()
         self.sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
         self.preview_presenter = PreviewPresenter(mock.Mock(), mock.Mock())
         self.preview_presenter.populate_preview_list = mock.MagicMock()
