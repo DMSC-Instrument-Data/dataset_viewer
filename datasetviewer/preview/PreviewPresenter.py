@@ -1,4 +1,3 @@
-from datasetviewer.preview.Command import Command as PreviewCommand
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 

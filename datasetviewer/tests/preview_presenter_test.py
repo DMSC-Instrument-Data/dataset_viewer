@@ -63,18 +63,6 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_presenter.populate_preview_list()
             add_prev.assert_called_once_with(self.var_name)
 
-    def test_notify_doesnt_throw_exception(self):
-
-        prev_presenter = PreviewPresenter(self.view)
-
-        for command in PreviewCommand:
-
-            try:
-                prev_presenter.notify(command)
-
-            except ValueError:
-                self.fail("Command " + str(command) + " raised an Exception.")
-
     def test_register_master(self):
 
         prev_presenter = PreviewPresenter(self.view)
