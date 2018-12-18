@@ -16,7 +16,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.main_presenter = mock.create_autospec(MainViewPresenter)
-        self.main_presenter.load_file_to_model = mock.MagicMock()
+        self.main_presenter.set_data = mock.MagicMock()
         self.view = mock.create_autospec(FileLoaderView)
 
         self.dummy_data = xr.Dataset()
@@ -44,6 +44,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def test_file_selection_calls_get_path(self):
 
         fl_presenter = FileLoaderPresenter(self.view)
+        fl_presenter.register_master(self.main_presenter)
         fl_presenter.load_data = mock.MagicMock()
         fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
@@ -59,25 +60,12 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def test_load_file(self):
 
         fl_presenter = FileLoaderPresenter(self.view)
+        fl_presenter.register_master(self.main_presenter)
         fl_presenter.load_data = mock.MagicMock(side_effect = lambda path: self.dummy_data.variables)
 
         fl_presenter.notify(Command.FILEOPENREQUEST)
         fl_presenter.load_data.assert_called_once_with(self.fake_file_path)
 
-        # self.main_presenter.load_file_to_model.assert_called_once_with(self.fake_file_path)
-
-    '''
-    @mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
-                side_effect = lambda path: xr.Dataset().variables)
-    def test_file_selection_loads_file(self, file_to_dict):
-
-        self.view.get_selected_file_path = mock.MagicMock(return_value=self.fake_file_path)
-
-        with mock.patch("datasetviewer.fileloader.FileLoaderPresenter.FileLoaderPresenter.load_data_to_model") as load_data:
-            self.fl_presenter.notify(Command.FILEOPENREQUEST)
-            load_data.assert_called_once()
-
-    '''
     def test_file_open_success_informs_main_presenter(self):
 
         with mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
