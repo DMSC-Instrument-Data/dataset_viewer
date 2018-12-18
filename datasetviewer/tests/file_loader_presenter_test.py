@@ -18,7 +18,6 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         self.main_presenter = mock.create_autospec(MainViewPresenter)
         self.main_presenter.load_file_to_model = mock.MagicMock()
-        self.source = mock.create_autospec(DataSetSource)
         self.view = mock.create_autospec(FileLoaderView)
 
         self.dummy_data = xr.Dataset()
@@ -26,22 +25,17 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         self.view.get_selected_file_path = mock.MagicMock(side_effect=lambda: self.fake_file_path)
 
-        self.fl_presenter = FileLoaderPresenter(self.source, self.view)
+        self.fl_presenter = FileLoaderPresenter(self.view)
         self.fl_presenter.register_master(self.main_presenter)
-
-    def test_presenter_throws_if_source_none(self):
-
-        with self.assertRaises(ValueError):
-            FileLoaderPresenter(None, self.view)
 
     def test_presenter_throws_if_view_none(self):
 
         with self.assertRaises(ValueError):
-            FileLoaderPresenter(self.source, None)
+            FileLoaderPresenter(None)
 
     def test_register_master(self):
 
-        fl_presenter = FileLoaderPresenter(self.source, self.view)
+        fl_presenter = FileLoaderPresenter(self.view)
 
         main_presenter = mock.create_autospec(MainViewPresenter)
         fl_presenter.register_master(main_presenter)
@@ -53,10 +47,23 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.fl_presenter.notify(Command.FILEOPENREQUEST)
         self.view.get_selected_file_path.assert_called_once()
 
-    def test_load_file_in_main_presenter(self):
+    def test_bad_file_shows_message(self):
 
-        self.fl_presenter.notify(Command.FILEOPENREQUEST)
-        self.main_presenter.load_file_to_model.assert_called_once_with(self.fake_file_path)
+        with mock.patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
+                        side_effect=lambda path: self.dummy_data):
+
+            self.fl_presenter.load_data(self.fake_file_path)
+            self.view.show_reject_file_message.assert_called_once()
+
+    def test_load_file(self):
+
+        fl_presenter = FileLoaderPresenter(self.view)
+        fl_presenter.load_data = mock.MagicMock(side_effect = lambda path: self.dummy_data.variables)
+
+        fl_presenter.notify(Command.FILEOPENREQUEST)
+        fl_presenter.load_data.assert_called_once_with(self.fake_file_path)
+
+        # self.main_presenter.load_file_to_model.assert_called_once_with(self.fake_file_path)
 
     '''
     @mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
@@ -77,15 +84,10 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
             self.fl_presenter.load_data_to_model(self.fake_file_path)
             self.source.set_data.assert_called_once_with(self.dummy_data.variables)
+    '''
 
-    def test_bad_file_shows_message(self):
 
-        with mock.patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
-                        side_effect = lambda path: self.dummy_data):
-
-            self.fl_presenter.load_data_to_model(self.fake_file_path)
-            self.view.show_reject_file_message.assert_called_once()
-
+    '''
     def test_file_open_success_informs_main_presenter(self):
 
         with mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
@@ -97,7 +99,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
     def test_unknown_command_raises(self):
 
-        fl_presenter = FileLoaderPresenter(self.source, self.view)
+        fl_presenter = FileLoaderPresenter(self.view)
 
         fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
 
