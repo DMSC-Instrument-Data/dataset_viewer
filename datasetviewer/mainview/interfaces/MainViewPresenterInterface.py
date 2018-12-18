@@ -6,10 +6,6 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def subscribe_preview_presenter(self, *preview_presenter):
-        pass
-
-    @abstractmethod
     def subscribe_subpresenter(self, *subpresenter):
         pass
 

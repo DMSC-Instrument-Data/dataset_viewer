@@ -10,7 +10,6 @@ from datasetviewer.preview.interfaces.PreviewView import PreviewView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.dataset.Variable import Variable
 
-
 class PreviewPresenterTest(unittest.TestCase):
 
     def setUp(self):

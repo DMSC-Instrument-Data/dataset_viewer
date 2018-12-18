@@ -9,7 +9,6 @@ from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.presenter.SubPresenter import SubPresenter
 
-
 class MainViewPresenterTest(unittest.TestCase):
 
     def setUp(self):

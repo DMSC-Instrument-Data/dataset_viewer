@@ -1,7 +1,6 @@
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
-
 class PreviewPresenter(SubPresenter):
 
     def __init__(self, preview_view):

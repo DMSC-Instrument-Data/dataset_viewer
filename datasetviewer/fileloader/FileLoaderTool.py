@@ -1,6 +1,5 @@
 from xarray import open_dataset
 
-
 class FileLoaderTool(object):
 
     def __init__(self):

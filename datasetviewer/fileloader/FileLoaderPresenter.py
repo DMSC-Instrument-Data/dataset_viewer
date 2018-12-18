@@ -3,7 +3,6 @@ from datasetviewer.fileloader.Command import Command
 from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
-
 class FileLoaderPresenter(SubPresenter):
 
     def __init__(self, file_loader_view):
@@ -21,7 +20,7 @@ class FileLoaderPresenter(SubPresenter):
 
         assert (isinstance(master, MainViewPresenterInterface))
 
-        # Register master must be called a subpresenter can call notify on the main presenter
+        #
         self._main_presenter = master
         self._main_presenter.subscribe_subpresenter(self)
 

@@ -1,7 +1,6 @@
 from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
-
 class MainViewPresenter(MainViewPresenterInterface):
 
     def __init__(self, mainview, *subpresenters):
