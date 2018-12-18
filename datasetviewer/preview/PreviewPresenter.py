@@ -17,7 +17,7 @@ class PreviewPresenter(SubPresenter):
     def set_data(self, data):
 
         self._data = data
-        self.populate_preview_list()
+        self._populate_preview_list()
 
     def register_master(self, master):
 
@@ -26,22 +26,22 @@ class PreviewPresenter(SubPresenter):
         self._main_presenter = master
         self._main_presenter.subscribe_preview_presenter(self)
 
-    def create_preview_text(self, name):
+    def _create_preview_text(self, name):
 
         var = self._data[name]
         dims = var.get_dimensions()
 
         return name + "\n" + str(dims)
 
-    def add_preview_entry(self, name):
+    def _add_preview_entry(self, name):
 
-        entry_text = self.create_preview_text(name)
+        entry_text = self._create_preview_text(name)
         self._view.add_entry_to_list(entry_text)
 
-    def populate_preview_list(self):
+    def _populate_preview_list(self):
 
         for key, _ in self._data.items():
-            self.add_preview_entry(key)
+            self._add_preview_entry(key)
 
     def notify(self, command):
         pass

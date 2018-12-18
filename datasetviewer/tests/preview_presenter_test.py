@@ -35,14 +35,14 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.set_data(self.fake_data)
-        self.assertEqual(prev_presenter.create_preview_text(self.var_name), self.fake_preview_text)
+        self.assertEqual(prev_presenter._create_preview_text(self.var_name), self.fake_preview_text)
 
     def test_call_to_create_preview_text(self):
 
         prev_presenter = PreviewPresenter(self.view)
 
-        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.create_preview_text') as prev_text:
-            prev_presenter.add_preview_entry(self.var_name)
+        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter._create_preview_text') as prev_text:
+            prev_presenter._add_preview_entry(self.var_name)
             prev_text.assert_called_once()
 
     def test_create_preview_calls_add_to_list(self):
@@ -56,8 +56,8 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.set_data(self.fake_data)
 
-        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter.add_preview_entry') as add_prev:
-            prev_presenter.populate_preview_list()
+        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter._add_preview_entry') as add_prev:
+            prev_presenter._populate_preview_list()
             add_prev.assert_called_once_with(self.var_name)
 
     def test_register_master(self):
