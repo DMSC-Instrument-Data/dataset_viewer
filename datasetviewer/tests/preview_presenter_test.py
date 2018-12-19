@@ -23,21 +23,30 @@ class PreviewPresenterTest(unittest.TestCase):
         self.fake_data = DataSet()
         self.fake_data[self.var_name] = Variable(self.var_name, np.random.rand(*self.var_dims))
 
+        # The fake preview text that should be generated from the fake data
         self.fake_preview_text = self.var_name + "\n" + str(self.var_dims)
 
     def test_presenter_throws_if_view_none(self):
-
+        '''
+        Ensure that the PreviewPresenter throws an exception when given a None PreviewView.
+        '''
         with self.assertRaises(ValueError):
             PreviewPresenter(None)
 
     def test_create_preview_text(self):
-
+        '''
+        Test that the Preview text that is generated after setting the data contains the expected key and data
+        dimensions
+        '''
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.set_data(self.fake_data)
         self.assertEqual(prev_presenter._create_preview_text(self.var_name), self.fake_preview_text)
 
     def test_call_to_create_preview_text(self):
-
+        '''
+        Test that the PreviewPresenter calls the `_create_preview_text` method once the `_add_preview_entry` method
+        has been called.
+        '''
         prev_presenter = PreviewPresenter(self.view)
 
         with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter._create_preview_text') as prev_text:
@@ -45,13 +54,19 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_text.assert_called_once()
 
     def test_create_preview_calls_add_to_list(self):
-
+        '''
+        Test that the PreviewPresenter calls the PreviewView's `_add_entry_to_list` method once with the expected text
+        once the data attribute has been set in the PreviewPresenter.
+        '''
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.set_data(self.fake_data)
         self.view.add_entry_to_list.assert_called_once_with(self.fake_preview_text)
 
     def test_call_to_add_preview_entry(self):
-
+        '''
+        Test that the `_add_preview_entry` method has been called once with the expected text once the data attribute
+        has been set.
+        '''
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.set_data(self.fake_data)
 
@@ -60,7 +75,9 @@ class PreviewPresenterTest(unittest.TestCase):
             add_prev.assert_called_once_with(self.var_name)
 
     def test_register_master(self):
-
+        '''
+        Test the two-way link between the PreviewPresenter as its MainViewPresenter master.
+        '''
         prev_presenter = PreviewPresenter(self.view)
         prev_presenter.register_master(self.master)
         self.master.subscribe_preview_presenter.assert_called_once_with(prev_presenter)

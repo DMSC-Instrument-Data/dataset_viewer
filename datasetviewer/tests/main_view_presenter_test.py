@@ -21,26 +21,37 @@ class MainViewPresenterTest(unittest.TestCase):
         self.fake_data = xr.Dataset().variables
 
     def test_presenter_throws_if_view_none(self):
-
+        '''
+        Test that the MainViewPresenter throws an Exception if the MainView is None.
+        '''
         with self.assertRaises(ValueError):
             MainViewPresenter(None, *self.sub_presenters)
 
     def test_main_throws_if_sub_none(self):
-
+        '''
+        Test that the MainViewPresenter throws an Exception if any of the SubPresenters are None.
+        :return:
+        '''
         badsubpresenters = self.sub_presenters + [None]
 
         with self.assertRaises(ValueError):
             MainViewPresenter(self.main_view, *badsubpresenters)
 
     def test_constructor_success(self):
-
+        '''
+        Test that the `register_master` method is called in each of the SubPresenters when the MainViewPresenter is
+        initialised.
+        '''
         main_view_presenter = MainViewPresenter(self.main_view, *self.sub_presenters)
 
         for presenter in self.sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
     def test_set_data_to_preview_presenter(self):
-
+        '''
+        Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter when its data attribute is set
+        to a value.
+        '''
         sub_presenters = self.sub_presenters + [self.preview_presenter]
         main_view_presenter = MainViewPresenter(self.main_view, *sub_presenters)
 
