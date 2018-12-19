@@ -4,11 +4,7 @@ class Variable(object):
     Args:
         name (str): The name/key associated with the data.
         data (xarray.core.variable.Variable): An xarray data structure that contains a key, dimension names, dimension
-        sizes, and 2+D data array.
-
-    Attributes:
-        msg (str): Human readable string describing the exception.
-        code (int): Exception error code.
+        sizes, and a data array with 2+ dimensions
 
     """
 

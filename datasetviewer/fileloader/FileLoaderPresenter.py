@@ -10,7 +10,7 @@ class FileLoaderPresenter(SubPresenter):
     FileLoaderView via a `notify` method. If a `FILEOPENREQUEST` signal is received then the FileLoaderPresenter
     attempts to open this file and pass the data to the MainViewPresenter.
 
-    Attributes:
+    Private Attributes:
         _main_presenter (str): The MainViewPresenter object. This is set to None in the constructor and assigned with
             the `register_master` method.
         _view (FileLoaderView): The FileLoaderView that this Presenter will manage.
@@ -76,7 +76,7 @@ class FileLoaderPresenter(SubPresenter):
             file_path (str): The path of the file to be loaded.
 
         Returns:
-            An OrderedDict of Variables containing xarrays with 2+ D data.
+            xarray.core.utils.Frozen: An dictionary of Variables containing xarrays with data of 2+ dimensions.
 
         Raises:
             ValueError: If the file does not exist.
