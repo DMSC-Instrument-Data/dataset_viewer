@@ -17,15 +17,29 @@ class FileLoaderPresenter(SubPresenter):
         self._file_reader = FileLoaderTool()
 
     def register_master(self, master):
+        """
+        Register the MainViewPresenter as the FileLoaderPresenter's master, and subscribe the MainViewPresenter to the
+        FileLoaderPresenter.
 
+        Args:
+            master: An instance of a MainViewPresenter.
+
+        """
         assert (isinstance(master, MainViewPresenterInterface))
 
-        #
         self._main_presenter = master
         self._main_presenter.subscribe_subpresenter(self)
 
     def notify(self, command):
+        """
+        Interpret a command from the FileLoaderView and take the appropriate action.
 
+        Args:
+            command: A command from the FileLoaderView indicating that an event has taken place.
+
+        Raises:
+            ValueError: If the command isn't recognised.
+        """
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()
             dict = self._load_data(file_path)
@@ -35,7 +49,20 @@ class FileLoaderPresenter(SubPresenter):
             raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
 
     def _load_data(self, file_path):
+        """
+        Given a file path, load this file and covert it to a data dictionary. Instructs the view to display a message
+        indicating that the file could not be loaded in the case of failure.
 
+        Args:
+            file_path: The path of the file to be loaded.
+
+        Returns:
+            An OrderedDict of Variables containing xarrays with 2+ D data.
+
+        Raises:
+            ValueError: If the file does not exist.
+            TypeError: If the file exists, but does not have the appropriate format.
+        """
         try:
             dict = self._file_reader.file_to_dict(file_path)
             return dict
