@@ -53,6 +53,9 @@ class FileLoaderPresenter(SubPresenter):
 
         Interpret a command from the FileLoaderView and take the appropriate action.
 
+        Note:
+            `register_master` must be called before this method can be called.
+
         Args:
             command (Command): A Command from the FileLoaderView indicating that an event has taken place.
 

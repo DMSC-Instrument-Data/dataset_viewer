@@ -40,6 +40,9 @@ class MainViewPresenter(MainViewPresenterInterface):
         """Sets the data attribute in the MainViewPresenter and other Presenters that require access to the data
             dictionary.
 
+        Note:
+            `subscribe_preview_presenter` must be called before this method can be called.
+
         Args:
             dict (DataSet): The data dictionary.
 
