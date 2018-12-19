@@ -4,6 +4,23 @@ from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class FileLoaderPresenter(SubPresenter):
+    """
+
+    Presenter for the File Loading component of the interface. Receives commands from an associated FileLoaderView
+    via a `notify` method. If a `FILEOPENREQUEST` signal is received then the FileLoaderPresenter attempts to open this
+    file and pass the data to the MainViewPresenter.
+
+    Attributes:
+        _main_presenter (str): The MainViewPresenter object. This is set to None in the constructor and assigned with
+            the `register_master` method.
+        _view (FileLoaderView): The FileLoaderView that this Presenter will manage.
+        _file_reader (FileLoaderTool): An instance of a FileLoaderTool object for converting .ncs files to data
+            dictionaries.
+
+    Raises:
+        ValueError: If the `file_loader_view` is None.
+
+    """
 
     def __init__(self, file_loader_view):
 
@@ -22,7 +39,7 @@ class FileLoaderPresenter(SubPresenter):
         FileLoaderPresenter.
 
         Args:
-            master: An instance of a MainViewPresenter.
+            master (MainViewPresenter): An instance of a MainViewPresenter.
 
         """
         assert (isinstance(master, MainViewPresenterInterface))
@@ -35,7 +52,7 @@ class FileLoaderPresenter(SubPresenter):
         Interpret a command from the FileLoaderView and take the appropriate action.
 
         Args:
-            command: A command from the FileLoaderView indicating that an event has taken place.
+            command (Command): A Command from the FileLoaderView indicating that an event has taken place.
 
         Raises:
             ValueError: If the command isn't recognised.
@@ -54,7 +71,7 @@ class FileLoaderPresenter(SubPresenter):
         indicating that the file could not be loaded in the case of failure.
 
         Args:
-            file_path: The path of the file to be loaded.
+            file_path (str): The path of the file to be loaded.
 
         Returns:
             An OrderedDict of Variables containing xarrays with 2+ D data.
