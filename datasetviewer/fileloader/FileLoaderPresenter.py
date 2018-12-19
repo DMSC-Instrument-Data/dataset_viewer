@@ -6,9 +6,9 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 class FileLoaderPresenter(SubPresenter):
     """
 
-    Presenter for the File Loading component of the interface. Receives commands from an associated FileLoaderView
-    via a `notify` method. If a `FILEOPENREQUEST` signal is received then the FileLoaderPresenter attempts to open this
-    file and pass the data to the MainViewPresenter.
+    Presenter for overseeing the File Loading component of the interface. Receives commands from an associated
+    FileLoaderView via a `notify` method. If a `FILEOPENREQUEST` signal is received then the FileLoaderPresenter
+    attempts to open this file and pass the data to the MainViewPresenter.
 
     Attributes:
         _main_presenter (str): The MainViewPresenter object. This is set to None in the constructor and assigned with
@@ -35,6 +35,7 @@ class FileLoaderPresenter(SubPresenter):
 
     def register_master(self, master):
         """
+
         Register the MainViewPresenter as the FileLoaderPresenter's master, and subscribe the MainViewPresenter to the
         FileLoaderPresenter.
 
@@ -49,6 +50,7 @@ class FileLoaderPresenter(SubPresenter):
 
     def notify(self, command):
         """
+
         Interpret a command from the FileLoaderView and take the appropriate action.
 
         Args:
@@ -78,7 +80,7 @@ class FileLoaderPresenter(SubPresenter):
 
         Raises:
             ValueError: If the file does not exist.
-            TypeError: If the file exists, but does not have the appropriate format.
+            TypeError: If the file exists, but does not have the appropriate format/contents.
         """
         try:
             dict = self._file_reader.file_to_dict(file_path)
