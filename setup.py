@@ -12,11 +12,12 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DMSC-Instrument-Data/dataset_viewer",
-    install_requires=['xarray'],
-    packages=['datasetviewer'],
+    install_requires=["xarray","matplotlib","pyqt5"],
+    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3"
     ],
-    tests_require=['nose>=1'],
-    test_suite='datasetviewer.tests',
+    tests_require=["nose>=1"],
+    test_suite="datasetviewer.tests",
+    scripts=["scripts/start-datasetviewer.py"],
 )

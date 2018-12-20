@@ -1,4 +1,2 @@
-from abc import ABC
-
-class MainViewInterface(ABC):
+class MainViewInterface(object):
     pass
