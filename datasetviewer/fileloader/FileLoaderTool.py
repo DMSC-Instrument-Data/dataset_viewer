@@ -6,19 +6,19 @@ from datasetviewer.dataset.Variable import Variable
 
 def invalid_dataset(data):
     """
-    Determines if a data array is suitable for plotting by checking the number of dimensions in all of its elements.
-    An element with only one dimension will cause the entire dataset to be rejected.
+    Determines if a data array is suitable for plotting by checking the contents of its elements. Empty arrays cause the
+    function to return True.
 
     Args:
         data (xarray.core.utils.Dataset): An xarray dataset.
 
     Returns:
-        bool: True if any of the elements have less than two dimensions, False otherwise.
+        bool: True if any of the elements are empty, False otherwise.
 
     """
 
     for key in data.variables:
-        if len(data[key].sizes) < 2:
+        if len(data[key]) < 1:
             return True
 
     return False
@@ -50,7 +50,7 @@ def file_to_dict(file_path):
         file_path (str): The path of the file to be opened.
 
     Raises:
-        ValueError: If the dataset is empty, or if any of its elements only have a single dimension.
+        ValueError: If the dataset is empty, or if any of its elements are empty.
         TypeError: If the file could not be converted to the an xarray.
 
     Returns:
@@ -64,6 +64,6 @@ def file_to_dict(file_path):
         raise ValueError("Error in FileLoader: Dataset is empty.")
 
     if invalid_dataset(data):
-        raise ValueError("Error in FileLoader: Dataset contains one or more elements with <2 dimensions.")
+        raise ValueError("Error in FileLoader: Dataset contains some empty arrays.")
 
     return dataset_to_dict(data)

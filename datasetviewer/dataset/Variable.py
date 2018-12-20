@@ -4,7 +4,7 @@ class Variable(object):
     Args:
         name (str): The name/key associated with the data.
         data (xarray.core.variable.Variable): An xarray data structure that contains a key, dimension names, dimension
-        sizes, and a data array with 2+ dimensions
+        sizes, and a data array.
 
     """
 

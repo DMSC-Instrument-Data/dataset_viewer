@@ -76,7 +76,7 @@ class FileLoaderPresenter(SubPresenter):
             file_path (str): The path of the file to be loaded.
 
         Returns:
-            xarray.core.utils.Frozen: An dictionary of Variables containing xarrays with data of 2+ dimensions.
+            xarray.core.utils.Frozen: An dictionary of Variables containing xarrays.
 
         Raises:
             ValueError: If the file does not exist.

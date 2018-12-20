@@ -9,12 +9,12 @@ class FileLoaderTest(unittest.TestCase):
 
     def setUp(self):
 
-        # Bad data in which one of the elements only has a single dimension
-        self.bad_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)), 'bad': np.random.rand(2)})
+        # Bad data in which one of the elements is an empty array
+        self.bad_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)), 'bad': np.array([])})
 
-        # Good data for which all of the elements have 2+ dimensions
+        # Good data for which all of the elements have some data
         self.good_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)),
-                                     'valid': (['a', 'b'], np.random.rand(3, 4)),
+                                     'valid': (['b'], np.random.rand(3)),
                                      'alsogood': (['c', 'd', 'e', 'f'], np.random.rand(3, 4, 5, 6))})
 
         self.fake_data_path = "madeuppath"
@@ -31,14 +31,13 @@ class FileLoaderTest(unittest.TestCase):
 
     def test_bad_dimensions_rejected(self):
         '''
-        Test that a data array containing elements with fewer than two dimensions is deemed invalid by the FileLoaderTool
+        Test that a data array containing elements with no data is deemed invalid by the FileLoaderTool
         '''
         self.assertTrue(FileLoaderTool.invalid_dataset(self.bad_data))
 
     def test_good_dimensions_accepted(self):
         '''
-        Test that a data array containing no elements with fewer than two dimensions is deemed valid by the
-        FileLoaderTool.
+        Test that a data array containing no empty elements is deemed valid by the FileLoaderTool.
         '''
         self.assertFalse(FileLoaderTool.invalid_dataset(self.good_data))
 
