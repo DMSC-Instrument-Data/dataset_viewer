@@ -7,7 +7,7 @@ import xarray as xr
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
-from datasetviewer.presenter.SubPresenter import SubPresenter
+from datasetviewer.subpresenter.SubPresenterInterface import SubPresenterInterface
 
 class MainViewPresenterTest(unittest.TestCase):
 
@@ -15,7 +15,7 @@ class MainViewPresenterTest(unittest.TestCase):
 
         self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_source = mock.Mock()
-        self.mock_sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
+        self.mock_sub_presenters = [mock.create_autospec(SubPresenterInterface) for _ in range(10)]
         self.mock_preview_presenter = mock.create_autospec(PreviewPresenterInterface)
         self.fake_data = xr.Dataset().variables
 
@@ -26,7 +26,7 @@ class MainViewPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             MainViewPresenter(None, *self.mock_sub_presenters)
 
-    def test_main_throws_if_sub_none(self):
+    def test_constructor_throws_if_subpresenter_none(self):
         '''
         Test that the MainViewPresenter throws an Exception if any of the SubPresenters are None.
         :return:

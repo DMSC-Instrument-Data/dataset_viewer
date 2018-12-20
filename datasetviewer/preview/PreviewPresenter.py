@@ -2,7 +2,7 @@ from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPr
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class PreviewPresenter(PreviewPresenterInterface):
-    """The presenter responsible for managing a PreviewView and providing it with the information that it will display.
+    """The subpresenter responsible for managing a PreviewView and providing it with the information that it will display.
 
     Args:
         preview_view (PreviewView): An instance of a PreviewView.

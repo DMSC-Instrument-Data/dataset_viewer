@@ -57,7 +57,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         fl_presenter.notify(Command.FILEOPENREQUEST)
         self.mock_view.get_selected_file_path.assert_called_once()
 
-    def test_bad_file_shows_message(self):
+    def test_bad_file_shows_message_on_view(self):
         '''
         Test that the request to open a bad file causes the view to display a message.
         '''
@@ -90,7 +90,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
             self.mock_main_presenter.set_data.assert_called_once_with(self.empty_data.variables)
 
-    def test_unknown_command_raises(self):
+    def test_notify_raises_if_command_unknown(self):
         '''
         Test that an exception is thrown if notify is called with a command it does not recognise.
         '''

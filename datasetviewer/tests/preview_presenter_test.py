@@ -7,7 +7,7 @@ from collections import OrderedDict as DataSet
 
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.interfaces.PreviewViewInterface import PreviewViewInterface
-from datasetviewer.mainview.MainViewPresenter import MainViewPresenterInterface
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 from datasetviewer.dataset.Variable import Variable
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -62,18 +62,6 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.set_data(self.fake_data)
         self.mock_preview_view.add_entry_to_list.assert_called_once_with(self.fake_preview_text)
-
-    def test_call_to_add_preview_entry(self):
-        '''
-        Test that the `_add_preview_entry` method has been called once with the expected text once the data attribute
-        has been set.
-        '''
-        prev_presenter = PreviewPresenter(self.mock_preview_view)
-        prev_presenter.set_data(self.fake_data)
-
-        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter._add_preview_entry') as add_prev:
-            prev_presenter._populate_preview_list()
-            add_prev.assert_called_once_with(self.var_name)
 
     def test_register_master(self):
         '''

@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 
-class SubPresenter(ABC):
-
-    def __init__(self):
-        pass
+class SubPresenterInterface(ABC):
 
     @abstractmethod
     def register_master(self, main_presenter):
