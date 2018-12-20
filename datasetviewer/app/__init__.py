@@ -1,5 +1,5 @@
 from datasetviewer.app.MainWindow import MainWindow
-from PyQt5.QtWidgets import QtWidgets
+from PyQt5 import QtWidgets
 import sys
 
 def main():
