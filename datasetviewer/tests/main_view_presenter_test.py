@@ -4,19 +4,19 @@ import mock
 
 import xarray as xr
 
-from datasetviewer.mainview.interfaces.MainView import MainView
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
-from datasetviewer.preview.PreviewPresenter import PreviewPresenter
+from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
+from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
 from datasetviewer.presenter.SubPresenter import SubPresenter
 
 class MainViewPresenterTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.mock_main_view = mock.create_autospec(MainView)
+        self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_source = mock.Mock()
         self.mock_sub_presenters = [mock.create_autospec(SubPresenter) for _ in range(10)]
-        self.mock_preview_presenter = mock.create_autospec(PreviewPresenter)
+        self.mock_preview_presenter = mock.create_autospec(PreviewPresenterInterface)
         self.fake_data = xr.Dataset().variables
 
     def test_presenter_throws_if_view_none(self):

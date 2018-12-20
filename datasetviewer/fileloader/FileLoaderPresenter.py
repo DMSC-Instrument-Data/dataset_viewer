@@ -1,9 +1,9 @@
-from datasetviewer.presenter.SubPresenter import SubPresenter
+from datasetviewer.fileloader.interfaces.FileLoaderPresenterInterface import FileLoaderPresenterInterface
 from datasetviewer.fileloader.Command import Command
 import datasetviewer.fileloader.FileLoaderTool as FileLoaderTool
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
-class FileLoaderPresenter(SubPresenter):
+class FileLoaderPresenter(FileLoaderPresenterInterface):
     """
 
     Presenter for overseeing the File Loading component of the interface. Receives commands from an associated

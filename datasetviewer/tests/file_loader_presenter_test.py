@@ -5,9 +5,9 @@ import mock
 from enum import Enum
 
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
-from datasetviewer.fileloader.interfaces.FileLoaderView import FileLoaderView
-from datasetviewer.fileloader.Command import Command
+from datasetviewer.fileloader.interfaces.FileLoaderViewInterface import FileLoaderViewInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
+from datasetviewer.fileloader.Command import Command
 
 import xarray as xr
 
@@ -17,7 +17,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         self.mock_main_presenter = mock.create_autospec(MainViewPresenterInterface)
         self.mock_main_presenter.set_data = mock.MagicMock()
-        self.mock_view = mock.create_autospec(FileLoaderView)
+        self.mock_view = mock.create_autospec(FileLoaderViewInterface)
 
         self.empty_data = xr.Dataset()
         self.fake_file_path = "filepath"
