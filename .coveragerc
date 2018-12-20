@@ -2,4 +2,5 @@
 omit =
     *SubPresenterInterface.py 
     */interfaces/*
+    *__init__.py
 show_missing = True
