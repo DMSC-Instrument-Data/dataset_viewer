@@ -1,6 +1,6 @@
 from datasetviewer.presenter.SubPresenter import SubPresenter
 from datasetviewer.fileloader.Command import Command
-from datasetviewer.fileloader.FileLoaderTool import FileLoaderTool
+import datasetviewer.fileloader.FileLoaderTool as FileLoaderTool
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class FileLoaderPresenter(SubPresenter):
@@ -14,8 +14,6 @@ class FileLoaderPresenter(SubPresenter):
         _main_presenter (str): The MainViewPresenter object. This is set to None in the constructor and assigned with
             the `register_master` method.
         _view (FileLoaderView): The FileLoaderView that this Presenter will manage.
-        _file_reader (FileLoaderTool): An instance of a FileLoaderTool object for converting .ncs files to data
-            dictionaries.
 
     Raises:
         ValueError: If the `file_loader_view` is None.
@@ -31,7 +29,6 @@ class FileLoaderPresenter(SubPresenter):
 
         self._main_presenter = None
         self._view = file_loader_view
-        self._file_reader = FileLoaderTool()
 
     def register_master(self, master):
         """
@@ -86,7 +83,7 @@ class FileLoaderPresenter(SubPresenter):
             TypeError: If the file exists, but does not have the appropriate format/contents.
         """
         try:
-            dict = self._file_reader.file_to_dict(file_path)
+            dict = FileLoaderTool.file_to_dict(file_path)
             return dict
 
         except (ValueError, TypeError) as e:

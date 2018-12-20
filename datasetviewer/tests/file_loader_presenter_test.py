@@ -84,7 +84,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         MainViewPresenter.
         :return:
         '''
-        with mock.patch("datasetviewer.fileloader.FileLoaderTool.FileLoaderTool.file_to_dict",
+        with mock.patch("datasetviewer.fileloader.FileLoaderTool.file_to_dict",
                         side_effect = lambda path: self.dummy_data.variables):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
