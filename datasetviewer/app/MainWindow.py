@@ -9,6 +9,3 @@ class MainWindow(MainViewInterface, QMainWindow):
         self.setGeometry(300, 300, 250, 150)
         self.setWindowTitle('Dataset Viewer')
         self.show()
-
-    def get_presenter(self):
-        pass
