@@ -4,7 +4,6 @@ from datasetviewer.dataset.Variable import Variable
 
 """ Tool for opening an ncs file and converting it to an OrderedDict of Variable objects. """
 
-
 def invalid_dataset(data):
     """
     Determines if a data array is suitable for plotting by checking the number of dimensions in all of its elements.

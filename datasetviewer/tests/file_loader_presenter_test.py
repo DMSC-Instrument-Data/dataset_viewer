@@ -7,7 +7,7 @@ from enum import Enum
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
 from datasetviewer.fileloader.interfaces.FileLoaderView import FileLoaderView
 from datasetviewer.fileloader.Command import Command
-from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 import xarray as xr
 
@@ -15,7 +15,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.main_presenter = mock.create_autospec(MainViewPresenter)
+        self.main_presenter = mock.create_autospec(MainViewPresenterInterface)
         self.main_presenter.set_data = mock.MagicMock()
         self.view = mock.create_autospec(FileLoaderView)
 
@@ -41,7 +41,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         '''
         fl_presenter = FileLoaderPresenter(self.view)
 
-        main_presenter = mock.create_autospec(MainViewPresenter)
+        main_presenter = mock.create_autospec(MainViewPresenterInterface)
         fl_presenter.register_master(main_presenter)
 
         main_presenter.subscribe_subpresenter.assert_called_once_with(fl_presenter)
