@@ -1,6 +1,6 @@
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 class MainWindow(MainViewInterface, QMainWindow):
 
@@ -9,7 +9,14 @@ class MainWindow(MainViewInterface, QMainWindow):
         QMainWindow.__init__(self)
         uic.loadUi("datasetviewer/app/MainWindow.ui", self)
 
-        self.actionOpen.triggered.connect(self.test)
+        self.fname = "Not set..."
+        self.actionOpen.triggered.connect(self.open_file)
+        self.actionQuit.triggered.connect(self.close)
 
-    def test(self):
-        print("Pressed open button.")
+    def open_file(self):
+
+        filedialog = QFileDialog()
+        # filedialog.exec_()
+        self.fname = filedialog.getOpenFileName(self, "Open file", "/home", "NetCDF (*.nc)")
+
+        print(self.fname)
