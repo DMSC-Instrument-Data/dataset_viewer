@@ -20,7 +20,7 @@ class MainWindow(MainViewInterface, QMainWindow):
         preview_widget = PreviewWidget()
         preview_presenter = preview_widget.get_presenter()
 
-        main_view_presenter = MainViewPresenter(self,file_loader_presenter, preview_presenter)
+        MainViewPresenter(self,file_loader_presenter, preview_presenter)
 
         # Action for exiting the program
         exitAct = QAction("Exit", self)

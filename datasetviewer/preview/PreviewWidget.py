@@ -3,7 +3,7 @@ from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 
 from PyQt5.QtWidgets import QListWidget
 
-class PreviewWidget(QListWidget, PreviewViewInterface):
+class PreviewWidget(PreviewViewInterface, QListWidget):
 
     def __init__(self, parent = None):
 
