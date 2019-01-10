@@ -64,7 +64,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         with mock.patch("datasetviewer.fileloader.FileLoaderTool.open_dataset",
                         side_effect=lambda path: self.empty_data):
 
-            self.fl_presenter._load_data(self.fake_file_path)
+            self.fl_presenter.notify(Command.FILEOPENREQUEST)
             self.mock_view.show_reject_file_message.assert_called_once()
 
     def test_closing_filedialog_does_nothing(self):

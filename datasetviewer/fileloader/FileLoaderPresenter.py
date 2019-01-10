@@ -66,8 +66,12 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
             if file_path == '':
                 return
 
-            dict = self._load_data(file_path)
-            self._main_presenter.set_data(dict)
+            try:
+                dict = self._load_data(file_path)
+                self._main_presenter.set_data(dict)
+
+            except (ValueError, TypeError) as e:
+                self._view.show_reject_file_message(str(e))
 
         else:
             raise ValueError("FileLoaderPresenter received an unrecognised command: {}".format(str(command)))
@@ -87,9 +91,6 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
             ValueError: If the file does not exist.
             TypeError: If the file exists, but does not have the appropriate format/contents.
         """
-        try:
-            dict = FileLoaderTool.file_to_dict(file_path)
-            return dict
 
-        except (ValueError, TypeError) as e:
-            self._view.show_reject_file_message(str(e))
+        dict = FileLoaderTool.file_to_dict(file_path)
+        return dict
