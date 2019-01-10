@@ -67,6 +67,25 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.fl_presenter._load_data(self.fake_file_path)
             self.mock_view.show_reject_file_message.assert_called_once()
 
+    def test_closing_filedialog_does_nothing(self):
+        '''
+        Test that closing the FileDialog without choosing a file causes the presenter to return without attempting
+        to open or interpret a file
+        '''
+
+        mock_view = mock.create_autospec(FileLoaderViewInterface)
+
+        # Tell the mock to behave as if the FileDialog was closed without a file being chosen
+        mock_view.get_selected_file_path = mock.MagicMock(side_effect = lambda: ('',''))
+
+        fl_presenter = FileLoaderPresenter(mock_view)
+        fl_presenter.register_master(self.mock_main_presenter)
+        fl_presenter._load_data = mock.MagicMock()
+
+        fl_presenter.notify(Command.FILEOPENREQUEST)
+        fl_presenter._load_data.assert_not_called()
+        self.mock_main_presenter.set_data.assert_not_called()
+
     def test_load_file(self):
         '''
         Test that a FILEOPENREQUEST in `notify` causes the `_load_data` method to be called with the expected argument.
