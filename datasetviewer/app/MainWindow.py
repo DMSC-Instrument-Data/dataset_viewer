@@ -1,7 +1,6 @@
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
-from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QAction
 
 class MainWindow(MainViewInterface, QMainWindow):
 
@@ -10,7 +9,13 @@ class MainWindow(MainViewInterface, QMainWindow):
         QMainWindow.__init__(self)
         menubar = FileLoaderWidget(self)
 
-        self.setGeometry(300, 300, 300, 200)
+        # Action for exiting the program
+        exitAct = QAction("Exit", self)
+        exitAct.triggered.connect(self.close)
+
+        menubar.mainMenu.addAction(exitAct)
+
+        self.setGeometry(800, 600, 300, 200)
         self.setWindowTitle("Dataset Viewer")
         self.show()
         # uic.loadUi("datasetviewer/app/MainWindow.ui", self)

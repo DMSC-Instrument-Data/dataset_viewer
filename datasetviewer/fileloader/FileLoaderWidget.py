@@ -18,17 +18,12 @@ class FileLoaderWidget(QMenuBar, FileLoaderViewInterface, metaclass=Template):
 
         self.fname = None
 
-        # Action for exiting the program
-        exitAct = QAction("Exit", self)
-        exitAct.triggered.connect(parent.close)
-
         # Action for opening a file
         fileAct = QAction("Open...", self)
         fileAct.triggered.connect(self.open_file)
 
-        mainMenu = self.addMenu("&File")
-        mainMenu.addAction(fileAct)
-        mainMenu.addAction(exitAct)
+        self.mainMenu = self.addMenu("&File")
+        self.mainMenu.addAction(fileAct)
 
         self._presenter = FileLoaderPresenter(self)
 
