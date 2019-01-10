@@ -1,7 +1,8 @@
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
-from PyQt5.QtWidgets import QMainWindow, QAction
+from datasetviewer.preview.PreviewWidget import PreviewWidget
+from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
 
 class MainWindow(MainViewInterface, QMainWindow):
 
@@ -12,21 +13,29 @@ class MainWindow(MainViewInterface, QMainWindow):
         menubar = self.menuBar()
         filemenu = menubar.addMenu("File")
 
-        fileloaderwidget = FileLoaderWidget(self)
-        filemenu.addAction(fileloaderwidget)
+        file_loader_widget = FileLoaderWidget(self)
+        filemenu.addAction(file_loader_widget)
 
         # Action for exiting the program
         exitAct = QAction("Exit", self)
         exitAct.triggered.connect(self.close)
         filemenu.addAction(exitAct)
 
-        fileloaderpresenter = fileloaderwidget.get_presenter()
+        preview_widget = PreviewWidget()
+        preview_presenter = preview_widget.get_presenter()
 
-        # also add preview presenter to arguments
-        mainviewpresenter = MainViewPresenter(self,fileloaderpresenter)
+        file_loader_presenter = file_loader_widget.get_presenter()
+
+        main_view_presenter = MainViewPresenter(self,file_loader_presenter, preview_presenter)
 
         self.statusBar()
 
-        self.setGeometry(200, 200, 800, 600)
-        self.setWindowTitle("Dataset Viewer")
+        centralWidget = QWidget(self)
+        self.setCentralWidget(centralWidget)
+
+        gridLayout = QGridLayout(self)
+        centralWidget.setLayout(gridLayout)
+
+        gridLayout.addWidget(preview_widget, 0, 0)
+
         self.show()
