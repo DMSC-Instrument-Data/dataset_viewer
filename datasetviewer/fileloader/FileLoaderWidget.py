@@ -2,7 +2,7 @@ from datasetviewer.fileloader.interfaces.FileLoaderViewInterface import FileLoad
 from datasetviewer.fileloader.FileLoaderPresenter import FileLoaderPresenter
 from datasetviewer.fileloader.Command import Command
 
-from PyQt5.QtWidgets import QMenuBar, QFileDialog, QAction
+from PyQt5.QtWidgets import QMenuBar, QFileDialog, QAction, QErrorMessage
 
 from abc import ABCMeta
 from sip import wrappertype
@@ -31,14 +31,16 @@ class FileLoaderWidget(QMenuBar, FileLoaderViewInterface, metaclass=Template):
         return self.fname
 
     def show_reject_file_message(self, error_msg):
-        pass
+
+        error_dialog = QErrorMessage()
+        error_dialog.showMessage(error_msg)
+        error_dialog.exec_()
 
     def open_file(self):
 
         # Create and show a file dialog with a NetCDF filter
         filedialog = QFileDialog()
         self.fname = filedialog.getOpenFileName(self, "Open file", "/home", "NetCDF (*.nc)")
-        print(self.fname)
 
         # Inform the presenter that the Open menu option was selected
         self._presenter.notify(Command.FILEOPENREQUEST)

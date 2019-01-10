@@ -58,6 +58,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
         Raises:
             ValueError: If the command isn't recognised.
+
         """
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()[0]
