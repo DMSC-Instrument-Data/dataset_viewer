@@ -3,4 +3,6 @@ omit =
     *SubPresenterInterface.py 
     */interfaces/*
     *__init__.py
+    *Widget.py
+    *MainWindow.py
 show_missing = True
