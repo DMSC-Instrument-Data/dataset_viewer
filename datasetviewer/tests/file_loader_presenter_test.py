@@ -20,7 +20,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.mock_view = mock.create_autospec(FileLoaderViewInterface)
 
         self.empty_data = xr.Dataset()
-        self.fake_file_path = "filepath"
+        self.fake_file_path = ("filepath", ".ext")
 
         self.mock_view.get_selected_file_path = mock.MagicMock(side_effect=lambda: self.fake_file_path)
 
@@ -76,7 +76,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         fl_presenter._load_data = mock.MagicMock(side_effect = lambda path: self.empty_data.variables)
 
         fl_presenter.notify(Command.FILEOPENREQUEST)
-        fl_presenter._load_data.assert_called_once_with(self.fake_file_path)
+        fl_presenter._load_data.assert_called_once_with(self.fake_file_path[0])
 
     def test_file_open_success_informs_main_presenter(self):
         '''
