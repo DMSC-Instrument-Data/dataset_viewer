@@ -14,19 +14,18 @@ class MainWindow(MainViewInterface, QMainWindow):
         filemenu = menubar.addMenu("File")
 
         file_loader_widget = FileLoaderWidget(self)
+        file_loader_presenter = file_loader_widget.get_presenter()
         filemenu.addAction(file_loader_widget)
+
+        preview_widget = PreviewWidget()
+        preview_presenter = preview_widget.get_presenter()
+
+        main_view_presenter = MainViewPresenter(self,file_loader_presenter, preview_presenter)
 
         # Action for exiting the program
         exitAct = QAction("Exit", self)
         exitAct.triggered.connect(self.close)
         filemenu.addAction(exitAct)
-
-        preview_widget = PreviewWidget()
-        preview_presenter = preview_widget.get_presenter()
-
-        file_loader_presenter = file_loader_widget.get_presenter()
-
-        main_view_presenter = MainViewPresenter(self,file_loader_presenter, preview_presenter)
 
         self.statusBar()
 
@@ -38,4 +37,5 @@ class MainWindow(MainViewInterface, QMainWindow):
 
         gridLayout.addWidget(preview_widget, 0, 0)
 
+        self.setWindowTitle("Dataset Viewer")
         self.show()

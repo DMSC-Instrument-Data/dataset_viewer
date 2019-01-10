@@ -9,3 +9,5 @@ cover/*
 *.xml
 .idea/*
 testrun.sh
+createdata.py
+testdata.nc

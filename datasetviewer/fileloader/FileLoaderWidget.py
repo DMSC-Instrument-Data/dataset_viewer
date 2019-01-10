@@ -4,13 +4,7 @@ from datasetviewer.fileloader.Command import Command
 
 from PyQt5.QtWidgets import QFileDialog, QAction, QErrorMessage
 
-from abc import ABCMeta
-from sip import wrappertype
-
-class Template(ABCMeta, wrappertype):
-    pass
-
-class FileLoaderWidget(QAction, FileLoaderViewInterface, metaclass=Template):
+class FileLoaderWidget(QAction, FileLoaderViewInterface):
 
     def __init__(self, parent = None):
 
@@ -18,7 +12,7 @@ class FileLoaderWidget(QAction, FileLoaderViewInterface, metaclass=Template):
 
         self.parent = parent
 
-        # Placeholder for the .nc filename
+        # Placeholder for the filename
         self.fname = None
 
         # Action for opening a file

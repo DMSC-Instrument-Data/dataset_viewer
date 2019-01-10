@@ -3,13 +3,7 @@ from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 
 from PyQt5.QtWidgets import QListWidget
 
-from abc import ABCMeta
-from sip import wrappertype
-
-class Template(ABCMeta, wrappertype):
-    pass
-
-class PreviewWidget(QListWidget, PreviewViewInterface, metaclass=Template):
+class PreviewWidget(QListWidget, PreviewViewInterface):
 
     def __init__(self, parent = None):
 
