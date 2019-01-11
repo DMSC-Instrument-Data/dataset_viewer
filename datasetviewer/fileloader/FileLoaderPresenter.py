@@ -64,7 +64,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
             file_path = self._view.get_selected_file_path()[0]
 
             # Do nothing if the FileDialog was closed without a file being selected
-            if file_path == '':
+            if not file_path:
                 return
 
             try:
