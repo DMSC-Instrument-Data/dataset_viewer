@@ -28,10 +28,13 @@ MainModel: Contains the data array.
 These sequence diagrams illustrate the object interactions that occur in the case of the following user actions: 
 * Pressing an X button for one of the dimensions
 * Changing the stepper value for one of the dimensions
+* Loading a file and having a summary of its contents appear in a preview pane 
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
 ### Stepper Change
 ![Stepper Change Sequence Diagram](StepperChange.png)
+### Loading a File 
+![Loading a File Sequence Diagram](FileLoad.png)
 ## Development Principles
 * All programming will follow a test-driven development approach
 * At least one reviewer must examine the code and this reviewer cannot be the developer of the feature

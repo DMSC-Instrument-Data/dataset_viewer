@@ -3,6 +3,10 @@
 *.pyc
 build/*
 dist/*
-*.egg-info/*
 .coverage
 cover/*
+*.xml
+.idea/*
+testrun.sh
+createdata.py
+*egg-info/

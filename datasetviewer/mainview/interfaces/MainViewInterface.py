@@ -1,0 +1,2 @@
+class MainViewInterface(object):
+    pass

@@ -1,3 +1,7 @@
 coverage
 python-coveralls
 nose
+flake8
+xarray
+pyqt5
+pyqt5-sip
