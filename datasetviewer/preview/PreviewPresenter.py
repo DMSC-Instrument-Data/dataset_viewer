@@ -94,3 +94,5 @@ class PreviewPresenter(PreviewPresenterInterface):
 
             # Trim the dimension information from the string
             key = selection.text().split("\n")[0]
+
+            self._main_presenter.create_default_plot(key)

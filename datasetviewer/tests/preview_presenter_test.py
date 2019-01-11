@@ -11,6 +11,8 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 from datasetviewer.preview.Command import Command
 from datasetviewer.dataset.Variable import Variable
 
+from PyQt5.QtWidgets import QListWidgetItem
+
 class PreviewPresenterTest(unittest.TestCase):
 
     def setUp(self):
@@ -84,3 +86,21 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter.notify(Command.ELEMENTSELECTION)
 
         self.mock_preview_view.get_selected_item.assert_called_once()
+
+    def test_selection_calls_default_plot(self):
+        '''
+        Test that making a selection on the Preview causes the MainViewPresenter to be alerted that a default plot
+        should be constructed
+        '''
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.register_master(self.mock_master_presenter)
+
+        fake_list_item = QListWidgetItem()
+        fake_list_item.setText("expected_key\n(2,3,2)")
+
+        self.mock_preview_view.get_selected_item = mock.MagicMock(side_effect = lambda: fake_list_item)
+
+        prev_presenter.notify(Command.ELEMENTSELECTION)
+
+        self.mock_master_presenter.create_default_plot.assert_called_once_with("expected_key")

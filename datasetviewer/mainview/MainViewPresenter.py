@@ -69,3 +69,6 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
 
         self._subpresenters.append(subpresenter)
+
+    def create_default_plot(self, key):
+        pass

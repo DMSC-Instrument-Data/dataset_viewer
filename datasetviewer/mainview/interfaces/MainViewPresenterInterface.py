@@ -9,3 +9,7 @@ class MainViewPresenterInterface(ABC):
     @abstractmethod
     def set_data(self, data):
         pass
+
+    @abstractmethod
+    def create_default_plot(self, key):
+        pass
