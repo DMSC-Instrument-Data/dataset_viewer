@@ -87,7 +87,20 @@ class PreviewPresenter(PreviewPresenterInterface):
             self._add_preview_entry(key)
 
     def notify(self, command):
+        """
 
+        Interpret a command from the PreviewView and take the appropriate action.
+
+        Note:
+            `register_master` must be called before this method can be called.
+
+        Args:
+            command (Command): A Command from the FileLoaderView indicating that an event has taken place.
+
+        Raises:
+            ValueError: If the command isn't recognised.
+
+        """
         if command == Command.ELEMENTSELECTION:
 
             selection = self._view.get_selected_item()
@@ -96,3 +109,6 @@ class PreviewPresenter(PreviewPresenterInterface):
             key = selection.text().split("\n")[0]
 
             self._main_presenter.create_default_plot(key)
+
+        else:
+            raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
