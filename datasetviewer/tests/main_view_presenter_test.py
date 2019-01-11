@@ -68,8 +68,9 @@ class MainViewPresenterTest(unittest.TestCase):
         Test that a call to the MainViewPresenter `create_default_plot` function calls another function of the same
         name in the PlotPresenter
         '''
-
-        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
+        sub_presenters = self.mock_sub_presenters + [self.mock_plot_presenter]
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *sub_presenters)
+        main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
         # Create a fake dataset and place it in the MainViewPresenter
         fake_data = DataSet()

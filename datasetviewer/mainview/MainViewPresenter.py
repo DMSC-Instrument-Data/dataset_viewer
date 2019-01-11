@@ -27,6 +27,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._main_view = mainview
         self._subpresenters = []
         self._preview_presenter = None
+        self._plot_presenter = None
         self._data = None
 
         for presenter in subpresenters:
@@ -60,6 +61,15 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
         self._preview_presenter = prev
 
+    def subscribe_plot_presenter(self, plot):
+        """Sets the plot_presenter attribute so that it can be controlled when a file has been loaded.
+
+        Args:
+            prev (PreviewPresenter): An instance of a PreviewPresenter.
+
+        """
+        self._plot_presenter = plot
+
     def subscribe_subpresenter(self, *subpresenter):
         """Appends the SubPresenter to the subpresenter list attribute.
 
@@ -71,4 +81,11 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._subpresenters.append(subpresenter)
 
     def create_default_plot(self, key):
-        pass
+        """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
+
+        Args:
+            key (String): The key of the dictionary element to be plotted.
+
+        """
+
+        self._plot_presenter.create_default_plot(self._data[key])
