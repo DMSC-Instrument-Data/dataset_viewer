@@ -2,7 +2,7 @@ from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterfac
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
 from datasetviewer.preview.PreviewWidget import PreviewWidget
-from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget, QCalendarWidget
+from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
 
 class MainWindow(MainViewInterface, QMainWindow):
 
