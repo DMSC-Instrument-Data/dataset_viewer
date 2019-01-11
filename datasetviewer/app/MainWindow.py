@@ -2,7 +2,7 @@ from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterfac
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
 from datasetviewer.preview.PreviewWidget import PreviewWidget
-from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget, QCalendarWidget
 
 class MainWindow(MainViewInterface, QMainWindow):
 
@@ -29,10 +29,10 @@ class MainWindow(MainViewInterface, QMainWindow):
 
         self.statusBar()
 
-        centralWidget = QWidget(self)
+        centralWidget = QWidget()
         self.setCentralWidget(centralWidget)
 
-        gridLayout = QGridLayout(self)
+        gridLayout = QGridLayout()
         centralWidget.setLayout(gridLayout)
 
         gridLayout.addWidget(preview_widget, 0, 0)
