@@ -5,6 +5,8 @@ import numpy as np
 
 from collections import OrderedDict as DataSet
 
+from enum import Enum
+
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.interfaces.PreviewViewInterface import PreviewViewInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
@@ -104,3 +106,16 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter.notify(Command.ELEMENTSELECTION)
 
         self.mock_master_presenter.create_default_plot.assert_called_once_with("expected_key")
+
+    def test_bad_command_throws(self):
+        '''
+        Test that an unrecognised command passed to notify causes an exception to be thrown
+        '''
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.register_master(self.mock_master_presenter)
+
+        fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
+
+        with self.assertRaises(ValueError):
+            prev_presenter.notify(fake_enum.bad_command)
