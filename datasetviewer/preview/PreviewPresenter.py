@@ -1,5 +1,6 @@
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
+from datasetviewer.preview.Command import Command
 
 class PreviewPresenter(PreviewPresenterInterface):
     """The subpresenter responsible for managing a PreviewView and providing it with the information that it will display.
@@ -86,4 +87,10 @@ class PreviewPresenter(PreviewPresenterInterface):
             self._add_preview_entry(key)
 
     def notify(self, command):
-        pass
+
+        if command == Command.ELEMENTSELECTION:
+
+            selection = self._view.get_selected_item()
+
+            # Trim the dimension information from the string
+            key = selection.text().split("\n")[0]

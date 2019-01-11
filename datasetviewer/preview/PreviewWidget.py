@@ -19,6 +19,7 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
     def record_selection(self, item):
         pass
+        # print()
 
     def get_selected_item(self):
         pass
