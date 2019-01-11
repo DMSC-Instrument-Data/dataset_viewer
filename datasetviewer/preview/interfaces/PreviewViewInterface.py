@@ -11,3 +11,15 @@ class PreviewViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def add_entry_to_list(self, entry_text):
         pass
+
+    @abstractmethod
+    def get_presenter(self):
+        pass
+
+    @abstractmethod
+    def record_selection(self, item):
+        pass
+
+    @abstractmethod
+    def get_selected_item(self):
+        pass

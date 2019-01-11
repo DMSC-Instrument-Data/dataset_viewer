@@ -9,10 +9,19 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
         QListWidget.__init__(self, parent)
 
+        self.selected_item = None
+
         self._presenter = PreviewPresenter(self)
+        self.itemDoubleClicked.connect(self.record_selection)
 
     def add_entry_to_list(self, entry_text):
         self.addItem(entry_text)
+
+    def record_selection(self, item):
+        pass
+
+    def get_selected_item(self):
+        pass
 
     def get_presenter(self):
         return self._presenter

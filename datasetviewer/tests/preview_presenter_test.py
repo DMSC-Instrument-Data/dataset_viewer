@@ -8,6 +8,7 @@ from collections import OrderedDict as DataSet
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
 from datasetviewer.preview.interfaces.PreviewViewInterface import PreviewViewInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
+from datasetviewer.preview.Command import Command
 from datasetviewer.dataset.Variable import Variable
 
 class PreviewPresenterTest(unittest.TestCase):
@@ -70,3 +71,16 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.register_master(self.mock_master_presenter)
         self.mock_master_presenter.subscribe_preview_presenter.assert_called_once_with(prev_presenter)
+
+    def test_get_selection(self):
+        '''
+        Test that the element-selection command causes the presenter to obtain information about the selection from the
+        view
+        '''
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.register_master(self.mock_master_presenter)
+
+        prev_presenter.notify(Command.ELEMENTSELECTION)
+
+        self.mock_preview_view.get_selected_item.assert_called_once()
