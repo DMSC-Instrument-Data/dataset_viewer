@@ -13,3 +13,11 @@ class PlotPresenterInterface(ABC):
     @abstractmethod
     def register_master(self, master):
         pass
+
+    @abstractmethod
+    def create_onedim_plot(self):
+        pass
+
+    @abstractmethod
+    def create_twodim_plot(self):
+        pass
