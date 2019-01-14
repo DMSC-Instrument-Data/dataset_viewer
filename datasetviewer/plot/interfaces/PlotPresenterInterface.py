@@ -7,5 +7,9 @@ class PlotPresenterInterface(ABC):
         pass
 
     @abstractmethod
+    def clear_plot(self):
+        pass
+
+    @abstractmethod
     def register_master(self, master):
         pass
