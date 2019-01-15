@@ -27,7 +27,31 @@ class PlotPresenter(PlotPresenterInterface):
                                       .transpose(data.dims[1],data.dims[0]))
 
     def clear_plot(self):
-        pass
+
+        # Try to delete a line plot if it exists
+        try:
+            self._view.line.pop(0).remove()
+        except Exception:
+            # Exception - plot being displayed is a colourmap
+            pass
+
+        # Prevent next plot from taking shape of the previous plot
+        try:
+            self._view.ax.cla()
+        except Exception:
+            pass
+
+        # Try to delete a colourbar if it exists
+        try:
+            self._view.cbar.remove()
+        except Exception:
+            pass
+
+        # Try to delete a colormap if it exists
+        try:
+            self._view.im.remove()
+        except Exception:
+            pass
 
     def register_master(self, master):
 

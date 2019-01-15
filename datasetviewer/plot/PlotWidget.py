@@ -15,12 +15,20 @@ class PlotWidget(FigureCanvasQTAgg, PlotViewInterface):
 
         self._presenter = PlotPresenter(self)
 
+        self.line = None
+        self.im = None
+        self.cbar = None
+
     def plot_image(self, arr):
-        self.ax.imshow(arr)
+
+        self.im = self.ax.imshow(arr)
+        self.cbar = self.figure.colorbar(self.im)
         self.draw()
 
     def plot_line(self, arr):
-        self.ax.plot(arr)
+
+        self.line = self.ax.plot(arr)
+        self.ax.set_aspect('auto')
         self.draw()
 
     def get_presenter(self):

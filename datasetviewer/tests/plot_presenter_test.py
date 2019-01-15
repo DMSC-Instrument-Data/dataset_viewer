@@ -5,6 +5,7 @@ import xarray as xr
 import numpy as np
 
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
 from datasetviewer.plot.PlotPresenter import PlotPresenter
 
@@ -49,3 +50,15 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.create_default_plot(self.fake_data.alsogood)
         xr.testing.assert_identical(self.mock_plot_view.plot_image.call_args[0][0],
                                     self.fake_data.alsogood.isel({'e':0, 'f':0}).transpose('d','c'))
+
+    def test_register_master(self):
+        '''
+
+        '''
+
+        plot_pres = PlotPresenter(self.mock_plot_view)
+
+        main_presenter = mock.create_autospec(MainViewPresenterInterface)
+        plot_pres.register_master(main_presenter)
+
+        main_presenter.subscribe_plot_presenter.assert_called_once_with(plot_pres)
