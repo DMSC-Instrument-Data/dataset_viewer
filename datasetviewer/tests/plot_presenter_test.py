@@ -24,9 +24,17 @@ class PlotPresenterTest(unittest.TestCase):
                                      'twodims': (['g', 'h'], np.random.rand(3, 8)),
                                      'alsogood': (['c', 'd', 'e', 'f'], np.random.rand(3, 4, 5, 6))})
 
+    def test_presenter_throws_when_view_none(self):
+        '''
+        Test that the PlotPresenter throws an Exception when the PlotView is None.
+        '''
+
+        with self.assertRaises(ValueError):
+            PlotPresenter(None)
+
     def test_clear_plot(self):
         '''
-        Test that loading a new data array causes the plot to be cleared.
+        Test that loading a new data array causes the previous plot to be cleared.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
@@ -36,7 +44,7 @@ class PlotPresenterTest(unittest.TestCase):
 
     def test_plot_call(self):
         '''
-        Test that creating a default plot with 1D data causes the appropriate view plot function to be called.
+        Test that creating a default plot with ND data causes the appropriate view plot function to be called.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
@@ -53,7 +61,8 @@ class PlotPresenterTest(unittest.TestCase):
 
     def test_register_master(self):
         '''
-
+        Test the two-way link between the PlotPresenter and its MainViewPresenter by ensuring that the master's
+        `subscribe_plot_presenter` method is called after the PlotPresenter's `register_master` method is called.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
