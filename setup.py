@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DMSC-Instrument-Data/dataset_viewer",
-    install_requires=["xarray","pyqt5","pyqt5-sip","netcdf4"],
+    install_requires=["xarray","pyqt5","pyqt5-sip","netcdf4", "matplotlib"],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3"

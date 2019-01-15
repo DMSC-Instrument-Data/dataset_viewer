@@ -5,3 +5,5 @@ flake8
 xarray
 pyqt5
 pyqt5-sip
+netcdf4
+matplotlib
