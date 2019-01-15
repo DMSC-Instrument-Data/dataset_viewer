@@ -22,11 +22,8 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.plot_line(data[0])
 
         else:
-
-            # selection = {}
-
-            for dim in data.dims:
-                pass
+            self._view.plot_image(data.isel({dim:0 for dim in data.dims[2:]})
+                                      .transpose(data.dims[1],data.dims[0]))
 
     def create_onedim_plot(self):
         pass

@@ -47,4 +47,5 @@ class PlotPresenterTest(unittest.TestCase):
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.twodims[0])
 
         plot_pres.create_default_plot(self.fake_data.alsogood)
-        # xr.testing.assert_identical()
+        xr.testing.assert_identical(self.mock_plot_view.plot_image.call_args[0][0],
+                                    self.fake_data.alsogood.isel({'e':0, 'f':0}).transpose('d','c'))
