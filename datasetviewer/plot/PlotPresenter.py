@@ -16,15 +16,14 @@ class PlotPresenter(PlotPresenterInterface):
         self._data = data
 
         if data.ndim == 1:
-            self._view.ax.plot(data)
+            self._view.plot_line(data)
 
         elif data.ndim == 2:
-            self._view.ax.plot(data[0])
+            self._view.plot_line(data[0])
 
         else:
 
             # selection = {}
-            # count = 0
 
             for dim in data.dims:
                 pass

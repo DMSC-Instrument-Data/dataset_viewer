@@ -15,9 +15,8 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_plot_view = mock.create_autospec(PlotView)
 
-        self.mock_plot_view.ax = mock.PropertyMock()
-        self.mock_plot_view.ax.plot = mock.MagicMock()
-        self.mock_plot_view.ax.imshow = mock.MagicMock()
+        self.mock_plot_view.plot_line = mock.MagicMock()
+        self.mock_plot_view.plot_image = mock.MagicMock()
 
         self.fake_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)),
                                      'valid': (['b'], np.random.rand(3)),
@@ -26,7 +25,7 @@ class PlotPresenterTest(unittest.TestCase):
 
     def test_clear_plot(self):
         '''
-        Test that loading a data array causes the plot to be cleared.
+        Test that loading a new data array causes the plot to be cleared.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
@@ -35,8 +34,15 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.clear_plot.assert_called_once()
 
     def test_plot_call(self):
+        '''
+        Test that creating a default plot with 1D data causes the appropriate view plot function to be called.
+        '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
 
         plot_pres.create_default_plot(self.fake_data.valid)
-        xr.testing.assert_equal(self.mock_plot_view.ax.plot.call_args[0][0], self.fake_data.valid)
+        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.valid)
+
+        # plot_pres.create_default_plot(self.fake_data.twodims)
+        # print(self.mock_plot_view.plot_line.call_args[0][0] == self.fake_data.twodims[0])
+        # xr.testing.assert_equal(self.mock_plot_view.plot_line.calls_args[0][0], self.fake_data.twodims[0])
