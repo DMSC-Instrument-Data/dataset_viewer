@@ -25,12 +25,6 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.plot_image(data.isel({dim:0 for dim in data.dims[2:]})
                                       .transpose(data.dims[1],data.dims[0]))
 
-    def create_onedim_plot(self):
-        pass
-
-    def create_twodim_plot(self):
-        pass
-
     def clear_plot(self):
         pass
 
