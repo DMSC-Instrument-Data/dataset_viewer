@@ -43,6 +43,8 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.create_default_plot(self.fake_data.valid)
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.valid)
 
-        # plot_pres.create_default_plot(self.fake_data.twodims)
-        # print(self.mock_plot_view.plot_line.call_args[0][0] == self.fake_data.twodims[0])
-        # xr.testing.assert_equal(self.mock_plot_view.plot_line.calls_args[0][0], self.fake_data.twodims[0])
+        plot_pres.create_default_plot(self.fake_data.twodims)
+        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.twodims[0])
+
+        plot_pres.create_default_plot(self.fake_data.alsogood)
+        # xr.testing.assert_identical()
