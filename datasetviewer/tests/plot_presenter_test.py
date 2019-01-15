@@ -34,25 +34,9 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.create_default_plot(self.fake_data.alsogood)
         plot_pres.clear_plot.assert_called_once()
 
-    def test_dim_call(self):
-        '''
-        Test that the appropriate function for generating an array is called depending on the size of the data.
-        '''
-
-        plot_pres = PlotPresenter(self.mock_plot_view)
-
-        plot_pres.create_onedim_plot = mock.MagicMock()
-        plot_pres.create_twodim_plot = mock.MagicMock()
-
-        plot_pres.create_default_plot(self.fake_data.twodims)
-        plot_pres.create_onedim_plot.assert_called_once()
-
-        plot_pres.create_default_plot(self.fake_data.alsogood)
-        plot_pres.create_twodim_plot.assert_called_once()
-
     def test_plot_call(self):
 
         plot_pres = PlotPresenter(self.mock_plot_view)
 
         plot_pres.create_default_plot(self.fake_data.valid)
-        self.mock_plot_view.ax.plot.assert_called_once()
+        xr.testing.assert_equal(self.mock_plot_view.ax.plot.call_args[0][0], self.fake_data.valid)
