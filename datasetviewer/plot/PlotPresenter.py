@@ -34,6 +34,7 @@ class PlotPresenter(PlotPresenterInterface):
 
         # Clear a previous plot if one exists
         self.clear_plot()
+
         self._data = data
 
         if data.ndim == 1:

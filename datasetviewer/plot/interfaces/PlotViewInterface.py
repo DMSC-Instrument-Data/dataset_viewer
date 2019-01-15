@@ -15,3 +15,7 @@ class PlotViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def plot_line(self, arr):
         pass
+
+    @abstractmethod
+    def get_presenter(self):
+        pass

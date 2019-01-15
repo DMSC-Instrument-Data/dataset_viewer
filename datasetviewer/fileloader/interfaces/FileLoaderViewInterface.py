@@ -15,3 +15,11 @@ class FileLoaderViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def show_reject_file_message(self, error_msg):
         pass
+
+    @abstractmethod
+    def open_file(self):
+        pass
+
+    @abstractmethod
+    def get_presenter(self):
+        pass
