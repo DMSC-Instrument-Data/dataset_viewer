@@ -1,5 +1,6 @@
 from datasetviewer.preview.interfaces.PreviewViewInterface import PreviewViewInterface
 from datasetviewer.preview.PreviewPresenter import PreviewPresenter
+from datasetviewer.preview.Command import Command
 
 from PyQt5.QtWidgets import QListWidget
 
@@ -18,11 +19,11 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         self.addItem(entry_text)
 
     def record_selection(self, item):
-        pass
-        # print()
+        self.selected_item = item
+        self._presenter.notify(Command.ELEMENTSELECTION)
 
     def get_selected_item(self):
-        pass
+        return self.selected_item
 
     def get_presenter(self):
         return self._presenter

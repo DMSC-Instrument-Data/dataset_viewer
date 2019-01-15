@@ -3,6 +3,7 @@ from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
 from datasetviewer.preview.PreviewWidget import PreviewWidget
 from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
+from datasetviewer.plot.PlotWidget import PlotWidget
 
 class MainWindow(MainViewInterface, QMainWindow):
 
@@ -20,7 +21,10 @@ class MainWindow(MainViewInterface, QMainWindow):
         preview_widget = PreviewWidget()
         preview_presenter = preview_widget.get_presenter()
 
-        MainViewPresenter(self, file_loader_presenter, preview_presenter)
+        plot_widget = PlotWidget()
+        plot_presenter = plot_widget.get_presenter()
+
+        MainViewPresenter(self, file_loader_presenter, preview_presenter, plot_presenter)
 
         # Action for exiting the program
         exitAct = QAction("Exit", self)
@@ -36,6 +40,7 @@ class MainWindow(MainViewInterface, QMainWindow):
         centralWidget.setLayout(gridLayout)
 
         gridLayout.addWidget(preview_widget, 0, 0)
+        gridLayout.addWidget(plot_widget, 0, 1)
 
         self.setWindowTitle("Dataset Viewer")
         self.show()

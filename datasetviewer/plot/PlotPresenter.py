@@ -1,4 +1,5 @@
 from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterInterface
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class PlotPresenter(PlotPresenterInterface):
 
@@ -29,4 +30,8 @@ class PlotPresenter(PlotPresenterInterface):
         pass
 
     def register_master(self, master):
-        pass
+
+        assert (isinstance(master, MainViewPresenterInterface))
+
+        self._main_presenter = master
+        master.subscribe_plot_presenter(self)

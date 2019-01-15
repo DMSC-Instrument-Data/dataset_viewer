@@ -88,4 +88,4 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         """
 
-        self._plot_presenter.create_default_plot(self._data[key])
+        self._plot_presenter.create_default_plot(self._data[key].data)

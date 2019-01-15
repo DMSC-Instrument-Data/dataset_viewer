@@ -5,7 +5,7 @@ import xarray as xr
 import numpy as np
 
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
-from datasetviewer.plot.PlotView import PlotView
+from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
 from datasetviewer.plot.PlotPresenter import PlotPresenter
 
 class PlotPresenterTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class PlotPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.mock_main_view = mock.create_autospec(MainViewInterface)
-        self.mock_plot_view = mock.create_autospec(PlotView)
+        self.mock_plot_view = mock.create_autospec(PlotViewInterface)
 
         self.mock_plot_view.plot_line = mock.MagicMock()
         self.mock_plot_view.plot_image = mock.MagicMock()

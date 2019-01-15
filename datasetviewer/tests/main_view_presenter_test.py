@@ -80,4 +80,4 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter._data = fake_data
 
         main_view_presenter.create_default_plot(fake_key)
-        self.mock_plot_presenter.create_default_plot.assert_called_once_with(fake_elem)
+        self.mock_plot_presenter.create_default_plot.assert_called_once_with(self.fake_data)
