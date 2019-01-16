@@ -43,10 +43,15 @@ class PlotPresenter(PlotPresenterInterface):
 
         elif data.ndim == 2:
 
+            self._view.label_x_axis(data.dims[0])
+
             # Slice the array if it is 2D, then create a 1D plot
-            self._view.plot_line(data[0])
+            self._view.plot_line(data.transpose()[0])
 
         else:
+
+            self._view.label_x_axis(data.dims[0])
+            self._view.label_y_axis(data.dims[1])
 
             # Slice the array by using the first two dimensions as the X and Y axes if it is 2D or greater
             self._view.plot_image(data.isel({dim:0 for dim in data.dims[2:]})

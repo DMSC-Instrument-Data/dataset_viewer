@@ -16,9 +16,6 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_plot_view = mock.create_autospec(PlotViewInterface)
 
-        self.mock_plot_view.plot_line = mock.MagicMock()
-        self.mock_plot_view.plot_image = mock.MagicMock()
-
         self.fake_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)),
                                      'valid': (['b'], np.random.rand(3)),
                                      'twodims': (['g', 'h'], np.random.rand(3, 8)),
@@ -53,7 +50,7 @@ class PlotPresenterTest(unittest.TestCase):
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.valid)
 
         plot_pres.create_default_plot(self.fake_data.twodims)
-        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.twodims[0])
+        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.twodims.transpose()[0])
 
         plot_pres.create_default_plot(self.fake_data.alsogood)
         xr.testing.assert_identical(self.mock_plot_view.plot_image.call_args[0][0],
@@ -71,3 +68,26 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.register_master(main_presenter)
 
         main_presenter.subscribe_plot_presenter.assert_called_once_with(plot_pres)
+
+    def test_label_axes(self):
+        '''
+        Test that the axes label functions are called with the expected inputs.
+        '''
+
+        # Don't label the axes in the case of 1D data
+        plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.create_default_plot(self.fake_data.valid)
+        self.mock_plot_view.label_x_axis.assert_not_called()
+        self.mock_plot_view.label_y_axis.assert_not_called()
+
+        # Label a single axes in the case of 2D data
+        plot_pres.create_default_plot(self.fake_data.twodims)
+        self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_data.twodims.dims[0])
+        self.mock_plot_view.label_y_axis.assert_not_called()
+
+        self.mock_plot_view.reset_mock()
+
+        # Label both axes in the case of nD data with n > 2
+        plot_pres.create_default_plot(self.fake_data.good)
+        self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_data.good.dims[0])
+        self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_data.good.dims[1])

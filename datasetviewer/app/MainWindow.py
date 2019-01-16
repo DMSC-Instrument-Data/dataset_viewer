@@ -5,6 +5,8 @@ from datasetviewer.preview.PreviewWidget import PreviewWidget
 from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
 from datasetviewer.plot.PlotWidget import PlotWidget
 
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
 class MainWindow(MainViewInterface, QMainWindow):
 
     def __init__(self):
@@ -23,6 +25,7 @@ class MainWindow(MainViewInterface, QMainWindow):
 
         plot_widget = PlotWidget()
         plot_presenter = plot_widget.get_presenter()
+        self.addToolBar(NavigationToolbar(plot_widget, self))
 
         MainViewPresenter(self, file_loader_presenter, preview_presenter, plot_presenter)
 

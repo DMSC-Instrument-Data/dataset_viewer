@@ -1,17 +1,16 @@
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
-from datasetviewer.plot.PlotPresenter import PlotPresenter
+
+from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 
-import matplotlib as mpl
-mpl.rc('lines', color='blue')
+from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
+from datasetviewer.plot.PlotPresenter import PlotPresenter
 
-class PlotWidget(FigureCanvasQTAgg, PlotViewInterface):
+class PlotWidget(FigureCanvas, PlotViewInterface):
 
     def __init__(self):
         self.figure = Figure()
         self.ax = self.figure.add_subplot(1, 1, 1)
-        FigureCanvasQTAgg.__init__(self, self.figure)
+        FigureCanvas.__init__(self, self.figure)
 
         self._presenter = PlotPresenter(self)
 
@@ -33,3 +32,9 @@ class PlotWidget(FigureCanvasQTAgg, PlotViewInterface):
 
     def get_presenter(self):
         return self._presenter
+
+    def label_x_axis(self, label):
+        self.ax.set_xlabel(label)
+
+    def label_y_axis(self, label):
+        self.ax.set_ylabel(label)

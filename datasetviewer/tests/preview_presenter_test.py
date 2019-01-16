@@ -20,9 +20,7 @@ class PreviewPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.mock_preview_view = mock.create_autospec(PreviewViewInterface)
-
         self.mock_master_presenter = mock.create_autospec(MainViewPresenterInterface)
-        self.mock_master_presenter.subscribe_preview_presenter = mock.MagicMock()
 
         self.var_name = "Key"
         self.var_dims = (8, 5)

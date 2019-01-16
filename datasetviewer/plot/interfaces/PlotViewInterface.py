@@ -19,3 +19,11 @@ class PlotViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def get_presenter(self):
         pass
+
+    @abstractmethod
+    def label_x_axis(self, label):
+        pass
+
+    @abstractmethod
+    def label_y_axis(self, label):
+        pass
