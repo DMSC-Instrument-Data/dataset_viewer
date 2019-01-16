@@ -27,3 +27,6 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
     def get_presenter(self):
         return self._presenter
+
+    def clear_preview(self):
+        self.clear()

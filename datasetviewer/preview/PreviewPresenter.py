@@ -35,6 +35,7 @@ class PreviewPresenter(PreviewPresenterInterface):
 
         """
         self._data = dict
+        self._view.clear_preview()
         self._populate_preview_list()
 
     def register_master(self, master):

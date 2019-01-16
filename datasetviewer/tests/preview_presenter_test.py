@@ -66,6 +66,15 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter.set_data(self.fake_data)
         self.mock_preview_view.add_entry_to_list.assert_called_once_with(self.fake_preview_text)
 
+    def test_create_preview_calls_clear_list(self):
+        '''
+        Test that any items that were previously on the list are removed once a file is loaded.
+        '''
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.set_data(self.fake_data)
+        self.mock_preview_view.clear_preview.assert_called_once()
+
     def test_register_master(self):
         '''
         Test the two-way link between the PreviewPresenter as its MainViewPresenter master.
