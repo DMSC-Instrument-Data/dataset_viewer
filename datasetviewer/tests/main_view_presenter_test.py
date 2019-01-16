@@ -81,3 +81,13 @@ class MainViewPresenterTest(unittest.TestCase):
 
         main_view_presenter.create_default_plot(fake_key)
         self.mock_plot_presenter.create_default_plot.assert_called_once_with(self.fake_data)
+
+    def test_update_toolbar(self):
+        '''
+        Test that the `udate_toolbar` method in the MainViewPresenter calls another function of the same name in the
+        MainView.
+        '''
+
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
+        main_view_presenter.update_toolbar()
+        self.mock_main_view.update_toolbar.assert_called_once()

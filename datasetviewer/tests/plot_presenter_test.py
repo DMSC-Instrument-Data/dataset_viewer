@@ -16,6 +16,8 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_plot_view = mock.create_autospec(PlotViewInterface)
 
+        self.mock_main_presenter = mock.create_autospec(MainViewPresenterInterface)
+
         self.fake_data = xr.Dataset({'good': (['x', 'y', 'z'], np.random.rand(3, 4, 5)),
                                      'valid': (['b'], np.random.rand(3)),
                                      'twodims': (['g', 'h'], np.random.rand(3, 8)),
@@ -35,6 +37,8 @@ class PlotPresenterTest(unittest.TestCase):
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+
         plot_pres.clear_plot = mock.MagicMock()
         plot_pres.create_default_plot(self.fake_data.alsogood)
         plot_pres.clear_plot.assert_called_once()
@@ -45,6 +49,7 @@ class PlotPresenterTest(unittest.TestCase):
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
 
         plot_pres.create_default_plot(self.fake_data.valid)
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_data.valid)
@@ -63,11 +68,9 @@ class PlotPresenterTest(unittest.TestCase):
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
 
-        main_presenter = mock.create_autospec(MainViewPresenterInterface)
-        plot_pres.register_master(main_presenter)
-
-        main_presenter.subscribe_plot_presenter.assert_called_once_with(plot_pres)
+        self.mock_main_presenter.subscribe_plot_presenter.assert_called_once_with(plot_pres)
 
     def test_label_axes(self):
         '''
@@ -76,6 +79,8 @@ class PlotPresenterTest(unittest.TestCase):
 
         # Don't label the axes in the case of 1D data
         plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+
         plot_pres.create_default_plot(self.fake_data.valid)
         self.mock_plot_view.label_x_axis.assert_not_called()
         self.mock_plot_view.label_y_axis.assert_not_called()
@@ -100,5 +105,17 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.draw_plot = mock.MagicMock()
 
         plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+
         plot_pres.create_default_plot(self.fake_data.valid)
         self.mock_plot_view.draw_plot.assert_called_once()
+
+    def test_new_data_updates_toolbar(self):
+        '''
+        Test that loading new data causes the toolbar to be updated.
+        '''
+
+        plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+        plot_pres.create_default_plot(self.fake_data.valid)
+        self.mock_main_presenter.update_toolbar.assert_called_once()

@@ -21,3 +21,7 @@ class MainViewPresenterInterface(ABC):
     @abstractmethod
     def create_default_plot(self, key):
         pass
+
+    @abstractmethod
+    def update_toolbar(self):
+        pass

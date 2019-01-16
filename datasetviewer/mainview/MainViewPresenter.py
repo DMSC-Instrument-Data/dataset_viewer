@@ -89,3 +89,8 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
 
         self._plot_presenter.create_default_plot(self._data[key].data)
+
+    def update_toolbar(self):
+        """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """
+
+        self._main_view.update_toolbar()

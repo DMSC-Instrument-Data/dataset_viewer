@@ -25,7 +25,8 @@ class MainWindow(MainViewInterface, QMainWindow):
 
         plot_widget = PlotWidget()
         plot_presenter = plot_widget.get_presenter()
-        self.addToolBar(NavigationToolbar(plot_widget, self))
+        self.toolbar = NavigationToolbar(plot_widget, self)
+        self.addToolBar(self.toolbar)
 
         MainViewPresenter(self, file_loader_presenter, preview_presenter, plot_presenter)
 
@@ -47,3 +48,10 @@ class MainWindow(MainViewInterface, QMainWindow):
 
         self.setWindowTitle("Dataset Viewer")
         self.show()
+
+    def update_toolbar(self):
+        """ Informs the toolbar that the 'Home' button should take the plot back to the current state. Called when a new
+            dataset is loaded. """
+
+        self.toolbar.update()
+        self.toolbar.push_current()

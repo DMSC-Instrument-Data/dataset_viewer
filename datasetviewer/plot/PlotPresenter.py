@@ -58,6 +58,7 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.label_y_axis(data.dims[1])
 
         self._view.draw_plot()
+        self._main_presenter.update_toolbar()
 
     def clear_plot(self):
         """ Erases the previous plot and plot elements if they exist. """
