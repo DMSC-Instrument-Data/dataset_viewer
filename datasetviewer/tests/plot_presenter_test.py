@@ -91,3 +91,14 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.create_default_plot(self.fake_data.good)
         self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_data.good.dims[0])
         self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_data.good.dims[1])
+
+    def test_draw_plot(self):
+        '''
+        Test that the presenter calls the PlotView's draw function after receiving new data.
+        '''
+
+        self.mock_plot_view.draw_plot = mock.MagicMock()
+
+        plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.create_default_plot(self.fake_data.valid)
+        self.mock_plot_view.draw_plot.assert_called_once()

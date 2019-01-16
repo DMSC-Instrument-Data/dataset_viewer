@@ -27,3 +27,7 @@ class PlotViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def label_y_axis(self, label):
         pass
+
+    @abstractmethod
+    def draw_plot(self):
+        pass

@@ -22,12 +22,13 @@ class PlotWidget(FigureCanvas, PlotViewInterface):
 
         self.im = self.ax.imshow(arr)
         self.cbar = self.figure.colorbar(self.im)
-        self.draw()
 
     def plot_line(self, arr):
 
         self.line = self.ax.plot(arr)
         self.ax.set_aspect('auto')
+
+    def draw_plot(self):
         self.draw()
 
     def get_presenter(self):

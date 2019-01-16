@@ -13,7 +13,7 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         self.selected_item = None
 
         self._presenter = PreviewPresenter(self)
-        self.itemDoubleClicked.connect(self.record_selection)
+        self.itemClicked.connect(self.record_selection)
 
     def add_entry_to_list(self, entry_text):
         self.addItem(entry_text)
