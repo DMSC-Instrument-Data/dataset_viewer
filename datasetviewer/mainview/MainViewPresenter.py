@@ -25,9 +25,9 @@ class MainViewPresenter(MainViewPresenterInterface):
             raise ValueError("Error: Cannot create MainViewPresenter when MainView is None.")
 
         self._main_view = mainview
-        self._subpresenters = []
         self._preview_presenter = None
         self._plot_presenter = None
+        self._file_loader_presenter = None
         self._data = None
 
         for presenter in subpresenters:
@@ -65,20 +65,20 @@ class MainViewPresenter(MainViewPresenterInterface):
         """Sets the plot_presenter attribute so that it can be controlled when a file has been loaded.
 
         Args:
-            prev (PreviewPresenter): An instance of a PreviewPresenter.
+            plot (PlotPresenter): An instance of a PlotPresenter.
 
         """
         self._plot_presenter = plot
 
-    def subscribe_subpresenter(self, *subpresenter):
-        """Appends the SubPresenter to the subpresenter list attribute.
+    def subscribe_file_loader_presenter(self, file_loader):
+        """Sets the file_loader_presenter attribute.
 
         Args:
-            subpresenter (SubPresenter): An instance of a SubPresenter.
+            file_loader (FileLoaderPresenter): An instance of a FileLoaderPresenter.
 
         """
 
-        self._subpresenters.append(subpresenter)
+        self._file_loader_presenter = file_loader
 
     def create_default_plot(self, key):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.

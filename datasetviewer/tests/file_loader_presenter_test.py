@@ -44,7 +44,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
         main_presenter = mock.create_autospec(MainViewPresenterInterface)
         fl_presenter.register_master(main_presenter)
 
-        main_presenter.subscribe_subpresenter.assert_called_once_with(fl_presenter)
+        main_presenter.subscribe_file_loader_presenter.assert_called_once_with(fl_presenter)
 
     def test_file_selection_calls_get_path_on_view(self):
         '''

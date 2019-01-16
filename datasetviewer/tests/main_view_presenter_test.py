@@ -7,8 +7,8 @@ import xarray as xr
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
-from datasetviewer.subpresenter.SubPresenterInterface import SubPresenterInterface
 from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterInterface
+from datasetviewer.fileloader.interfaces.FileLoaderPresenterInterface import FileLoaderPresenterInterface
 from datasetviewer.dataset.Variable import Variable
 
 from collections import OrderedDict as DataSet
@@ -19,9 +19,15 @@ class MainViewPresenterTest(unittest.TestCase):
 
         self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_source = mock.Mock()
-        self.mock_sub_presenters = [mock.create_autospec(SubPresenterInterface) for _ in range(10)]
+
         self.mock_preview_presenter = mock.create_autospec(PreviewPresenterInterface)
         self.mock_plot_presenter = mock.create_autospec(PlotPresenterInterface)
+        self.mock_file_loader_presenter = mock.create_autospec(FileLoaderPresenterInterface)
+
+        self.mock_sub_presenters = [self.mock_preview_presenter,
+                                    self.mock_plot_presenter,
+                                    self.mock_file_loader_presenter]
+
         self.fake_data = xr.Dataset().variables
 
     def test_presenter_throws_if_view_none(self):
@@ -56,8 +62,8 @@ class MainViewPresenterTest(unittest.TestCase):
         Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter when its data attribute is set
         to a value.
         '''
-        sub_presenters = self.mock_sub_presenters + [self.mock_preview_presenter]
-        main_view_presenter = MainViewPresenter(self.mock_main_view, *sub_presenters)
+
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
 
         main_view_presenter.set_data(self.fake_data)
@@ -68,8 +74,8 @@ class MainViewPresenterTest(unittest.TestCase):
         Test that a call to the MainViewPresenter `create_default_plot` function calls another function of the same
         name in the PlotPresenter
         '''
-        sub_presenters = self.mock_sub_presenters + [self.mock_plot_presenter]
-        main_view_presenter = MainViewPresenter(self.mock_main_view, *sub_presenters)
+
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
         # Create a fake dataset and place it in the MainViewPresenter

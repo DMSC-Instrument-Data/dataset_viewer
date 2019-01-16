@@ -11,7 +11,7 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def subscribe_subpresenter(self, *subpresenter):
+    def subscribe_file_loader_presenter(self, file_loader):
         pass
 
     @abstractmethod
