@@ -39,7 +39,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     def set_data(self, dict):
         """Sets the data attribute in the MainViewPresenter and other Presenters that require access to the data
-            dictionary.
+            dictionary. Clears any previous plots.
 
         Note:
             `subscribe_preview_presenter` must be called before this method can be called.
@@ -50,6 +50,8 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
 
         self._data = dict
+        self._plot_presenter.clear_plot()
+        self._plot_presenter.draw_plot()
         self._preview_presenter.set_data(dict)
 
     def subscribe_preview_presenter(self, prev):

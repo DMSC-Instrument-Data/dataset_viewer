@@ -57,7 +57,7 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.label_x_axis(data.dims[0])
             self._view.label_y_axis(data.dims[1])
 
-        self._view.draw_plot()
+        self.draw_plot()
         self._main_presenter.update_toolbar()
 
     def clear_plot(self):
@@ -86,6 +86,10 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.im.remove()
         except Exception:
             pass
+
+    def draw_plot(self):
+        """ Redraw the plot in the view after an update has occurred."""
+        self._view.draw_plot()
 
     def register_master(self, master):
         """

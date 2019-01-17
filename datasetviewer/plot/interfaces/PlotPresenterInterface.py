@@ -13,3 +13,7 @@ class PlotPresenterInterface(ABC):
     @abstractmethod
     def register_master(self, master):
         pass
+
+    @abstractmethod
+    def draw_plot(self):
+        pass

@@ -65,9 +65,23 @@ class MainViewPresenterTest(unittest.TestCase):
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
+        main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
         main_view_presenter.set_data(self.fake_data)
         self.mock_preview_presenter.set_data.assert_called_once_with(self.fake_data)
+
+    def test_clear_previous_plot(self):
+        '''
+        Test that loading a new data set causes any previous plot to be cleared.
+        '''
+
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
+        main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
+        main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
+
+        main_view_presenter.set_data(self.fake_data)
+        self.mock_plot_presenter.clear_plot.assert_called_once()
+        self.mock_plot_presenter.draw_plot.assert_called_once()
 
     def test_create_default_plot(self):
         '''
