@@ -13,15 +13,15 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         self.selected_item = None
 
         self._presenter = PreviewPresenter(self)
-        self.itemClicked.connect(self.record_selection)
+        self.itemSelectionChanged.connect(self.record_selection)
 
         self.setMinimumWidth(200)
 
     def add_entry_to_list(self, entry_text):
         self.addItem(entry_text)
 
-    def record_selection(self, item):
-        self.selected_item = item
+    def record_selection(self):
+        self.selected_item = self.currentItem()
         self._presenter.notify(Command.ELEMENTSELECTION)
 
     def get_selected_item(self):
