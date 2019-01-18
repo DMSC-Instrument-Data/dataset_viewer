@@ -34,8 +34,10 @@ class PreviewPresenter(PreviewPresenterInterface):
             dict (DataSet): The data dictionary.
 
         """
+
         self._data = dict
         self._view.clear_preview()
+        self._view.clear_selection()
         self._populate_preview_list()
 
     def register_master(self, master):

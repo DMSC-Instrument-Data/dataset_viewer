@@ -13,6 +13,10 @@ class PreviewViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
+    def clear_selection(self):
+        pass
+
+    @abstractmethod
     def get_presenter(self):
         pass
 
