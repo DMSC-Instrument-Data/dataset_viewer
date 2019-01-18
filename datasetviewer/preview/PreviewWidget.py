@@ -15,6 +15,8 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         self._presenter = PreviewPresenter(self)
         self.itemClicked.connect(self.record_selection)
 
+        self.setMinimumWidth(200)
+
     def add_entry_to_list(self, entry_text):
         self.addItem(entry_text)
 
