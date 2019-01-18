@@ -23,9 +23,13 @@ class PlotPresenter(PlotPresenterInterface):
             raise ValueError("Error: Cannot create PlotPresenter when View is None.")
 
         self._view = plot_view
-        self._data = None
+        self._dict = None
 
-    def create_default_plot(self, data):
+    def set_dict(self, dict):
+
+        self._dict = dict
+
+    def create_default_plot(self, key):
         """Creates a default plot for different data types depending on the number of dimensions.
 
         Args:
@@ -35,7 +39,7 @@ class PlotPresenter(PlotPresenterInterface):
         # Clear a previous plot if one exists
         self.clear_plot()
 
-        self._data = data
+        data = self._dict[key].data
 
         if data.ndim == 1:
             # Plot the array as it is if it is 1D

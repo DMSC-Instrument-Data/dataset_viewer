@@ -28,7 +28,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._preview_presenter = None
         self._plot_presenter = None
         self._file_loader_presenter = None
-        self._data = None
+        self._dict = None
 
         for presenter in subpresenters:
 
@@ -37,7 +37,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
             presenter.register_master(self)
 
-    def set_data(self, dict):
+    def set_dict(self, dict):
         """Sets the data attribute in the MainViewPresenter and other Presenters that require access to the data
             dictionary. Clears any previous plots.
 
@@ -49,10 +49,10 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         """
 
-        self._data = dict
+        self._dict = dict
         self._plot_presenter.clear_plot()
-        self._plot_presenter.draw_plot()
-        self._preview_presenter.set_data(dict)
+        self._plot_presenter.set_dict(dict)
+        self._preview_presenter.set_dict(dict)
 
     def subscribe_preview_presenter(self, prev):
         """Sets the preview_presenter attribute so that it can be controlled when a file has been loaded.
@@ -90,7 +90,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         """
 
-        self._plot_presenter.create_default_plot(self._data[key].data)
+        self._plot_presenter.create_default_plot(self._dict[key].data)
 
     def update_toolbar(self):
         """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """

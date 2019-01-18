@@ -69,7 +69,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
             try:
                 dict = self._load_data(file_path)
-                self._main_presenter.set_data(dict)
+                self._main_presenter.set_dict(dict)
 
             except (ValueError, OSError) as e:
                 self._view.show_reject_file_message(str(e))

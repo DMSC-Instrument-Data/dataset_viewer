@@ -17,3 +17,7 @@ class PlotPresenterInterface(ABC):
     @abstractmethod
     def draw_plot(self):
         pass
+
+    @abstractmethod
+    def set_dict(self, dict):
+        pass

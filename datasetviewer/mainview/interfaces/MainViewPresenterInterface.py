@@ -15,7 +15,7 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def set_data(self, data):
+    def set_dict(self, dict):
         pass
 
     @abstractmethod

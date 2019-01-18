@@ -25,9 +25,9 @@ class PreviewPresenter(PreviewPresenterInterface):
             raise ValueError("Error: Cannot create PreviewPresenter when View is None.")
 
         self._view = preview_view
-        self._data = None
+        self._dict = None
 
-    def set_data(self, dict):
+    def set_dict(self, dict):
         """Sets the `_data` attribute and calls a method to generate the preview contents.
 
         Args:
@@ -35,7 +35,7 @@ class PreviewPresenter(PreviewPresenterInterface):
 
         """
 
-        self._data = dict
+        self._dict = dict
         self._view.clear_preview()
         self._view.clear_selection()
         self._populate_preview_list()
@@ -66,7 +66,7 @@ class PreviewPresenter(PreviewPresenterInterface):
 
         """
 
-        var = self._data[name]
+        var = self._dict[name]
         dims = var.get_dimensions()
 
         return name + "\n" + str(dims)
@@ -86,7 +86,7 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _populate_preview_list(self):
         """ Fill the preview pane with the information about all of the elements in the DataSet. """
-        for key, _ in self._data.items():
+        for key, _ in self._dict.items():
             self._add_preview_entry(key)
 
     def notify(self, command):

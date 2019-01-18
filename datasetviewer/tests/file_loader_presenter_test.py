@@ -16,7 +16,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.mock_main_presenter = mock.create_autospec(MainViewPresenterInterface)
-        self.mock_main_presenter.set_data = mock.MagicMock()
+        self.mock_main_presenter.set_dict = mock.MagicMock()
         self.mock_view = mock.create_autospec(FileLoaderViewInterface)
 
         self.empty_data = xr.Dataset()
@@ -84,7 +84,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
 
         fl_presenter.notify(Command.FILEOPENREQUEST)
         fl_presenter._load_data.assert_not_called()
-        self.mock_main_presenter.set_data.assert_not_called()
+        self.mock_main_presenter.set_dict.assert_not_called()
 
     def test_load_file(self):
         '''
@@ -107,7 +107,7 @@ class FileLoaderPresenterTest(unittest.TestCase):
                         side_effect = lambda path: self.empty_data.variables):
 
             self.fl_presenter.notify(Command.FILEOPENREQUEST)
-            self.mock_main_presenter.set_data.assert_called_once_with(self.empty_data.variables)
+            self.mock_main_presenter.set_dict.assert_called_once_with(self.empty_data.variables)
 
     def test_notify_raises_if_command_unknown(self):
         '''

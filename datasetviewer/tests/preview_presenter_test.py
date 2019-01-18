@@ -43,7 +43,7 @@ class PreviewPresenterTest(unittest.TestCase):
         dimensions
         '''
         prev_presenter = PreviewPresenter(self.mock_preview_view)
-        prev_presenter.set_data(self.fake_data)
+        prev_presenter.set_dict(self.fake_data)
         self.assertEqual(prev_presenter._create_preview_text(self.var_name), self.fake_preview_text)
 
     def test_call_to_create_preview_text(self):
@@ -63,7 +63,7 @@ class PreviewPresenterTest(unittest.TestCase):
         once the data attribute has been set in the PreviewPresenter.
         '''
         prev_presenter = PreviewPresenter(self.mock_preview_view)
-        prev_presenter.set_data(self.fake_data)
+        prev_presenter.set_dict(self.fake_data)
         self.mock_preview_view.add_entry_to_list.assert_called_once_with(self.fake_preview_text)
 
     def test_create_preview_calls_clear_list(self):
@@ -72,7 +72,7 @@ class PreviewPresenterTest(unittest.TestCase):
         '''
 
         prev_presenter = PreviewPresenter(self.mock_preview_view)
-        prev_presenter.set_data(self.fake_data)
+        prev_presenter.set_dict(self.fake_data)
         self.mock_preview_view.clear_preview.assert_called_once()
         self.mock_preview_view.clear_selection.assert_called_once()
 

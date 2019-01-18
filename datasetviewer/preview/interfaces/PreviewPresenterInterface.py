@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class PreviewPresenterInterface(ABC):
 
     @abstractmethod
-    def set_data(self, dict):
+    def set_dict(self, dict):
         pass
 
     @abstractmethod

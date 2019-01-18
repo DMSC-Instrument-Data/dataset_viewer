@@ -12,6 +12,7 @@ from datasetviewer.fileloader.interfaces.FileLoaderPresenterInterface import Fil
 from datasetviewer.dataset.Variable import Variable
 
 from collections import OrderedDict as DataSet
+import numpy as np
 
 class MainViewPresenterTest(unittest.TestCase):
 
@@ -28,7 +29,9 @@ class MainViewPresenterTest(unittest.TestCase):
                                     self.mock_plot_presenter,
                                     self.mock_file_loader_presenter]
 
-        self.fake_data = xr.Dataset().variables
+        self.fake_dict = DataSet()
+        self.fake_dict["good"] = Variable("good", xr.DataArray(np.random.rand(3, 4, 5), dims=['x', 'y', 'z']))
+        self.fake_dict["valid"] = Variable("valid", xr.DataArray(np.random.rand(3), dims=['b']))
 
     def test_presenter_throws_if_view_none(self):
         '''
@@ -57,7 +60,7 @@ class MainViewPresenterTest(unittest.TestCase):
         for presenter in self.mock_sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
-    def test_set_data_to_preview_presenter(self):
+    def test_set_dict(self):
         '''
         Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter when its data attribute is set
         to a value.
@@ -67,8 +70,9 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
-        main_view_presenter.set_data(self.fake_data)
-        self.mock_preview_presenter.set_data.assert_called_once_with(self.fake_data)
+        main_view_presenter.set_dict(self.fake_dict)
+        self.mock_preview_presenter.set_dict.assert_called_once_with(self.fake_dict)
+        self.mock_plot_presenter.set_dict.assert_called_with(self.fake_dict)
 
     def test_clear_previous_plot(self):
         '''
@@ -79,9 +83,8 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
-        main_view_presenter.set_data(self.fake_data)
+        main_view_presenter.set_dict(self.fake_dict)
         self.mock_plot_presenter.clear_plot.assert_called_once()
-        self.mock_plot_presenter.draw_plot.assert_called_once()
 
     def test_create_default_plot(self):
         '''
@@ -91,20 +94,18 @@ class MainViewPresenterTest(unittest.TestCase):
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
+        main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
+        main_view_presenter.set_dict(self.fake_dict)
 
         # Create a fake dataset and place it in the MainViewPresenter
-        fake_data = DataSet()
-        fake_key = "fake_key"
-        fake_elem = Variable(fake_key, self.fake_data)
-        fake_data["fake_key"] = fake_elem
-        main_view_presenter._data = fake_data
+        main_view_presenter.create_default_plot("good")
 
-        main_view_presenter.create_default_plot(fake_key)
-        self.mock_plot_presenter.create_default_plot.assert_called_once_with(self.fake_data)
+        # Test that the `create_default_plot` function is called with the first element in the DataSet
+        self.mock_plot_presenter.create_default_plot.assert_called_once_with(self.fake_dict["good"].data)
 
     def test_update_toolbar(self):
         '''
-        Test that the `udate_toolbar` method in the MainViewPresenter calls another function of the same name in the
+        Test that the `update_toolbar` method in the MainViewPresenter calls another function of the same name in the
         MainView.
         '''
 
