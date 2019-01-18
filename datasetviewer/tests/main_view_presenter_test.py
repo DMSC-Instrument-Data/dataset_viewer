@@ -101,7 +101,7 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.create_default_plot("good")
 
         # Test that the `create_default_plot` function is called with the first element in the DataSet
-        self.mock_plot_presenter.create_default_plot.assert_called_once_with(self.fake_dict["good"].data)
+        self.mock_plot_presenter.create_default_plot.assert_called_once_with("good")
 
     def test_update_toolbar(self):
         '''

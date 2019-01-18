@@ -86,11 +86,11 @@ class MainViewPresenter(MainViewPresenterInterface):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
 
         Args:
-            key (String): The key of the dictionary element to be plotted.
+            key (key): The key of the dictionary element to be plotted.
 
         """
 
-        self._plot_presenter.create_default_plot(self._dict[key].data)
+        self._plot_presenter.create_default_plot(key)
 
     def update_toolbar(self):
         """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """

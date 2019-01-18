@@ -27,17 +27,19 @@ class PlotPresenter(PlotPresenterInterface):
 
     def set_dict(self, dict):
 
+        # Clear a previous plot if one exists
+        self.clear_plot()
+
         self._dict = dict
+
+        self.create_default_plot(list(dict.keys())[0])
 
     def create_default_plot(self, key):
         """Creates a default plot for different data types depending on the number of dimensions.
 
         Args:
-            data (DataArray): An xarray dataset containing nD data.
+            key (str): A key corresponding with the element to be plotted.
         """
-
-        # Clear a previous plot if one exists
-        self.clear_plot()
 
         data = self._dict[key].data
 
