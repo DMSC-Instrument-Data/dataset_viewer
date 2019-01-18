@@ -27,9 +27,6 @@ class PlotPresenter(PlotPresenterInterface):
 
     def set_dict(self, dict):
 
-        # Clear a previous plot if one exists
-        self.clear_plot()
-
         self._dict = dict
 
         self.create_default_plot(list(dict.keys())[0])
@@ -40,6 +37,9 @@ class PlotPresenter(PlotPresenterInterface):
         Args:
             key (str): A key corresponding with the element to be plotted.
         """
+
+        # Clear a previous plot if one exists
+        self.clear_plot()
 
         data = self._dict[key].data
 
