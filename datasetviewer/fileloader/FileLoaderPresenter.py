@@ -71,7 +71,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
                 dict = self._load_data(file_path)
                 self._main_presenter.set_data(dict)
 
-            except (ValueError, TypeError) as e:
+            except (ValueError, OSError) as e:
                 self._view.show_reject_file_message(str(e))
 
         else:
@@ -90,7 +90,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
         Raises:
             ValueError: If the file does not exist.
-            TypeError: If the file exists, but does not have the appropriate format/contents.
+            OSError If the file exists, but does not have the appropriate format/contents.
         """
 
         dict = FileLoaderTool.file_to_dict(file_path)
