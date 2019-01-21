@@ -33,3 +33,7 @@ class StackPresenter(StackPresenterInterface):
     def set_dict(self, dict):
 
         self._view.clear_stack()
+
+        for i, key in enumerate(dict.keys()):
+
+            self._view.create_stack_element()

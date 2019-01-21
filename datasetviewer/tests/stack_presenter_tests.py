@@ -48,3 +48,10 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.set_dict(self.fake_dict)
 
         self.mock_stack_view.clear_stack.assert_called_once()
+
+    def test_correct_stacks_created(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        self.assertEqual(self.mock_stack_view.create_stack_element.call_count, len(self.fake_dict))

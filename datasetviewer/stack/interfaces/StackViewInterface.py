@@ -11,3 +11,7 @@ class StackViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def clear_stack(self):
         pass
+
+    @abstractmethod
+    def create_stack_element(self):
+        pass
