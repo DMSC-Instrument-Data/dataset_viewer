@@ -1,4 +1,5 @@
 from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresenterInterface
+from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class StackPresenter(StackPresenterInterface):
 
@@ -15,9 +16,20 @@ class StackPresenter(StackPresenterInterface):
         self._master = None
 
     def register_master(self, master):
+        """
+
+        Register the MainViewPresenter as the StackPresenter's master, and subscribe the MainViewPresenter to the
+        StackPresenter.
+
+        Args:
+            master (MainViewPresenter): An instance of a MainViewPresenter.
+
+        """
+        assert (isinstance(master, MainViewPresenterInterface))
 
         self._master = master
         master.subscribe_stack_presenter(self)
 
     def set_dict(self, dict):
-        pass
+
+        self._view.clear_stack()
