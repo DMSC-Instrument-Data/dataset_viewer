@@ -39,6 +39,7 @@ class PreviewPresenter(PreviewPresenterInterface):
         self._view.clear_preview()
         self._view.clear_selection()
         self._populate_preview_list()
+        self._view.select_first_item()
 
     def register_master(self, master):
         """

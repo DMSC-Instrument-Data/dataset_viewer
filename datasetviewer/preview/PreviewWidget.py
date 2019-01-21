@@ -35,3 +35,6 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
     def clear_preview(self):
         self.clear()
+
+    def select_first_item(self):
+        self.setCurrentItem(self.item(0))

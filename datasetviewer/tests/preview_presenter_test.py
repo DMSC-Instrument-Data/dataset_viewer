@@ -76,6 +76,17 @@ class PreviewPresenterTest(unittest.TestCase):
         self.mock_preview_view.clear_preview.assert_called_once()
         self.mock_preview_view.clear_selection.assert_called_once()
 
+    def test_create_preview_calls_select_first(self):
+        '''
+        Test that the function for selection the first element on a list is called once a preview list has been
+        generated.
+        '''
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.set_dict(self.fake_data)
+
+        self.mock_preview_view.select_first_item.assert_called_once()
+
     def test_register_master(self):
         '''
         Test the two-way link between the PreviewPresenter as its MainViewPresenter master.

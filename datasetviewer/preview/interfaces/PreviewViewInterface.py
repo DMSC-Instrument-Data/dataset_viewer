@@ -31,3 +31,7 @@ class PreviewViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def clear_preview(self):
         pass
+
+    @abstractmethod
+    def select_first_item(self):
+        pass
