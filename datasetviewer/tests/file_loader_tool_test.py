@@ -25,7 +25,9 @@ class FileLoaderTest(unittest.TestCase):
         '''
         empty_data = xr.Dataset()
 
+        # Patch the `open_dataset` function so that it returns an empty data file
         with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: empty_data):
+
             with self.assertRaises(ValueError):
                 FileLoaderTool.file_to_dict(self.fake_data_path)
 
@@ -43,18 +45,26 @@ class FileLoaderTest(unittest.TestCase):
 
     def test_file_read_success(self):
         '''
-        Test that FileLoaderTool calls the `open_dataset` method.
+        Test that FileLoaderTool calls the `open_dataset` function.
         '''
 
-        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.good_data) as dummy_data_loader:
+        # Patch the `open_dataset` so that it returns good data
+        with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.good_data) \
+                as dummy_data_loader:
+
+            '''
+            Call the `file_to_dict` converstion function and check that this causes the `open_dataset` function to
+            be called with the expected filepath
+            '''
             FileLoaderTool.file_to_dict(self.fake_data_path)
             dummy_data_loader.assert_called_once_with(self.fake_data_path)
 
     def test_bad_data_raises(self):
         '''
-        Test that bad data being returned by the `open_dataset` method raises an Exception.
+        Test that bad data being returned by the `open_dataset` function raises an Exception.
         '''
 
+        # Patch the `open_dataset` function so that it returns invalid data.
         with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.bad_data):
             with self.assertRaises(ValueError):
                 FileLoaderTool.file_to_dict(self.fake_data_path)
