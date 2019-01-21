@@ -10,8 +10,14 @@ class StackPresenter(StackPresenterInterface):
         if dim_fact is None:
             raise ValueError("Error: Cannot create DimensionViewFactory when View is None.")
 
+        self._view = stack_view
+        self._dim_fact = dim_fact
+        self._master = None
+
     def register_master(self, master):
-        pass
+
+        self._master = master
+        master.subscribe_stack_presenter(self)
 
     def set_dict(self, dict):
         pass
