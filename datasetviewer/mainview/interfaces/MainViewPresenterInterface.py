@@ -11,10 +11,6 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def subscribe_file_loader_presenter(self, file_loader):
-        pass
-
-    @abstractmethod
     def set_dict(self, dict):
         pass
 

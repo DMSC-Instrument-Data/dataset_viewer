@@ -43,7 +43,6 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
         assert (isinstance(master, MainViewPresenterInterface))
 
         self._main_presenter = master
-        self._main_presenter.subscribe_file_loader_presenter(self)
 
     def notify(self, command):
         """

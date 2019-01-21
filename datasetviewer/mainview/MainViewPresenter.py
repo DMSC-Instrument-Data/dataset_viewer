@@ -5,14 +5,15 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     Args:
         mainview (MainView): Instance of a MainView.
-        subpresenters (SubPresenter): One or more SubPresenters.
+        subpresenters: One or more SubPresenters.
 
     Private Attributes:
         _main_view (MainView): MainView associated with this Presenter.
-        _subpresenters (SubPresenter[]): A List of the associated SubPresenters.
-        _preview_presenter (PreviewPresenter): The PreviewPresenter that handles the behaviour of the PreviewView.
+        _preview_presenter (PreviewPresenter): The Presenter that handles the behaviour of the PreviewView.
             Defaults to None.
-        -_data (DataSet): An OrderedDict of Variables. Defaults to None.
+            _plot_presenter (PlotPresenter): The Presenter that handles the behaviour of the PlotView.
+            _file_loader_presenter (FileLoaderPresenter): The presenter that handles the behaviour of the FileLoaderView
+        -_dict (DataSet): An OrderedDict of Variables. Defaults to None.
 
     Raises:
         ValueError: If the MainView or any of the SubPresenters are None.
@@ -38,11 +39,11 @@ class MainViewPresenter(MainViewPresenterInterface):
             presenter.register_master(self)
 
     def set_dict(self, dict):
-        """Sets the data attribute in the MainViewPresenter and other Presenters that require access to the data
-            dictionary. Clears any previous plots.
+        """Sets the dict attribute in the MainViewPresenter and other Presenters that require access to the data
+            dictionary. Clears any previous plots/information.
 
         Note:
-            `subscribe_preview_presenter` must be called before this method can be called.
+            The PlotPresenter and PreviewPresenter must be registered with master before this method is called.
 
         Args:
             dict (DataSet): The data dictionary.
@@ -71,16 +72,6 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         """
         self._plot_presenter = plot
-
-    def subscribe_file_loader_presenter(self, file_loader):
-        """Sets the file_loader_presenter attribute.
-
-        Args:
-            file_loader (FileLoaderPresenter): An instance of a FileLoaderPresenter.
-
-        """
-
-        self._file_loader_presenter = file_loader
 
     def create_default_plot(self, key):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
