@@ -1,5 +1,6 @@
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
+from datasetviewer.preview.Command import Command
 
 class PreviewPresenter(PreviewPresenterInterface):
     """The subpresenter responsible for managing a PreviewView and providing it with the information that it will display.
@@ -10,8 +11,8 @@ class PreviewPresenter(PreviewPresenterInterface):
     Private Attributes:
         _view (PreviewView): The PreviewView containing interface elements that display a preview of the data. Assigned
             during initialisation.
-        _data (DataSet): The data dictionary from which the preview is generated. Defaults to None. Is assigned once a
-            file has been loaded by a user.
+        _dict (DataSet): The data dictionary from which the preview is generated. Defaults to None. Is assigned once a
+            file has been loaded by a user. Defaults to None.
 
         Raises:
             ValueError: If the `preview_view` argument is None.
@@ -24,17 +25,22 @@ class PreviewPresenter(PreviewPresenterInterface):
             raise ValueError("Error: Cannot create PreviewPresenter when View is None.")
 
         self._view = preview_view
-        self._data = None
+        self._dict = None
 
-    def set_data(self, dict):
-        """Sets the `_data` attribute and calls a method to generate the preview contents.
+    def set_dict(self, dict):
+        """Sets the `_data` attribute and then sets up a preview by clearing the previous contents, populating the list,
+            and selecting the first item on the list.
 
         Args:
-            dict (DataSet): The data dictionary.
+            dict (DataSet): An OrderedDict of xarray Datasets.
 
         """
-        self._data = dict
+
+        self._dict = dict
+        self._view.clear_preview()
+        self._view.reset_selection()
         self._populate_preview_list()
+        self._view.select_first_item()
 
     def register_master(self, master):
         """
@@ -55,14 +61,17 @@ class PreviewPresenter(PreviewPresenterInterface):
         """
 
         Generate the preview text that should appear for a given dictionary element. The preview consists of the
-        name/key and its data dimensions.
+        name/key and its corresponding data dimensions.
 
         Args:
             name (str): The name/key associated with an element of the DataSet.
 
+        Returns:
+            str: A string containing the element key and its dimensions separated by a newline.
+
         """
 
-        var = self._data[name]
+        var = self._dict[name]
         dims = var.get_dimensions()
 
         return name + "\n" + str(dims)
@@ -82,8 +91,32 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _populate_preview_list(self):
         """ Fill the preview pane with the information about all of the elements in the DataSet. """
-        for key, _ in self._data.items():
+        for key in self._dict.keys():
             self._add_preview_entry(key)
 
     def notify(self, command):
-        pass
+        """
+
+        Interpret a command from the PreviewView and take the appropriate action.
+
+        Note:
+            `register_master` must be called before this method can be called.
+
+        Args:
+            command (Command): A Command from the FileLoaderView indicating that an event has taken place.
+
+        Raises:
+            ValueError: If the command isn't recognised.
+
+        """
+        if command == Command.ELEMENTSELECTION:
+
+            selection = self._view.get_selected_item()
+
+            # Trim the dimension information from the string
+            key = selection.text().split("\n")[0]
+
+            self._main_presenter.create_default_plot(key)
+
+        else:
+            raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

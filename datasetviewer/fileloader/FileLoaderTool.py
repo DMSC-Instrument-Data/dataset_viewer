@@ -51,7 +51,7 @@ def file_to_dict(file_path):
 
     Raises:
         ValueError: If the dataset is empty, or if any of its elements are empty.
-        TypeError: If the file could not be converted to the an xarray.
+        OSError: If the file could not be converted to the an xarray.
 
     Returns:
         DataSet: An OrderedDict of Variable objects containing a name and a data array.

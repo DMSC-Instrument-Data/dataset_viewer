@@ -2,4 +2,5 @@ from enum import Enum
 
 class Command(Enum):
 
-    ARRAYSELECTION = 100
+    # Command indicating that an element was selected in the Preview Pane
+    ELEMENTSELECTION = 100
