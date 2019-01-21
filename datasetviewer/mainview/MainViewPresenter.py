@@ -31,6 +31,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._preview_presenter = None
         self._plot_presenter = None
         self._file_loader_presenter = None
+        self._stack_presenter = None
         self._dict = None
 
         for presenter in subpresenters:
@@ -55,6 +56,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._dict = dict
         self._plot_presenter.set_dict(dict)
         self._preview_presenter.set_dict(dict)
+        self._stack_presenter.set_dict(dict)
 
     def subscribe_preview_presenter(self, prev):
         """Sets the preview_presenter attribute so that it can be controlled when a file has been loaded.
@@ -73,6 +75,15 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         """
         self._plot_presenter = plot
+
+    def subscribe_stack_presenter(self, stack):
+        """Sets the stack_presenter attribute so that it can be controlled when a file has been loaded.
+
+        Args:
+            stack (StackPresenter): An instance of a StackPresenter.
+
+        """
+        self._stack_presenter = stack
 
     def create_default_plot(self, key):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.

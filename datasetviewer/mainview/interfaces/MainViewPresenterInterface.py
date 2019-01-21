@@ -11,6 +11,10 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
+    def subscribe_stack_presenter(self, stack):
+        pass
+
+    @abstractmethod
     def set_dict(self, dict):
         pass
 

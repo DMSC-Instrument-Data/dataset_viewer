@@ -9,6 +9,7 @@ from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterfac
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
 from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterInterface
 from datasetviewer.fileloader.interfaces.FileLoaderPresenterInterface import FileLoaderPresenterInterface
+from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresenterInterface
 from datasetviewer.dataset.Variable import Variable
 
 from collections import OrderedDict as DataSet
@@ -24,10 +25,12 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_preview_presenter = mock.create_autospec(PreviewPresenterInterface)
         self.mock_plot_presenter = mock.create_autospec(PlotPresenterInterface)
         self.mock_file_loader_presenter = mock.create_autospec(FileLoaderPresenterInterface)
+        self.mock_stack_presenter = mock.create_autospec(StackPresenterInterface)
 
         self.mock_sub_presenters = [self.mock_preview_presenter,
                                     self.mock_plot_presenter,
-                                    self.mock_file_loader_presenter]
+                                    self.mock_file_loader_presenter,
+                                    self.mock_stack_presenter]
 
         # Create a fake data dictionary
         self.fake_dict = DataSet()
@@ -62,17 +65,19 @@ class MainViewPresenterTest(unittest.TestCase):
 
     def test_set_dict(self):
         '''
-        Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter and PlotPresenter when its
-        data attribute is set.
+        Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter, PlotPresenter, and
+        StackPresenter when its data attribute is set.
         '''
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
+        main_view_presenter.subscribe_stack_presenter(self.mock_stack_presenter)
 
         main_view_presenter.set_dict(self.fake_dict)
         self.mock_preview_presenter.set_dict.assert_called_once_with(self.fake_dict)
-        self.mock_plot_presenter.set_dict.assert_called_with(self.fake_dict)
+        self.mock_plot_presenter.set_dict.assert_called_once_with(self.fake_dict)
+        self.mock_stack_presenter.set_dict.assert_called_once_with(self.fake_dict)
 
     def test_create_default_plot(self):
         '''
@@ -83,6 +88,7 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
+        main_view_presenter.subscribe_stack_presenter(self.mock_stack_presenter)
         main_view_presenter.set_dict(self.fake_dict)
 
         # Instruct the MainViewPresenter to generate the default plot from one of the elements in the data dictionary
