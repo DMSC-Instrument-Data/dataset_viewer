@@ -53,7 +53,7 @@ class FileLoaderTest(unittest.TestCase):
                 as dummy_data_loader:
 
             '''
-            Call the `file_to_dict` converstion function and check that this causes the `open_dataset` function to
+            Call the `file_to_dict` conversion function and check that this causes the `open_dataset` function to
             be called with the expected filepath
             '''
             FileLoaderTool.file_to_dict(self.fake_data_path)

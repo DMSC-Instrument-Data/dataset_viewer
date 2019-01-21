@@ -21,11 +21,12 @@ class PlotPresenterTest(unittest.TestCase):
 
         self.mock_main_presenter = mock.create_autospec(MainViewPresenterInterface)
 
+        # Create a fake data dictionary with valid elements
         self.fake_dict = DataSet()
-        self.fake_dict["good"] = Variable("good", xr.DataArray(np.random.rand(3, 4, 5), dims=['x', 'y', 'z']))
-        self.fake_dict["valid"] = Variable("valid", xr.DataArray(np.random.rand(3), dims=['b']))
+        self.fake_dict["threedims"] = Variable("threedims", xr.DataArray(np.random.rand(3, 4, 5), dims=['x', 'y', 'z']))
+        self.fake_dict["onedim"] = Variable("onedim", xr.DataArray(np.random.rand(3), dims=['b']))
         self.fake_dict["twodims"] = Variable("twodims", xr.DataArray(np.random.rand(3, 8), dims=['g', 'h']))
-        self.fake_dict["alsogood"] = Variable("alsogood", xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
+        self.fake_dict["fourdims"] = Variable("fourdims", xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
 
     def test_presenter_throws_when_view_none(self):
         '''
@@ -48,23 +49,24 @@ class PlotPresenterTest(unittest.TestCase):
 
     def test_plot_call(self):
         '''
-        Test that creating a default plot with ND data causes the appropriate view plot function to be called.
+        Test that creating a default plot with nD data causes the appropriate plot function to be called in the
+        PlotView.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
 
-        plot_pres.create_default_plot("valid")
-        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_dict["valid"].data)
+        plot_pres.create_default_plot("onedim")
+        xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_dict["onedim"].data)
 
         plot_pres.create_default_plot("twodims")
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0],
                                     self.fake_dict["twodims"].data.transpose()[0])
 
-        plot_pres.create_default_plot("alsogood")
+        plot_pres.create_default_plot("fourdims")
         xr.testing.assert_identical(self.mock_plot_view.plot_image.call_args[0][0],
-                                    self.fake_dict["alsogood"].data.isel({'e':0, 'f':0}).transpose('d', 'c'))
+                                    self.fake_dict["fourdims"].data.isel({'e':0, 'f':0}).transpose('d', 'c'))
 
     def test_register_master(self):
         '''
@@ -86,9 +88,11 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
 
+        # Set the dict attribute directly to bypass the function calls in `set_dict`
         plot_pres._dict = self.fake_dict
 
-        plot_pres.create_default_plot("valid")
+        # Check that the axes aren't labelled when a 1D array has been plotted
+        plot_pres.create_default_plot("onedim")
         self.mock_plot_view.label_x_axis.assert_not_called()
         self.mock_plot_view.label_y_axis.assert_not_called()
 
@@ -98,13 +102,12 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.label_y_axis.assert_not_called()
 
         self.mock_plot_view.reset_mock()
-        # plot_pres.set_dict(self.fake_data)
         plot_pres._dict = self.fake_dict
 
         # Label both axes in the case of nD data with n > 2
-        plot_pres.create_default_plot("good")
-        self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_dict["good"].data.dims[0])
-        self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_dict["good"].data.dims[1])
+        plot_pres.create_default_plot("threedims")
+        self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[0])
+        self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[1])
 
     def test_draw_plot(self):
         '''
@@ -117,17 +120,16 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
 
-        # plot_pres.create_default_plot("valid")
         self.mock_plot_view.draw_plot.assert_called_once()
 
     def test_new_data_updates_toolbar(self):
         '''
-        Test that loading new data causes the toolbar to be updated.
+        Test that creating a new plot causes the toolbar to be updated.
         '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres._dict = self.fake_dict
 
-        plot_pres.create_default_plot("valid")
+        plot_pres.create_default_plot("onedim")
         self.mock_main_presenter.update_toolbar.assert_called_once()

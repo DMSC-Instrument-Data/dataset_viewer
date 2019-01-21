@@ -22,6 +22,7 @@ class PreviewPresenterTest(unittest.TestCase):
         self.mock_preview_view = mock.create_autospec(PreviewViewInterface)
         self.mock_master_presenter = mock.create_autospec(MainViewPresenterInterface)
 
+        # Create a fake dataset with a random 2D array
         self.var_name = "Key"
         self.var_dims = (8, 5)
         self.fake_data = DataSet()
@@ -52,10 +53,10 @@ class PreviewPresenterTest(unittest.TestCase):
         has been called.
         '''
         prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter._create_preview_text = mock.MagicMock()
 
-        with mock.patch('datasetviewer.preview.PreviewPresenter.PreviewPresenter._create_preview_text') as prev_text:
-            prev_presenter._add_preview_entry(self.var_name)
-            prev_text.assert_called_once()
+        prev_presenter._add_preview_entry(self.var_name)
+        prev_presenter._create_preview_text.assert_called_once_with(self.var_name)
 
     def test_create_preview_calls_add_to_list(self):
         '''
@@ -68,17 +69,18 @@ class PreviewPresenterTest(unittest.TestCase):
 
     def test_create_preview_calls_clear_list(self):
         '''
-        Test that any items that were previously on the list are removed once a file is loaded.
+        Test that any items that were previously on the list are removed once a file is loaded, and test that the
+        selection attribute on the PreviewView is reset.
         '''
-
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.set_dict(self.fake_data)
+
         self.mock_preview_view.clear_preview.assert_called_once()
         self.mock_preview_view.reset_selection.assert_called_once()
 
     def test_create_preview_calls_select_first(self):
         '''
-        Test that the function for selection the first element on a list is called once a preview list has been
+        Test that the function for selecting the first element on a list is called once a preview list has been
         generated.
         '''
 
@@ -110,20 +112,26 @@ class PreviewPresenterTest(unittest.TestCase):
 
     def test_selection_calls_default_plot(self):
         '''
-        Test that making a selection on the Preview causes the MainViewPresenter to be alerted that a default plot
-        should be constructed
+        Test that making a selection on the PreviewView causes the MainViewPresenter to be alerted that a default plot
+        should be constructed.
         '''
 
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.register_master(self.mock_master_presenter)
 
+        # Create a fake List Item containing a key and dimension information
         fake_list_item = QListWidgetItem()
         fake_list_item.setText("expected_key\n(2,3,2)")
 
+        # Instruct the mock PreviewView to return the fake List Item
         self.mock_preview_view.get_selected_item = mock.MagicMock(side_effect = lambda: fake_list_item)
 
         prev_presenter.notify(Command.ELEMENTSELECTION)
 
+        '''
+        Check that the MainViewPresenter now attempts to create a plot for the key that is obtained from the
+        PreviewView
+        '''
         self.mock_master_presenter.create_default_plot.assert_called_once_with("expected_key")
 
     def test_bad_command_throws(self):
@@ -134,6 +142,7 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.register_master(self.mock_master_presenter)
 
+        # Create a fake Enum command
         fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
 
         with self.assertRaises(ValueError):

@@ -28,7 +28,7 @@ class PlotPresenter(PlotPresenterInterface):
         """ Set the `_dict` variable to an OrderedDict and plot the first element in the dictionary.
 
         Args:
-            dict (DataSet): An OrderedDict of xarray DataSets.
+            dict (DataSet): An OrderedDict of xarray Datasets.
         """
 
         self._dict = dict
@@ -47,12 +47,12 @@ class PlotPresenter(PlotPresenterInterface):
         data = self._dict[key].data
 
         if data.ndim == 1:
-            # Plot the array as it is if it is 1D
+            # If the array is 1D then plot it as it is
             self._view.plot_line(data)
 
         elif data.ndim == 2:
 
-            # Slice the array if it is 2D, then create a 1D plot
+            # Slice the array if it is 2D, then create a 1D plot with the first dimension as the X axis
             self._view.plot_line(data.transpose()[0])
 
             self._view.label_x_axis(data.dims[0])
@@ -67,6 +67,8 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.label_y_axis(data.dims[1])
 
         self._draw_plot()
+
+        # Update the toolbar so that it returns to this plot when the "Home" button is pressed
         self._main_presenter.update_toolbar()
 
     def _clear_plot(self):

@@ -19,8 +19,8 @@ class MainViewPresenterTest(unittest.TestCase):
     def setUp(self):
 
         self.mock_main_view = mock.create_autospec(MainViewInterface)
-        self.mock_source = mock.Mock()
 
+        # Mock the SubPresenters
         self.mock_preview_presenter = mock.create_autospec(PreviewPresenterInterface)
         self.mock_plot_presenter = mock.create_autospec(PlotPresenterInterface)
         self.mock_file_loader_presenter = mock.create_autospec(FileLoaderPresenterInterface)
@@ -29,6 +29,7 @@ class MainViewPresenterTest(unittest.TestCase):
                                     self.mock_plot_presenter,
                                     self.mock_file_loader_presenter]
 
+        # Create a fake data dictionary
         self.fake_dict = DataSet()
         self.fake_dict["good"] = Variable("good", xr.DataArray(np.random.rand(3, 4, 5), dims=['x', 'y', 'z']))
         self.fake_dict["valid"] = Variable("valid", xr.DataArray(np.random.rand(3), dims=['b']))
@@ -43,7 +44,6 @@ class MainViewPresenterTest(unittest.TestCase):
     def test_constructor_throws_if_subpresenter_none(self):
         '''
         Test that the MainViewPresenter throws an Exception if any of the SubPresenters are None.
-        :return:
         '''
         badsubpresenters = self.mock_sub_presenters + [None]
 
@@ -62,8 +62,8 @@ class MainViewPresenterTest(unittest.TestCase):
 
     def test_set_dict(self):
         '''
-        Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter when its data attribute is set
-        to a value.
+        Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter and PlotPresenter when its
+        data attribute is set.
         '''
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
@@ -85,10 +85,10 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
         main_view_presenter.set_dict(self.fake_dict)
 
-        # Create a fake dataset and place it in the MainViewPresenter
+        # Instruct the MainViewPresenter to generate the default plot from one of the elements in the data dictionary
         main_view_presenter.create_default_plot("good")
 
-        # Test that the `create_default_plot` function is called with the first element in the DataSet
+        # Test that the `create_default_plot` method in the PlotPresenter is called with the same key.
         self.mock_plot_presenter.create_default_plot.assert_called_once_with("good")
 
     def test_update_toolbar(self):
