@@ -74,7 +74,7 @@ class PreviewPresenterTest(unittest.TestCase):
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.set_dict(self.fake_data)
         self.mock_preview_view.clear_preview.assert_called_once()
-        self.mock_preview_view.clear_selection.assert_called_once()
+        self.mock_preview_view.reset_selection.assert_called_once()
 
     def test_create_preview_calls_select_first(self):
         '''

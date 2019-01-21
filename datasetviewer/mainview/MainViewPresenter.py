@@ -42,7 +42,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     def set_dict(self, dict):
         """Sets the `_dict` attribute in the MainViewPresenter and other Presenters that require access to the data
-            dictionary. Clears any previous plots/information.
+            dictionary.
 
         Note:
             The PlotPresenter and PreviewPresenter must be registered with master before this method is called.
@@ -78,7 +78,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
 
         Args:
-            key (key): The key of the dictionary element to be plotted.
+            key (str): The key of the dictionary element to be plotted.
 
         """
 

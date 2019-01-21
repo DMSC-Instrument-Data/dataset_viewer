@@ -17,7 +17,7 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
         self.setMinimumWidth(200)
 
-    def clear_selection(self):
+    def reset_selection(self):
         self._selected_item = None
 
     def add_entry_to_list(self, entry_text):

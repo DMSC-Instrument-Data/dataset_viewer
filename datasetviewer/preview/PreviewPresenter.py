@@ -11,8 +11,8 @@ class PreviewPresenter(PreviewPresenterInterface):
     Private Attributes:
         _view (PreviewView): The PreviewView containing interface elements that display a preview of the data. Assigned
             during initialisation.
-        _data (DataSet): The data dictionary from which the preview is generated. Defaults to None. Is assigned once a
-            file has been loaded by a user.
+        _dict (DataSet): The data dictionary from which the preview is generated. Defaults to None. Is assigned once a
+            file has been loaded by a user. Defaults to None.
 
         Raises:
             ValueError: If the `preview_view` argument is None.
@@ -28,16 +28,17 @@ class PreviewPresenter(PreviewPresenterInterface):
         self._dict = None
 
     def set_dict(self, dict):
-        """Sets the `_data` attribute and calls a method to generate the preview contents.
+        """Sets the `_data` attribute and then sets up a preview by clearing the previous contents, populating the list,
+            and selecting the first item on the list.
 
         Args:
-            dict (DataSet): The data dictionary.
+            dict (DataSet): An OrderedDict of xarray Datasets.
 
         """
 
         self._dict = dict
         self._view.clear_preview()
-        self._view.clear_selection()
+        self._view.reset_selection()
         self._populate_preview_list()
         self._view.select_first_item()
 
@@ -60,10 +61,13 @@ class PreviewPresenter(PreviewPresenterInterface):
         """
 
         Generate the preview text that should appear for a given dictionary element. The preview consists of the
-        name/key and its data dimensions.
+        name/key and its corresponding data dimensions.
 
         Args:
             name (str): The name/key associated with an element of the DataSet.
+
+        Returns:
+            str: A string containing the element key and its dimensions separated by a newline.
 
         """
 
@@ -87,7 +91,7 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _populate_preview_list(self):
         """ Fill the preview pane with the information about all of the elements in the DataSet. """
-        for key, _ in self._dict.items():
+        for key in self._dict.keys():
             self._add_preview_entry(key)
 
     def notify(self, command):

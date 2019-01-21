@@ -13,7 +13,7 @@ class PreviewViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def clear_selection(self):
+    def reset_selection(self):
         pass
 
     @abstractmethod

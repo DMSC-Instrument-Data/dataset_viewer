@@ -10,8 +10,7 @@ class PlotPresenter(PlotPresenterInterface):
     Private Attributes:
         _view (PlotView): The PlotView containing the interface elements that display a plot. Assigned
             during initialisation.
-        _data (DataArray): A data dictionary element that is plotted. Defaults to None. Is assigned once a
-            file has been loaded by a user.
+        _dict (DataSet): An OrderedDict of xarray Datasets. Defaults to None.
 
         Raises:
             ValueError: If the `plot_view` argument is None.
@@ -26,6 +25,11 @@ class PlotPresenter(PlotPresenterInterface):
         self._dict = None
 
     def set_dict(self, dict):
+        """ Set the `_dict` variable to an OrderedDict and plot the first element in the dictionary.
+
+        Args:
+            dict (DataSet): An OrderedDict of xarray DataSets.
+        """
 
         self._dict = dict
         self.create_default_plot(list(dict.keys())[0])
@@ -62,7 +66,7 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.label_x_axis(data.dims[0])
             self._view.label_y_axis(data.dims[1])
 
-        self.draw_plot()
+        self._draw_plot()
         self._main_presenter.update_toolbar()
 
     def _clear_plot(self):
@@ -74,7 +78,7 @@ class PlotPresenter(PlotPresenterInterface):
         except Exception:
             pass
 
-        # Prevent next plot from taking shape of the previous plot
+        # Prevent next plot from taking shape of the previous plot by clearing the axis
         try:
             self._view.ax.cla()
         except Exception:
@@ -86,13 +90,13 @@ class PlotPresenter(PlotPresenterInterface):
         except Exception:
             pass
 
-        # Try to delete a colormap if it exists
+        # Try to delete a 2D plot if it exists
         try:
             self._view.im.remove()
         except Exception:
             pass
 
-    def draw_plot(self):
+    def _draw_plot(self):
         """ Redraw the plot in the view after an update has occurred."""
         self._view.draw_plot()
 
