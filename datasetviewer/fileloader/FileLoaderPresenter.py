@@ -33,8 +33,8 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
     def register_master(self, master):
         """
 
-        Register the MainViewPresenter as the FileLoaderPresenter's master. Subscribing isn't necessary as the
-        MainViewPresenter doesn't send instructions to the FileLoaderPresenter, so it doesn't need to store a reference.
+        Register the MainViewPresenter as the FileLoaderPresenter's master. Subscribing in the MainViewPresenter
+        isn't necessary as the MainViewPresenter doesn't send instructions to the FileLoaderPresenter.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
