@@ -24,8 +24,11 @@ class FileLoaderWidget(QAction, FileLoaderViewInterface):
         return self.fname
 
     def show_reject_file_message(self, error_msg):
+        '''
+        Error message displayed when the chosen file couldn't be read into an xarray. Simply a copy of the exception
+        thrown during file reading.
+        '''
 
-        # Error message displayed when the chosen file couldn't be read into an xarray
         error_dialog = QErrorMessage()
         error_dialog.showMessage(error_msg)
         error_dialog.exec_()
@@ -34,9 +37,11 @@ class FileLoaderWidget(QAction, FileLoaderViewInterface):
 
         # Create and show a file dialog with a NetCDF filter
         filedialog = QFileDialog()
+
+        # Store the location of the file that was selected
         self.fname = filedialog.getOpenFileName(self.parent, "Open file", "/home", "NetCDF (*.nc)")
 
-        # Inform the presenter that the Open menu option was selected
+        # Inform the presenter that the user attempted to open a file
         self._presenter.notify(Command.FILEOPENREQUEST)
 
     def get_presenter(self):

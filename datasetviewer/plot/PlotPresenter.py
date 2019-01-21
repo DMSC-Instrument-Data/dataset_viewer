@@ -28,7 +28,6 @@ class PlotPresenter(PlotPresenterInterface):
     def set_dict(self, dict):
 
         self._dict = dict
-
         self.create_default_plot(list(dict.keys())[0])
 
     def create_default_plot(self, key):
@@ -39,7 +38,7 @@ class PlotPresenter(PlotPresenterInterface):
         """
 
         # Clear a previous plot if one exists
-        self.clear_plot()
+        self._clear_plot()
 
         data = self._dict[key].data
 
@@ -66,7 +65,7 @@ class PlotPresenter(PlotPresenterInterface):
         self.draw_plot()
         self._main_presenter.update_toolbar()
 
-    def clear_plot(self):
+    def _clear_plot(self):
         """ Erases the previous plot and plot elements if they exist. """
 
         # Try to delete a line plot if it exists

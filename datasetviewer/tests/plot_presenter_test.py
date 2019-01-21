@@ -42,9 +42,9 @@ class PlotPresenterTest(unittest.TestCase):
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
-        plot_pres.clear_plot = mock.MagicMock()
+        plot_pres._clear_plot = mock.MagicMock()
         plot_pres.set_dict(self.fake_dict)
-        plot_pres.clear_plot.assert_called_once()
+        plot_pres._clear_plot.assert_called_once()
 
     def test_plot_call(self):
         '''

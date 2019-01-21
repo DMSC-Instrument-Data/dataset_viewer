@@ -2,6 +2,7 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 
 class MainViewPresenter(MainViewPresenterInterface):
     """ MainViewPresenter that controls SubPresenters and calls their `register_master` method during initialisation.
+        Also controls the MainView by updating its toolbar.
 
     Args:
         mainview (MainView): Instance of a MainView.
@@ -11,8 +12,9 @@ class MainViewPresenter(MainViewPresenterInterface):
         _main_view (MainView): MainView associated with this Presenter.
         _preview_presenter (PreviewPresenter): The Presenter that handles the behaviour of the PreviewView.
             Defaults to None.
-            _plot_presenter (PlotPresenter): The Presenter that handles the behaviour of the PlotView.
-            _file_loader_presenter (FileLoaderPresenter): The presenter that handles the behaviour of the FileLoaderView
+        _plot_presenter (PlotPresenter): The Presenter that handles the behaviour of the PlotView. Defaults to None.
+        _file_loader_presenter (FileLoaderPresenter): The presenter that handles the behaviour of the FileLoaderView.
+            Defaults to None.
         -_dict (DataSet): An OrderedDict of Variables. Defaults to None.
 
     Raises:
@@ -39,7 +41,7 @@ class MainViewPresenter(MainViewPresenterInterface):
             presenter.register_master(self)
 
     def set_dict(self, dict):
-        """Sets the dict attribute in the MainViewPresenter and other Presenters that require access to the data
+        """Sets the `_dict` attribute in the MainViewPresenter and other Presenters that require access to the data
             dictionary. Clears any previous plots/information.
 
         Note:
@@ -51,7 +53,6 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
 
         self._dict = dict
-        self._plot_presenter.clear_plot()
         self._plot_presenter.set_dict(dict)
         self._preview_presenter.set_dict(dict)
 

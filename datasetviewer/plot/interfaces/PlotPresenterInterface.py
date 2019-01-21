@@ -7,7 +7,7 @@ class PlotPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def clear_plot(self):
+    def _clear_plot(self):
         pass
 
     @abstractmethod

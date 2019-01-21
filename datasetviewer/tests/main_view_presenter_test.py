@@ -74,18 +74,6 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_preview_presenter.set_dict.assert_called_once_with(self.fake_dict)
         self.mock_plot_presenter.set_dict.assert_called_with(self.fake_dict)
 
-    def test_clear_previous_plot(self):
-        '''
-        Test that loading a new data set causes any previous plot to be cleared.
-        '''
-
-        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
-        main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
-        main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
-
-        main_view_presenter.set_dict(self.fake_dict)
-        self.mock_plot_presenter.clear_plot.assert_called_once()
-
     def test_create_default_plot(self):
         '''
         Test that a call to the MainViewPresenter `create_default_plot` function calls another function of the same

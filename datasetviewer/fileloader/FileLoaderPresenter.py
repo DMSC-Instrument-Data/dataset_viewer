@@ -33,8 +33,8 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
     def register_master(self, master):
         """
 
-        Register the MainViewPresenter as the FileLoaderPresenter's master, and subscribe the MainViewPresenter to the
-        FileLoaderPresenter.
+        Register the MainViewPresenter as the FileLoaderPresenter's master. Subscribing isn't necessary as the
+        MainViewPresenter doesn't send instructions to the FileLoaderPresenter, so it doesn't need to store a reference.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
@@ -85,11 +85,12 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
             file_path (str): The path of the file to be loaded.
 
         Returns:
-            xarray.core.utils.Frozen: An dictionary of Variables containing xarrays.
+            DataSet: An OrderedDict of Variables containing xarrays.
 
         Raises:
             ValueError: If the file does not exist.
-            OSError If the file exists, but does not have the appropriate format/contents.
+            OSError: If the file exists, but does not have the appropriate format/contents and cannot be converted to
+                an xarray.
         """
 
         dict = FileLoaderTool.file_to_dict(file_path)

@@ -15,7 +15,7 @@ class Variable(object):
 
     @property
     def name(self):
-        """str: The name associated with the data/key array."""
+        """str: The name/key associated with the data array."""
 
         return self._name
 
