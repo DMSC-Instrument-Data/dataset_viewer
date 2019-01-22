@@ -1,4 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 class DimensionViewFactoryInterface(ABC):
-    pass
+
+    @abstractmethod
+    def create_widget(self, size):
+        pass

@@ -39,3 +39,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def set_stepper_value(self):
         pass
+
+    @abstractmethod
+    def get_presenter(self):
+        pass

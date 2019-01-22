@@ -13,7 +13,9 @@ class StackPresenter(StackPresenterInterface):
 
         self._view = stack_view
         self._dim_fact = dim_fact
+        self._dict = None
         self._master = None
+        self._dim_presenters = {}
 
     def register_master(self, master):
         """
@@ -32,8 +34,18 @@ class StackPresenter(StackPresenterInterface):
 
     def set_dict(self, dict):
 
+        self._dict = dict
         self._view.clear_stack()
 
-        for i, key in enumerate(dict.keys()):
+        for key in dict.keys():
 
-            self._view.create_stack_element()
+            idx = self._view.create_stack_element()
+            self._dim_presenters[key] = {}
+            data = dict[key].data
+
+            if len(data.dims) > 1:
+
+                for i in range(len(data.dims)):
+
+                    w = self._dim_fact.create_widget(data.shape[i])
+                    self._dim_presenters[key][data.dims[i]] = w.get_presenter()
