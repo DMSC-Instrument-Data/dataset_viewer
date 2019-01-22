@@ -3,7 +3,7 @@ class Variable(object):
 
     Args:
         name (str): The name/key associated with the data.
-        data (xarray.core.variable.Variable): An xarray data structure that contains a key, dimension names, dimension
+        data (xarray.core.dataarray.DataArray): An xarray data structure that contains a key, dimension names, dimension
         sizes, and a data array.
 
     """
@@ -21,7 +21,7 @@ class Variable(object):
 
     @property
     def data(self):
-        """xarray.core.variable.Variable: An xarray data structure."""
+        """xarray.core.dataarray.DataArray: An xarray data structure."""
 
         return self._data
 

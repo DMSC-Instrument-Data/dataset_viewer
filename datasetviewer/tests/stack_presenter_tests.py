@@ -28,8 +28,27 @@ class StackPresenterTest(unittest.TestCase):
         self.fake_dict["fourdims"] = Variable("fourdims",
                                               xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
 
-        self.mock_dim_widget = mock.create_autospec(DimensionViewInterface)
-        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect=lambda name,size: self.mock_dim_widget)
+        '''
+        Find the expected number of calls that will be made to the DimensionViewFactory create_widget method for the
+        above dictionary.
+        '''
+        self.expected_factory_call_count = 0
+
+        for key in self.fake_dict.keys():
+            data = self.fake_dict[key].data
+            if len(data.dims) > 1:
+                for i in range(len(data.dims)):
+                    self.expected_factory_call_count += 1
+
+        # Create mock DimensionView widgets to imitate the widget-creation sequence for the fake dictionary
+        self.mock_dim_widgets = [mock.create_autospec(DimensionViewInterface)
+                                 for _ in range(self.expected_factory_call_count)]
+
+        # Instruct the mock DimensionViewFactory to return the mock widgets
+        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = self.mock_dim_widgets)
+
+        self.mock_stack_view.create_stack_element = \
+            mock.MagicMock(side_effect=[i for i in range(len(self.fake_dict.keys()))])
 
     def test_presenter_throws_if_args_none(self):
         ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
@@ -49,6 +68,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_main_presenter.subscribe_stack_presenter.assert_called_once_with(stack_pres)
 
     def test_clear_stack(self):
+        ''' Test that the stack is cleared whenever it received new data. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -56,6 +76,8 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.clear_stack.assert_called_once()
 
     def test_correct_stacks_created(self):
+        ''' Test that the number of stacks created upon receiving new data matches the number of elements in the data
+        dictionary. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -63,21 +85,59 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(self.mock_stack_view.create_stack_element.call_count, len(self.fake_dict))
 
     def test_correct_dims_created(self):
+        ''' Test that the function for generating the dimension widgets makes the correct calls the correct number
+        of times and with the correct arguments. This needs to be one call for every dimension in the entire
+        dictionary minus the 1D datasets. '''
 
-        expected_calls = []
+        expected_factory_calls = []
 
         for key in self.fake_dict.keys():
 
-            data = self.fake_dict[key].data
+            fake_data = self.fake_dict[key].data
 
-            if len(data.dims) > 1:
-                for i in range(len(data.dims)):
-                    expected_calls.append(mock.call(data.dims[i], data.shape[i]))
+            # Skip data 1D data as it will not require dimension widgets
+            if len(fake_data.dims) > 1:
 
+                for i in range(len(fake_data.dims)):
+
+                    # Create a mock call with the dimension name and size
+                    expected_factory_calls.append(mock.call(fake_data.dims[i], fake_data.shape[i]))
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 
-        self.assertEqual(self.mock_dim_fact.create_widget.call_count, len(expected_calls))
-        self.mock_dim_fact.create_widget.assert_has_calls(expected_calls)
-        self.assertEqual(self.mock_dim_widget.get_presenter.call_count, len(expected_calls))
+        # Check that the DimensionViewFactory received the expected calls and the expected number of calls
+        self.mock_dim_fact.create_widget.assert_has_calls(expected_factory_calls)
+        self.assertEqual(self.mock_dim_fact.create_widget.call_count, self.expected_factory_call_count)
+
+    def test_get_dim_presenter(self):
+        ''' Test that a presenter is retrieved from all of the mock widgets that are created by the
+        DimensionViewFactory '''
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        for w in self.mock_dim_widgets:
+            w.get_presenter.assert_called_once()
+
+    def test_add_dimension_view_to_stack(self):
+        ''' Test that the DimensionView is added to the correct index in the Stack '''
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        mock_add_dims_calls = []
+
+        mock_dim_view_idx = 0
+
+        for i, key in enumerate(self.fake_dict.keys()):
+
+            fake_data = self.fake_dict[key].data
+
+            if len(fake_data.dims) > 1:
+                for j in range(len(fake_data.dims)):
+                    mock_add_dims_calls.append(mock.call(i,self.mock_dim_widgets[mock_dim_view_idx]))
+                    mock_dim_view_idx += 1
+
+        self.mock_stack_view.add_dimension_view.assert_has_calls(mock_add_dims_calls)
+        self.assertEqual(self.mock_stack_view.add_dimension_view.call_count, self.expected_factory_call_count)
