@@ -47,5 +47,5 @@ class StackPresenter(StackPresenterInterface):
 
                 for i in range(len(data.dims)):
 
-                    w = self._dim_fact.create_widget(data.shape[i])
+                    w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()

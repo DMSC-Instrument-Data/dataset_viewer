@@ -29,9 +29,10 @@ class StackPresenterTest(unittest.TestCase):
                                               xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
 
         self.mock_dim_widget = mock.create_autospec(DimensionViewInterface)
-        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect=lambda size: self.mock_dim_widget)
+        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect=lambda name,size: self.mock_dim_widget)
 
     def test_presenter_throws_if_args_none(self):
+        ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
 
         with self.assertRaises(ValueError):
             StackPresenter(None, self.mock_dim_fact)
@@ -40,6 +41,7 @@ class StackPresenterTest(unittest.TestCase):
             StackPresenter(self.mock_stack_view, None)
 
     def test_register_master(self):
+        ''' '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -67,9 +69,10 @@ class StackPresenterTest(unittest.TestCase):
         for key in self.fake_dict.keys():
 
             data = self.fake_dict[key].data
+
             if len(data.dims) > 1:
                 for i in range(len(data.dims)):
-                    expected_calls.append(mock.call(data.shape[i]))
+                    expected_calls.append(mock.call(data.dims[i], data.shape[i]))
 
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
