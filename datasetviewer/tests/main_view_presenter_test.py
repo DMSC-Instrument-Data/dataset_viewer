@@ -92,7 +92,7 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.set_dict(self.fake_dict)
 
         # Instruct the MainViewPresenter to generate the default plot from one of the elements in the data dictionary
-        main_view_presenter.create_default_plot("good")
+        main_view_presenter.change_current_key("good")
 
         # Test that the `create_default_plot` method in the PlotPresenter is called with the same key.
         self.mock_plot_presenter.create_default_plot.assert_called_once_with("good")

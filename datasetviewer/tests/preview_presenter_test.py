@@ -110,10 +110,9 @@ class PreviewPresenterTest(unittest.TestCase):
 
         self.mock_preview_view.get_selected_item.assert_called_once()
 
-    def test_selection_calls_default_plot(self):
+    def test_selection_calls_change_current_key(self):
         '''
-        Test that making a selection on the PreviewView causes the MainViewPresenter to be alerted that a default plot
-        should be constructed.
+        Test that making a selection on the PreviewView causes the MainViewPresenter to change its current key.
         '''
 
         prev_presenter = PreviewPresenter(self.mock_preview_view)
@@ -128,11 +127,8 @@ class PreviewPresenterTest(unittest.TestCase):
 
         prev_presenter.notify(Command.ELEMENTSELECTION)
 
-        '''
-        Check that the MainViewPresenter now attempts to create a plot for the key that is obtained from the
-        PreviewView
-        '''
-        self.mock_master_presenter.create_default_plot.assert_called_once_with("expected_key")
+        # Check that the MainViewPresenter changes the current key.
+        self.mock_master_presenter.change_current_key.assert_called_once_with("expected_key")
 
     def test_bad_command_throws(self):
         '''

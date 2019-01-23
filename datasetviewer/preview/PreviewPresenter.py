@@ -116,7 +116,7 @@ class PreviewPresenter(PreviewPresenterInterface):
             # Trim the dimension information from the string
             key = selection.text().split("\n")[0]
 
-            self._main_presenter.create_default_plot(key)
+            self._main_presenter.change_current_key(key)
 
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))

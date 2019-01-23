@@ -19,7 +19,7 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def create_default_plot(self, key):
+    def change_current_key(self, key):
         pass
 
     @abstractmethod

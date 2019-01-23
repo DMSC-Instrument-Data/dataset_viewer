@@ -85,7 +85,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         """
         self._stack_presenter = stack
 
-    def create_default_plot(self, key):
+    def change_current_key(self, key):
         """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
 
         Args:

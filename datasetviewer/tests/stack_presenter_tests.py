@@ -204,3 +204,7 @@ class StackPresenterTest(unittest.TestCase):
         # Check that just the X button has been pressed for the first dimension
         self.mock_stack_view.press_x.assert_called_once_with("threedims", x_button_to_press)
         self.mock_stack_view.press_y.assert_called_once_with("threedims", y_button_to_press)
+
+    def test_change_stack_face(self):
+        ''' Test the change of the Stack face once a different element on the Preview has been selected. '''
+        pass
