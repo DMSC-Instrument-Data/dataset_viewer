@@ -142,7 +142,17 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.add_dimension_view.assert_has_calls(mock_add_dims_calls)
         self.assertEqual(self.mock_stack_view.add_dimension_view.call_count, self.expected_factory_call_count)
 
-    def test_default_plot_creation(self):
+    def test_call_to_default_button_press(self):
+        ''' Test that creating a default plot leads to a call to the function that creates the appropriate button
+        configuration for the default plot. '''
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.create_default_button_press = mock.Mock()
+
+        stack_pres.set_dict(self.fake_dict)
+        stack_pres.create_default_button_press.assert_called_once()
+
+    def test_correct_default_button_press(self):
         ''' Test that the correct buttons are pressed on the View in order to match the configuration of the default
         plot. '''
 

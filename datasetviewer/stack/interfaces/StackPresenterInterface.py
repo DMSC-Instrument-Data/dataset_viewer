@@ -9,3 +9,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def set_dict(self, dict):
         pass
+
+    @abstractmethod
+    def create_default_button_press(self):
+        pass
