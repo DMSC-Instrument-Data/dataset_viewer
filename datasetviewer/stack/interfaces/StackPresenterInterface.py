@@ -13,3 +13,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def create_default_button_press(self):
         pass
+
+    @abstractmethod
+    def change_stack_face(self, key):
+        pass

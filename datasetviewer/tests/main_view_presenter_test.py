@@ -96,6 +96,7 @@ class MainViewPresenterTest(unittest.TestCase):
 
         # Test that the `create_default_plot` method in the PlotPresenter is called with the same key.
         self.mock_plot_presenter.create_default_plot.assert_called_once_with("good")
+        self.mock_stack_presenter.change_stack_face.assert_called_once_with("good")
 
     def test_update_toolbar(self):
         '''
