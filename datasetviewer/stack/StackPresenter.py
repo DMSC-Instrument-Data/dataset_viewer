@@ -16,6 +16,7 @@ class StackPresenter(StackPresenterInterface):
         self._dict = None
         self._master = None
         self._dim_presenters = {}
+        self._current_face = None
 
     def register_master(self, master):
         """
@@ -51,6 +52,7 @@ class StackPresenter(StackPresenterInterface):
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
                     self._view.add_dimension_view(key, w)
 
+        self.change_stack_face(list(dict.keys())[0])
         self.create_default_button_press()
 
     def create_default_button_press(self):
@@ -73,3 +75,4 @@ class StackPresenter(StackPresenterInterface):
     def change_stack_face(self, key):
 
         self._view.change_stack_face(key)
+        self._current_face = key

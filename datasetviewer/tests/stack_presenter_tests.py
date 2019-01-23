@@ -28,6 +28,8 @@ class StackPresenterTest(unittest.TestCase):
         self.fake_dict["fourdims"] = Variable("fourdims",
                                               xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
 
+        self.first_key = list(self.fake_dict.keys())[0]
+
         '''
         Find the expected number of calls that will be made to the DimensionViewFactory create_widget method for the
         above dictionary.
@@ -142,15 +144,17 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.add_dimension_view.assert_has_calls(mock_add_dims_calls)
         self.assertEqual(self.mock_stack_view.add_dimension_view.call_count, self.expected_factory_call_count)
 
-    def test_call_to_default_button_press(self):
+    def test_call_to_button_and_face(self):
         ''' Test that creating a default plot leads to a call to the function that creates the appropriate button
         configuration for the default plot. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.create_default_button_press = mock.Mock()
+        stack_pres.change_stack_face = mock.Mock()
 
         stack_pres.set_dict(self.fake_dict)
         stack_pres.create_default_button_press.assert_called_once()
+        stack_pres.change_stack_face.assert_called_once_with(self.first_key)
 
     def test_default_no_button_press(self):
         ''' Test that the correct buttons are pressed on the View in order to match the configuration of the default
@@ -211,5 +215,4 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 
-        stack_pres.change_stack_face("fourdims")
-        self.mock_stack_view.change_stack_face.assert_called_once_with("fourdims")
+        self.mock_stack_view.change_stack_face.assert_called_once_with(self.first_key)
