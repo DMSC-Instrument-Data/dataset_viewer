@@ -47,9 +47,6 @@ class StackPresenterTest(unittest.TestCase):
         # Instruct the mock DimensionViewFactory to return the mock widgets
         self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = self.mock_dim_widgets)
 
-        self.mock_stack_view.create_stack_element = \
-            mock.MagicMock(side_effect=[i for i in range(len(self.fake_dict.keys()))])
-
     def test_presenter_throws_if_args_none(self):
         ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
 
@@ -82,6 +79,9 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 
+        expected_calls = [mock.call(key) for key in self.fake_dict.keys()]
+
+        self.mock_stack_view.create_stack_element.assert_has_calls(expected_calls)
         self.assertEqual(self.mock_stack_view.create_stack_element.call_count, len(self.fake_dict))
 
     def test_correct_dims_created(self):
@@ -130,14 +130,21 @@ class StackPresenterTest(unittest.TestCase):
 
         mock_dim_view_idx = 0
 
-        for i, key in enumerate(self.fake_dict.keys()):
+        for key in self.fake_dict.keys():
 
             fake_data = self.fake_dict[key].data
 
             if len(fake_data.dims) > 1:
-                for j in range(len(fake_data.dims)):
-                    mock_add_dims_calls.append(mock.call(i,self.mock_dim_widgets[mock_dim_view_idx]))
+                for _ in range(len(fake_data.dims)):
+                    mock_add_dims_calls.append(mock.call(key,self.mock_dim_widgets[mock_dim_view_idx]))
                     mock_dim_view_idx += 1
 
         self.mock_stack_view.add_dimension_view.assert_has_calls(mock_add_dims_calls)
         self.assertEqual(self.mock_stack_view.add_dimension_view.call_count, self.expected_factory_call_count)
+
+    def test_default_plot_creation(self):
+        ''' Test that the correct buttons are pressed on the View in order to match the configuration of the default
+        plot. '''
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)

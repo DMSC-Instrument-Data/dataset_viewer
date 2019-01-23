@@ -13,9 +13,9 @@ class StackViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def create_stack_element(self):
+    def create_stack_element(self, key):
         pass
 
     @abstractmethod
-    def add_dimension_view(self, idx, dim_view):
+    def add_dimension_view(self, key, dim_view):
         pass

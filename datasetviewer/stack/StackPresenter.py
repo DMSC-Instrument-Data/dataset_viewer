@@ -39,7 +39,7 @@ class StackPresenter(StackPresenterInterface):
 
         for key in dict.keys():
 
-            idx = self._view.create_stack_element()
+            self._view.create_stack_element(key)
             self._dim_presenters[key] = {}
             data = dict[key].data
 
@@ -49,4 +49,4 @@ class StackPresenter(StackPresenterInterface):
 
                     w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
-                    self._view.add_dimension_view(idx, w)
+                    self._view.add_dimension_view(key, w)
