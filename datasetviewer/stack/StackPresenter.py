@@ -71,4 +71,5 @@ class StackPresenter(StackPresenterInterface):
             self._view.press_y(first_key, first_dataset.dims[1])
 
     def change_stack_face(self, key):
-        pass
+
+        self._view.change_stack_face(key)

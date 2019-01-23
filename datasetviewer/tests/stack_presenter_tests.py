@@ -207,4 +207,9 @@ class StackPresenterTest(unittest.TestCase):
 
     def test_change_stack_face(self):
         ''' Test the change of the Stack face once a different element on the Preview has been selected. '''
-        pass
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        stack_pres.change_stack_face("fourdims")
+        self.mock_stack_view.change_stack_face.assert_called_once_with("fourdims")
