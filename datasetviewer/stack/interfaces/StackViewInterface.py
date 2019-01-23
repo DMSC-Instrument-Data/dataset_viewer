@@ -19,3 +19,11 @@ class StackViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def add_dimension_view(self, key, dim_view):
         pass
+
+    @abstractmethod
+    def press_x(self, key, dim):
+        pass
+
+    @abstractmethod
+    def press_y(self, key, dim):
+        pass

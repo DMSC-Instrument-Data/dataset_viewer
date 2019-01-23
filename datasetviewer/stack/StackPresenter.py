@@ -50,3 +50,17 @@ class StackPresenter(StackPresenterInterface):
                     w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
                     self._view.add_dimension_view(key, w)
+
+        # Create the default plot once all the View elements have been prepared
+        first_key = list(dict.keys())[0]
+        first_dataset = dict[first_key].data
+        n_dims = len(first_dataset.dims)
+
+        if n_dims == 1:
+            return
+
+        elif n_dims == 2:
+            pass
+
+        else:
+            pass

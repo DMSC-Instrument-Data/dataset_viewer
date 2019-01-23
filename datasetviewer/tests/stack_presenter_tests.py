@@ -147,4 +147,15 @@ class StackPresenterTest(unittest.TestCase):
         plot. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+
+        # Create a dictionary for which the first element is 1D
+        first_onedim = DataSet()
+        first_onedim["onedim"] = self.fake_dict["onedim"]
+        first_onedim["twodims"] = self.fake_dict["twodims"]
+
+        # Send the dictionary to the mock StackPresenter
         stack_pres.set_dict(self.fake_dict)
+
+        # Check that no buttons were pressed (this must happen as a 1D data will have no buttons anyway)
+        self.mock_stack_view.press_x.assert_not_called()
+        self.mock_stack_view.press_y.assert_not_called()
