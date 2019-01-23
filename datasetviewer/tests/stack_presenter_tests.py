@@ -152,7 +152,7 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.set_dict(self.fake_dict)
         stack_pres.create_default_button_press.assert_called_once()
 
-    def test_no_button_press(self):
+    def test_default_no_button_press(self):
         ''' Test that the correct buttons are pressed on the View in order to match the configuration of the default
         plot. '''
 
@@ -170,7 +170,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.press_x.assert_not_called()
         self.mock_stack_view.press_y.assert_not_called()
 
-    def test_single_button_press(self):
+    def test_default_single_button_press(self):
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
 
@@ -186,3 +186,21 @@ class StackPresenterTest(unittest.TestCase):
         # Check that just the X button has been pressed for the first dimension
         self.mock_stack_view.press_x.assert_called_once_with("twodims", x_button_to_press)
         self.mock_stack_view.press_y.assert_not_called()
+
+    def test_default_two_button_press(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+
+        # Create a dictionary for which the first element is 2D
+        first_threedim = DataSet()
+        first_threedim["threedims"] = self.fake_dict["threedims"]
+        first_threedim["onedim"] = self.fake_dict["onedim"]
+        x_button_to_press = self.fake_dict["threedims"].data.dims[0]
+        y_button_to_press = self.fake_dict["threedims"].data.dims[1]
+
+        # Send the dictionary to the mock StackPresenter
+        stack_pres.set_dict(first_threedim)
+
+        # Check that just the X button has been pressed for the first dimension
+        self.mock_stack_view.press_x.assert_called_once_with("threedims", x_button_to_press)
+        self.mock_stack_view.press_y.assert_called_once_with("threedims", y_button_to_press)

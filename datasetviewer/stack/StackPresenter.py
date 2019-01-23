@@ -67,4 +67,5 @@ class StackPresenter(StackPresenterInterface):
             self._view.press_x(first_key, first_dataset.dims[0])
 
         else:
-            pass
+            self._view.press_x(first_key, first_dataset.dims[0])
+            self._view.press_y(first_key, first_dataset.dims[1])
