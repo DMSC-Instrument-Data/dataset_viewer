@@ -113,8 +113,5 @@ class StackPresenter(StackPresenterInterface):
 
     def _same_dim_has_x_and_y_pressed(self, dims_with_x_pressed, dims_with_y_pressed):
 
-        if len(dims_with_x_pressed) == 0 or len(dims_with_y_pressed) == 0:
-            return False
-
         return dims_with_x_pressed.issubset(dims_with_y_pressed) or \
             dims_with_y_pressed.issubset(dims_with_x_pressed)

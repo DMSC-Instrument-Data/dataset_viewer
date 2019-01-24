@@ -21,12 +21,22 @@ class DimensionPresenter(DimensionPresenterInterface):
         if command == Command.XBUTTONPRESS:
 
             new_x_state = self._view.get_x_state()
-            self._stack_master.x_button_press(self._dim_name, new_x_state)
+
+            if new_x_state == self._view.get_y_state():
+                self._view.set_x_state(not new_x_state)
+
+            else:
+                self._stack_master.x_button_press(self._dim_name, new_x_state)
 
         elif command == Command.YBUTTONPRESS:
 
             new_y_state = self._view.get_y_state()
-            self._stack_master.y_button_press(self._dim_name, new_y_state)
+
+            if new_y_state == self._view.get_x_state():
+                self._view.set_y_state(not new_y_state)
+
+            else:
+                self._stack_master.y_button_press(self._dim_name, new_y_state)
 
         elif command == Command.SLIDERCHANGE:
 
