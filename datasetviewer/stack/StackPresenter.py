@@ -106,4 +106,6 @@ class StackPresenter(StackPresenterInterface):
                 if self._dim_presenters[self._current_face][dimname].get_x_state()}
 
     def _dims_with_y_pressed(self):
-        pass
+
+        return {dimname for dimname in self._dim_presenters[self._current_face].keys()
+                if self._dim_presenters[self._current_face][dimname].get_y_state()}

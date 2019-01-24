@@ -270,6 +270,31 @@ class StackPresenterTest(unittest.TestCase):
 
         self.assertEqual(stack_pres._dims_with_x_pressed(), {'z'})
 
+    def test_no_y_buttons_pressed(self):
+
+        # Have the DimensionPresenters say that their Y buttons are unchecked
+        for p in self.mock_dim_presenters:
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        self.assertEqual(stack_pres._dims_with_y_pressed(), set())
+
+    def test_single_y_button_pressed(self):
+
+        # Have the DimensionPresenters say that their Y buttons are unchecked
+        for p in self.mock_dim_presenters:
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        # Set the Presenter that corresponds with element "threedims", dimension "z" report that its Y button is checked
+        self.mock_dim_presenters[2].get_y_state = mock.MagicMock(return_value = True)
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        self.assertEqual(stack_pres._dims_with_y_pressed(), {'z'})
+
     def test_no_y_buttons_pressed_rechecks(self):
         ''' Test that attempting to uncheck a Y button when no other Y buttons have been pressed causes the
         StackPresenter to recheck this button'''
