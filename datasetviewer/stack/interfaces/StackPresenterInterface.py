@@ -17,3 +17,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def change_stack_face(self, key):
         pass
+
+    @abstractmethod
+    def x_button_press(self, dim_name, state):
+        pass

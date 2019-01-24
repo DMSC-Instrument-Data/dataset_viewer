@@ -47,14 +47,15 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_widgets = [mock.create_autospec(DimensionViewInterface)
                                  for _ in range(self.expected_factory_call_count)]
 
+        # Instruct the mock DimensionViewFactory to return the mock widgets
+        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = self.mock_dim_widgets)
+
+        # Create mock DimensionPresenters and have them be returned by the mock DimensionViews
         self.mock_dim_presenters = [mock.create_autospec(DimensionPresenterInterface)
                                     for _ in range(self.expected_factory_call_count)]
 
         for i in range(self.expected_factory_call_count):
             self.mock_dim_widgets[i].get_presenter = mock.MagicMock(return_value=self.mock_dim_presenters[i])
-
-        # Instruct the mock DimensionViewFactory to return the mock widgets
-        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = self.mock_dim_widgets)
 
     def test_presenter_throws_if_args_none(self):
         ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
@@ -225,7 +226,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.change_stack_face.assert_called_once_with(self.first_key)
 
     def test_call_to_register_master(self):
-
+        ''''''
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 

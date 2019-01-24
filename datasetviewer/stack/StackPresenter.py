@@ -77,3 +77,6 @@ class StackPresenter(StackPresenterInterface):
 
         self._view.change_stack_face(key)
         self._current_face = key
+
+    def x_button_press(self, dim_name, state):
+        pass
