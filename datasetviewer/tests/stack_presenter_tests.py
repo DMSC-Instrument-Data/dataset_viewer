@@ -5,6 +5,7 @@ from datasetviewer.stack.StackPresenter import StackPresenter
 from datasetviewer.stack.interfaces.StackViewInterface import StackViewInterface
 from datasetviewer.dimension.interfaces.DimensionViewFactoryInterface import DimensionViewFactoryInterface
 from datasetviewer.dimension.interfaces.DimensionViewInterface import DimensionViewInterface
+from datasetviewer.dimension.interfaces.DimensionPresenterInterface import DimensionPresenterInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 from collections import OrderedDict as DataSet
@@ -45,6 +46,12 @@ class StackPresenterTest(unittest.TestCase):
         # Create mock DimensionView widgets to imitate the widget-creation sequence for the fake dictionary
         self.mock_dim_widgets = [mock.create_autospec(DimensionViewInterface)
                                  for _ in range(self.expected_factory_call_count)]
+
+        self.mock_dim_presenters = [mock.create_autospec(DimensionPresenterInterface)
+                                    for _ in range(self.expected_factory_call_count)]
+
+        for i in range(self.expected_factory_call_count):
+            self.mock_dim_widgets[i].get_presenter = mock.MagicMock(return_value=self.mock_dim_presenters[i])
 
         # Instruct the mock DimensionViewFactory to return the mock widgets
         self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = self.mock_dim_widgets)
@@ -216,3 +223,11 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.set_dict(self.fake_dict)
 
         self.mock_stack_view.change_stack_face.assert_called_once_with(self.first_key)
+
+    def test_call_to_register_master(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        for pres in self.mock_dim_presenters:
+            pres.register_stack_master.assert_called_once_with(stack_pres)

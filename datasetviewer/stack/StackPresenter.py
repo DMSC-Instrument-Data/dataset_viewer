@@ -50,6 +50,7 @@ class StackPresenter(StackPresenterInterface):
 
                     w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
+                    self._dim_presenters[key][data.dims[i]].register_stack_master(self)
                     self._view.add_dimension_view(key, w)
 
         self.change_stack_face(list(dict.keys())[0])
