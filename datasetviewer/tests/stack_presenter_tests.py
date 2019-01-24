@@ -234,32 +234,6 @@ class StackPresenterTest(unittest.TestCase):
         for pres in self.mock_dim_presenters:
             pres.register_stack_master.assert_called_once_with(stack_pres)
 
-    def test_check_same_dimension_has_two_buttons_pressed(self):
-        pass
-
-    def test_same_x_and_y_pressed_reverses(self):
-
-        # Have the DimensionPresenters say that their X and Y buttons are unchecked
-        for p in self.mock_dim_presenters:
-            p.get_y_state = mock.MagicMock(return_value=False)
-            p.get_x_state = mock.MagicMock(return_value=False)
-
-        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
-        stack_pres.set_dict(self.fake_dict)
-
-        '''
-        Have the DimensionPresenter for the key-threedims, dimension-z element report that both the X and Y have
-        been checked
-        '''
-        self.mock_dim_presenters[2].get_x_state = mock.MagicMock(return_value = True)
-        self.mock_dim_presenters[2].get_y_state = mock.MagicMock(return_value = True)
-
-        # Tell the StackPresenter than the Y button on the z-dimension in the threedims-dataset has been checked
-        stack_pres.y_button_press('z', False)
-
-        # Check that Y button is unchecked through its presenter
-        self.mock_dim_presenters[2].set_y_state.assert_called_once_with(False)
-
     def test_no_x_buttons_pressed(self):
 
         # Have the DimensionPresenters say that their X buttons are unchecked
