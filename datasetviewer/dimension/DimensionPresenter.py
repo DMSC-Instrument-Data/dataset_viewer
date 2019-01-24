@@ -17,10 +17,16 @@ class DimensionPresenter(DimensionPresenterInterface):
             new_x_state = self._view.get_x_state()
             self._stack_master.x_button_press(self._dim_name, new_x_state)
 
-        if command == Command.YBUTTONPRESS:
+        elif command == Command.YBUTTONPRESS:
 
             new_y_state = self._view.get_y_state()
             self._stack_master.y_button_press(self._dim_name, new_y_state)
+
+        elif command == Command.SLIDERCHANGE:
+
+            new_slider_val = self._view.get_slider_value()
+            self._view.set_stepper_value(new_slider_val)
+            self._stack_master.slider_change(self._dim_name, new_slider_val)
 
     def register_stack_master(self, stack_master):
 

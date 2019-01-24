@@ -13,7 +13,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def set_x_state(self):
+    def set_x_state(self, state):
         pass
 
     @abstractmethod
@@ -21,7 +21,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def set_y_state(self):
+    def set_y_state(self, state):
         pass
 
     @abstractmethod
@@ -29,7 +29,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def set_slider_value(self):
+    def set_slider_value(self, val):
         pass
 
     @abstractmethod
@@ -37,7 +37,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def set_stepper_value(self):
+    def set_stepper_value(self, val):
         pass
 
     @abstractmethod

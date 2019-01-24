@@ -83,3 +83,6 @@ class StackPresenter(StackPresenterInterface):
 
     def y_button_press(self, dim_name, state):
         pass
+
+    def slider_change(self, dim_name, val):
+        pass
