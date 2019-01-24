@@ -9,3 +9,11 @@ class DimensionPresenterInterface(ABC):
     @abstractmethod
     def notify(self, command):
         pass
+
+    @abstractmethod
+    def set_x_state(self, state):
+        pass
+
+    @abstractmethod
+    def set_y_state(self, state):
+        pass

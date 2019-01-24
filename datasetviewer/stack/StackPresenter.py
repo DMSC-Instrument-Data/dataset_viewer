@@ -86,6 +86,14 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
 
+        if len(dims_with_y_pressed) == 0:
+
+            if len(dims_with_x_pressed) == 0:
+                self._dim_presenters[self._current_face][dim_name].set_y_state(True)
+
+            else:
+                pass
+
     def slider_change(self, dim_name, val):
         pass
 
@@ -93,7 +101,9 @@ class StackPresenter(StackPresenterInterface):
         pass
 
     def _dims_with_x_pressed(self):
-        pass
+
+        return {dimname for dimname in self._dim_presenters[self._current_face].keys()
+                if self._dim_presenters[self._current_face][dimname].get_x_state()}
 
     def _dims_with_y_pressed(self):
         pass

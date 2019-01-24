@@ -48,3 +48,11 @@ class DimensionPresenter(DimensionPresenterInterface):
         assert (isinstance(stack_master, StackPresenterInterface))
 
         self._stack_master = stack_master
+
+    def set_x_state(self, state):
+
+        self._view.set_x_state(state)
+
+    def set_y_state(self, state):
+
+        self._view.set_y_state(state)
