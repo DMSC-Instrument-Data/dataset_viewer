@@ -85,14 +85,15 @@ class StackPresenter(StackPresenterInterface):
 
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
+        total_buttons_pressed = len(dims_with_x_pressed) + len(dims_with_y_pressed)
 
-        if len(dims_with_y_pressed) == 0:
+        if total_buttons_pressed == 0:
+            self._dim_presenters[self._current_face][dim_name].set_y_state(True)
 
-            if len(dims_with_x_pressed) == 0:
-                self._dim_presenters[self._current_face][dim_name].set_y_state(True)
+        if self._same_dim_has_x_and_y_pressed(dims_with_x_pressed,dims_with_y_pressed):
 
-            else:
-                pass
+            self._dim_presenters[self._current_face][dim_name].set_y_state(False)
+            return
 
     def slider_change(self, dim_name, val):
         pass
@@ -109,3 +110,11 @@ class StackPresenter(StackPresenterInterface):
 
         return {dimname for dimname in self._dim_presenters[self._current_face].keys()
                 if self._dim_presenters[self._current_face][dimname].get_y_state()}
+
+    def _same_dim_has_x_and_y_pressed(self, dims_with_x_pressed, dims_with_y_pressed):
+
+        if len(dims_with_x_pressed) == 0 or len(dims_with_y_pressed) == 0:
+            return False
+
+        return dims_with_x_pressed.issubset(dims_with_y_pressed) or \
+            dims_with_y_pressed.issubset(dims_with_x_pressed)

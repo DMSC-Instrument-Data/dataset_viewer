@@ -41,3 +41,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def _dims_with_y_pressed(self):
         pass
+
+    @abstractmethod
+    def _same_dim_has_x_and_y_pressed(self, dims_with_x_pressed, dims_with_y_pressed):
+        pass
