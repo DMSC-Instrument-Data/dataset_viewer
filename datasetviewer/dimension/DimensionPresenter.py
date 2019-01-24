@@ -34,6 +34,9 @@ class DimensionPresenter(DimensionPresenterInterface):
             self._view.set_slider_value(new_stepper_val)
             self._stack_master.stepper_change(self._dim_name, new_stepper_val)
 
+        else:
+            raise ValueError("DimensionPresenter received an unrecognised command: {}".format(str(command)))
+
     def register_stack_master(self, stack_master):
 
         assert (isinstance(stack_master, StackPresenterInterface))

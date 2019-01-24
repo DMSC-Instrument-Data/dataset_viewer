@@ -1,6 +1,8 @@
 import unittest
 from unittest import mock
 
+from enum import Enum
+
 from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresenterInterface
 from datasetviewer.dimension.interfaces.DimensionViewInterface import DimensionViewInterface
 from datasetviewer.dimension.DimensionPresenter import DimensionPresenter
@@ -64,3 +66,13 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.get_stepper_value.assert_called_once()
         self.mock_dim_view.set_slider_value.assert_called_once_with(fake_stepper_value)
         self.mock_stack_pres.stepper_change.assert_called_once_with(self.fake_dim_name, fake_stepper_value)
+
+    def test_notify_throws(self):
+
+        # Create a fake command/enum
+        fake_enum = Enum(value='invalid', names=[('bad_command', -200000)])
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+
+        with self.assertRaises(ValueError):
+            dim_pres.notify(fake_enum)
