@@ -6,6 +6,12 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def __init__(self, dim_view, dim_name):
 
+        if dim_view is None:
+            raise ValueError("Error: Cannot create DimensionPresenter when View is None.")
+
+        if dim_name is None:
+            raise ValueError("Error: Cannot create DimensionPresenter when Name is None.")
+
         self._view = dim_view
         self._dim_name = dim_name
         self._stack_master = None

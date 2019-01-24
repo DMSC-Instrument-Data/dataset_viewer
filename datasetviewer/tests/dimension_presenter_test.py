@@ -17,6 +17,14 @@ class DimensionPresenterTest(unittest.TestCase):
 
         self.fake_dim_name = 'y'
 
+    def test_constructor_throws_if_args_none(self):
+
+        with self.assertRaises(ValueError):
+            DimensionPresenter(self.mock_dim_view, None)
+
+        with self.assertRaises(ValueError):
+            DimensionPresenter(None, self.fake_dim_name)
+
     def test_notify_x_press(self):
 
         fake_x_state = False
