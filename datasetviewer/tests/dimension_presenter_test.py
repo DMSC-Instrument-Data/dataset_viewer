@@ -49,4 +49,18 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.SLIDERCHANGE)
         self.mock_dim_view.get_slider_value.assert_called_once()
+        self.mock_dim_view.set_stepper_value.assert_called_once_with(fake_slider_value)
         self.mock_stack_pres.slider_change.assert_called_once_with(self.fake_dim_name, fake_slider_value)
+
+    def test_notify_stepper_change(self):
+
+        fake_stepper_value = 3
+        self.mock_dim_view.get_stepper_value = mock.MagicMock(return_value = fake_stepper_value)
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.register_stack_master(self.mock_stack_pres)
+
+        dim_pres.notify(Command.STEPPERCHANGE)
+        self.mock_dim_view.get_stepper_value.assert_called_once()
+        self.mock_dim_view.set_slider_value.assert_called_once_with(fake_stepper_value)
+        self.mock_stack_pres.stepper_change.assert_called_once_with(self.fake_dim_name, fake_stepper_value)

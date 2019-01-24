@@ -28,6 +28,12 @@ class DimensionPresenter(DimensionPresenterInterface):
             self._view.set_stepper_value(new_slider_val)
             self._stack_master.slider_change(self._dim_name, new_slider_val)
 
+        elif command == Command.STEPPERCHANGE:
+
+            new_stepper_val = self._view.get_stepper_value()
+            self._view.set_slider_value(new_stepper_val)
+            self._stack_master.stepper_change(self._dim_name, new_stepper_val)
+
     def register_stack_master(self, stack_master):
 
         assert (isinstance(stack_master, StackPresenterInterface))

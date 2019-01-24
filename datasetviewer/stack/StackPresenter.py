@@ -86,3 +86,6 @@ class StackPresenter(StackPresenterInterface):
 
     def slider_change(self, dim_name, val):
         pass
+
+    def stepper_change(self, dim_name, val):
+        pass

@@ -29,3 +29,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def slider_change(self, dim_name, val):
         pass
+
+    @abstractmethod
+    def stepper_change(self, dim_name, val):
+        pass

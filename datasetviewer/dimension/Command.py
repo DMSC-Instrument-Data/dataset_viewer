@@ -10,3 +10,6 @@ class Command(Enum):
 
     # Indicates that the slider value has changed
     SLIDERCHANGE = 302
+
+    # Indicates that the stepper value has been changed
+    STEPPERCHANGE = 303
