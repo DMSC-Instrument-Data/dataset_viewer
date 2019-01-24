@@ -26,3 +26,15 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres.notify(Command.XBUTTONPRESS)
         self.mock_dim_view.get_x_state.assert_called_once()
         self.mock_stack_pres.x_button_press.assert_called_once_with(self.fake_dim_name, fake_x_state)
+
+    def test_notify_y_press(self):
+
+        fake_y_state = False
+        self.mock_dim_view.get_y_state = mock.MagicMock(return_value=fake_y_state)
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.register_stack_master(self.mock_stack_pres)
+
+        dim_pres.notify(Command.YBUTTONPRESS)
+        self.mock_dim_view.get_y_state.assert_called_once()
+        self.mock_stack_pres.y_button_press.assert_called_once_with(self.fake_dim_name, fake_y_state)

@@ -80,3 +80,6 @@ class StackPresenter(StackPresenterInterface):
 
     def x_button_press(self, dim_name, state):
         pass
+
+    def y_button_press(self, dim_name, state):
+        pass

@@ -21,3 +21,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def x_button_press(self, dim_name, state):
         pass
+
+    @abstractmethod
+    def y_button_press(self, dim_name, state):
+        pass
