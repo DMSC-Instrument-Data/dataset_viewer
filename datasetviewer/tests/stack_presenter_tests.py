@@ -232,3 +232,15 @@ class StackPresenterTest(unittest.TestCase):
 
         for pres in self.mock_dim_presenters:
             pres.register_stack_master.assert_called_once_with(stack_pres)
+
+    def test_y_button_press_counts_all_presses(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        stack_pres._dims_with_x_pressed = mock.MagicMock()
+        stack_pres._dims_with_y_pressed = mock.MagicMock()
+
+        stack_pres.y_button_press('y', True)
+        stack_pres._dims_with_x_pressed.assert_called_once()
+        stack_pres._dims_with_y_pressed.assert_called_once()

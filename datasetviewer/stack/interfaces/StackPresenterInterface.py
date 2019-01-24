@@ -33,3 +33,11 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def stepper_change(self, dim_name, val):
         pass
+
+    @abstractmethod
+    def _dims_with_x_pressed(self):
+        pass
+
+    @abstractmethod
+    def _dims_with_y_pressed(self):
+        pass

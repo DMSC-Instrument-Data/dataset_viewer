@@ -82,10 +82,18 @@ class StackPresenter(StackPresenterInterface):
         pass
 
     def y_button_press(self, dim_name, state):
-        pass
+
+        dims_with_x_pressed = self._dims_with_x_pressed()
+        dims_with_y_pressed = self._dims_with_y_pressed()
 
     def slider_change(self, dim_name, val):
         pass
 
     def stepper_change(self, dim_name, val):
+        pass
+
+    def _dims_with_x_pressed(self):
+        pass
+
+    def _dims_with_y_pressed(self):
         pass
