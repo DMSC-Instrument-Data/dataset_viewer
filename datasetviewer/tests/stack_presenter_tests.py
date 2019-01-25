@@ -303,3 +303,48 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
                                                                             'z',
                                                                             slice)
+
+    def test_check_y_goes_to_twodim_from_onedim(self):
+
+        # Have the DimensionPresenters say that their X and Y buttons are unchecked
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        # Create fake slider values for a single dimension in the first element of the dataset
+        self.mock_dim_presenters['x'].get_slider_value = mock.MagicMock(return_value = 8)
+
+        # Create the slice dictionary that matches the fake slider values
+        slice = {'x': 8}
+
+        # Tell the Presenter that corresponds with dimension 'y' to report that its X button is checked
+        self.mock_dim_presenters['y'].get_x_state = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = False)
+
+        # Create a mock for the disable_dimension method that causes is_enabled to return False
+        def mock_disable():
+            self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value=False)
+
+        '''
+        Tell the Presenter that corresponds with dimension 'z' to report that its Y button has recently been checked
+        but has yet been disabled
+        '''
+        self.mock_dim_presenters['z'].get_y_state = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters['z'].disable_dimension = mock.MagicMock(side_effect = lambda: mock_disable())
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # Send the instruction to check the Y button for dimension 'z'
+        stack_pres.y_button_press('z', True)
+
+        # Check that this causes the slider and stepper buttons to disappear for the 'z' dimension
+        self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
+
+        # Check that this causes the master to create a one-dimensional plot with the correct arguments
+        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
+                                                                            'y',
+                                                                            'z',
+                                                                            slice)

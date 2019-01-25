@@ -29,3 +29,7 @@ class MainViewPresenterInterface(ABC):
     @abstractmethod
     def create_onedim_plot(self, key, x_dim, slice):
         pass
+
+    @abstractmethod
+    def create_twodim_plot(self, key, x_dim, y_dim, slice):
+        pass

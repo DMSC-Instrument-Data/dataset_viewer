@@ -67,6 +67,7 @@ class StackPresenter(StackPresenterInterface):
             return
 
         elif n_dims == 2:
+
             self._dim_presenters[first_key][first_dataset.dims[0]].set_x_state(True)
             self._dim_presenters[first_key][first_dataset.dims[0]].disable_dimension()
 
@@ -104,6 +105,14 @@ class StackPresenter(StackPresenterInterface):
             return
 
         if num_dims_with_y_pressed == 1:
+
+            self._dim_presenters[self._current_face][dim_name].disable_dimension()
+
+            self._master.create_twodim_plot(self._current_face,
+                                            dims_with_x_pressed.pop(),
+                                            dims_with_y_pressed.pop(),
+                                            self._create_slice_dictionary())
+
             return
 
         if num_dims_with_y_pressed == 2:
