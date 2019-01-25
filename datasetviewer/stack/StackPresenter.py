@@ -85,10 +85,20 @@ class StackPresenter(StackPresenterInterface):
 
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
-        total_buttons_pressed = len(dims_with_x_pressed) + len(dims_with_y_pressed)
 
-        if total_buttons_pressed == 0:
-            self._dim_presenters[self._current_face][dim_name].set_y_state(True)
+        num_dims_with_x_pressed = len(dims_with_x_pressed)
+        num_dims_with_y_pressed = len(dims_with_y_pressed)
+
+        if num_dims_with_x_pressed == 0:
+            # revert
+            return
+
+        elif num_dims_with_x_pressed == 1 and num_dims_with_y_pressed == 0:
+            # 1D plot time!!!
+            return
+
+        elif num_dims_with_x_pressed == 1 and num_dims_with_y_pressed == 1:
+            pass
 
     def slider_change(self, dim_name, val):
         pass

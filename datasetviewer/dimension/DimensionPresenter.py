@@ -22,7 +22,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
             new_x_state = self._view.get_x_state()
 
-            if new_x_state == self._view.get_y_state():
+            if new_x_state and new_x_state == self._view.get_y_state():
                 self._view.set_x_state(not new_x_state)
 
             else:
@@ -32,7 +32,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
             new_y_state = self._view.get_y_state()
 
-            if new_y_state == self._view.get_x_state():
+            if new_y_state and new_y_state == self._view.get_x_state():
                 self._view.set_y_state(not new_y_state)
 
             else:

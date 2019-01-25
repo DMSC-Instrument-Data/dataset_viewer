@@ -38,22 +38,9 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.get_x_state.assert_called_once()
         self.mock_stack_pres.x_button_press.assert_called_once_with(self.fake_dim_name, fake_x_state)
 
-    def test_notify_x_press_reverts_press(self):
-
-        fake_x_state = False
-        self.mock_dim_view.get_x_state = mock.MagicMock(return_value = fake_x_state)
-        self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_x_state)
-
-        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
-        dim_pres.register_stack_master(self.mock_stack_pres)
-
-        dim_pres.notify(Command.XBUTTONPRESS)
-        self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
-        self.mock_stack_pres.x_button_press.assert_not_called()
-
     def test_notify_y_press_calls_stack(self):
 
-        fake_y_state = False
+        fake_y_state = True
         self.mock_dim_view.get_x_state = mock.MagicMock(return_value = not fake_y_state)
         self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_y_state)
 
@@ -64,9 +51,22 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.get_y_state.assert_called_once()
         self.mock_stack_pres.y_button_press.assert_called_once_with(self.fake_dim_name, fake_y_state)
 
+    def test_notify_x_press_reverts_press(self):
+
+        fake_x_state = True
+        self.mock_dim_view.get_x_state = mock.MagicMock(return_value = fake_x_state)
+        self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_x_state)
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.register_stack_master(self.mock_stack_pres)
+
+        dim_pres.notify(Command.XBUTTONPRESS)
+        self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
+        self.mock_stack_pres.x_button_press.assert_not_called()
+
     def test_notify_y_press_reverts_press(self):
 
-        fake_y_state = False
+        fake_y_state = True
         self.mock_dim_view.get_x_state = mock.MagicMock(return_value = fake_y_state)
         self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_y_state)
 
