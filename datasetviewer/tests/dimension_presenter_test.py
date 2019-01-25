@@ -27,7 +27,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
     def test_notify_x_press_calls_stack(self):
 
-        fake_x_state = False
+        fake_x_state = True
         self.mock_dim_view.get_x_state = mock.MagicMock(return_value = fake_x_state)
         self.mock_dim_view.get_y_state = mock.MagicMock(return_value = not fake_x_state)
 
@@ -76,6 +76,19 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres.notify(Command.YBUTTONPRESS)
         self.mock_dim_view.set_y_state.assert_called_once_with(not fake_y_state)
         self.mock_stack_pres.y_button_press.assert_not_called()
+
+    def test_x_cannot_be_unchecked(self):
+
+        fake_x_state = False
+        self.mock_dim_view.get_x_state = mock.MagicMock(return_value = fake_x_state)
+        self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_x_state)
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.register_stack_master(self.mock_stack_pres)
+
+        dim_pres.notify(Command.XBUTTONPRESS)
+        self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
+        self.mock_stack_pres.x_button_press.assert_not_called()
 
     def test_notify_slider_change(self):
 
