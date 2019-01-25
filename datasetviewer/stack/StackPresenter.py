@@ -85,7 +85,26 @@ class StackPresenter(StackPresenterInterface):
         self._current_face = key
 
     def x_button_press(self, dim_name, state):
-        pass
+
+        dims_with_x_pressed = self._dims_with_x_pressed()
+        dims_with_y_pressed = self._dims_with_y_pressed()
+
+        num_dims_with_y_pressed = len(dims_with_y_pressed)
+
+        if num_dims_with_y_pressed == 0:
+
+            previous_x_button = dims_with_x_pressed - set(dim_name)
+            previous_x_button = previous_x_button.pop()
+
+            self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
+            self._dim_presenters[self._current_face][previous_x_button].set_x_state(False)
+
+            self._dim_presenters[self._current_face][dim_name].disable_dimension()
+
+            self._master.create_onedim_plot(self._current_face,
+                                            dim_name,
+                                            self._create_slice_dictionary())
+
 
     def y_button_press(self, dim_name, state):
 
