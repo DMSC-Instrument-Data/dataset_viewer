@@ -21,13 +21,5 @@ class StackViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def press_x(self, key, dim):
-        pass
-
-    @abstractmethod
-    def press_y(self, key, dim):
-        pass
-
-    @abstractmethod
     def change_stack_face(self, key):
         pass

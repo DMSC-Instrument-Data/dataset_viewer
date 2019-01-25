@@ -67,11 +67,16 @@ class StackPresenter(StackPresenterInterface):
             return
 
         elif n_dims == 2:
-            self._view.press_x(first_key, first_dataset.dims[0])
+            self._dim_presenters[first_key][first_dataset.dims[0]].set_x_state(True)
+            self._dim_presenters[first_key][first_dataset.dims[0]].disable_dimension()
 
         else:
-            self._view.press_x(first_key, first_dataset.dims[0])
-            self._view.press_y(first_key, first_dataset.dims[1])
+
+            self._dim_presenters[first_key][first_dataset.dims[0]].set_x_state(True)
+            self._dim_presenters[first_key][first_dataset.dims[0]].disable_dimension()
+
+            self._dim_presenters[first_key][first_dataset.dims[1]].set_y_state(True)
+            self._dim_presenters[first_key][first_dataset.dims[1]].disable_dimension()
 
     def change_stack_face(self, key):
 
