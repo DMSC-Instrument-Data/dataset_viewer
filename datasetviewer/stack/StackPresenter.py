@@ -110,12 +110,26 @@ class StackPresenter(StackPresenterInterface):
 
             self._master.create_twodim_plot(self._current_face,
                                             dims_with_x_pressed.pop(),
-                                            dims_with_y_pressed.pop(),
+                                            dim_name,
                                             self._create_slice_dictionary())
 
             return
 
         if num_dims_with_y_pressed == 2:
+
+            previous_y_button = dims_with_y_pressed - set(dim_name)
+            previous_y_button = previous_y_button.pop()
+
+            self._dim_presenters[self._current_face][dim_name].disable_dimension()
+
+            self._dim_presenters[self._current_face][previous_y_button].enable_dimension()
+            self._dim_presenters[self._current_face][previous_y_button].set_y_state(False)
+
+            self._master.create_twodim_plot(self._current_face,
+                                            dims_with_x_pressed.pop(),
+                                            dim_name,
+                                            self._create_slice_dictionary())
+
             return
 
     def slider_change(self, dim_name, val):
