@@ -100,3 +100,6 @@ class MainViewPresenter(MainViewPresenterInterface):
         """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """
 
         self._main_view.update_toolbar()
+
+    def create_onedim_plot(self, key, x_dim, slice):
+        pass

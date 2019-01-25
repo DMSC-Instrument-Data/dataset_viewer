@@ -25,3 +25,7 @@ class MainViewPresenterInterface(ABC):
     @abstractmethod
     def update_toolbar(self):
         pass
+
+    @abstractmethod
+    def create_onedim_plot(self, key, x_dim, slice):
+        pass

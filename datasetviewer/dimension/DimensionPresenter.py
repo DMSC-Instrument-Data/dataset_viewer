@@ -15,6 +15,7 @@ class DimensionPresenter(DimensionPresenterInterface):
         self._view = dim_view
         self._dim_name = dim_name
         self._stack_master = None
+        self._enabled = True
 
     def notify(self, command):
 
@@ -22,7 +23,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
             new_x_state = self._view.get_x_state()
 
-            if (new_x_state and new_x_state == self._view.get_y_state()) \
+            if (new_x_state and self._view.get_y_state()) \
                     or not new_x_state:
                 self._view.set_x_state(not new_x_state)
 
@@ -33,7 +34,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
             new_y_state = self._view.get_y_state()
 
-            if new_y_state and new_y_state == self._view.get_x_state():
+            if new_y_state and self._view.get_x_state():
                 self._view.set_y_state(not new_y_state)
 
             else:
@@ -67,3 +68,21 @@ class DimensionPresenter(DimensionPresenterInterface):
     def set_y_state(self, state):
 
         self._view.set_y_state(state)
+
+    def enable_dimension(self):
+
+        self._view.enable_slider()
+        self._view.enable_stepper()
+        self._enabled = True
+
+    def disable_dimension(self):
+
+        self._view.disable_slider()
+        self._view.disable_stepper()
+        self._enabled = False
+
+    def is_enabled(self):
+        return self._enabled
+
+    def get_slider_value(self):
+        return self._view.get_slider_value()

@@ -41,3 +41,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def _dims_with_y_pressed(self):
         pass
+
+    @abstractmethod
+    def _create_slice_dictionary(self):
+        pass

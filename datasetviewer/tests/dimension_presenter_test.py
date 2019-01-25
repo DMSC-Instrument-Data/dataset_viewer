@@ -40,7 +40,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
     def test_notify_y_press_calls_stack(self):
 
-        fake_y_state = True
+        fake_y_state = False
         self.mock_dim_view.get_x_state = mock.MagicMock(return_value = not fake_y_state)
         self.mock_dim_view.get_y_state = mock.MagicMock(return_value = fake_y_state)
 
@@ -137,3 +137,24 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.set_y_state(True)
         self.mock_dim_view.set_y_state.assert_called_once_with(True)
+
+    def test_enable_and_disable_dimension(self):
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+
+        dim_pres.enable_dimension()
+        self.mock_dim_view.enable_slider.assert_called_once()
+        self.mock_dim_view.enable_stepper.assert_called_once()
+        self.assertTrue(dim_pres.is_enabled())
+
+        dim_pres.disable_dimension()
+        self.mock_dim_view.disable_slider.assert_called_once()
+        self.mock_dim_view.disable_stepper.assert_called_once()
+        self.assertFalse(dim_pres.is_enabled())
+
+    def test_get_slider_value(self):
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+
+        dim_pres.get_slider_value()
+        self.mock_dim_view.get_slider_value.assert_called_once()

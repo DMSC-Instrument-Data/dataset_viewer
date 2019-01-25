@@ -43,3 +43,19 @@ class DimensionViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def get_presenter(self):
         pass
+
+    @abstractmethod
+    def enable_slider(self):
+        pass
+
+    @abstractmethod
+    def enable_stepper(self):
+        pass
+
+    @abstractmethod
+    def disable_slider(self):
+        pass
+
+    @abstractmethod
+    def disable_stepper(self):
+        pass

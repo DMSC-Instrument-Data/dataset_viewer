@@ -245,6 +245,17 @@ class StackPresenterTest(unittest.TestCase):
 
         self.assertEqual(stack_pres._dims_with_x_pressed(), set())
 
+    def test_no_y_buttons_pressed(self):
+
+        # Have the DimensionPresenters say that their Y buttons are unchecked
+        for p in self.mock_dim_presenters:
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.set_dict(self.fake_dict)
+
+        self.assertEqual(stack_pres._dims_with_y_pressed(), set())
+
     def test_single_x_button_pressed(self):
 
         # Have the DimensionPresenters say that their X buttons are unchecked
@@ -258,17 +269,6 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.set_dict(self.fake_dict)
 
         self.assertEqual(stack_pres._dims_with_x_pressed(), {'z'})
-
-    def test_no_y_buttons_pressed(self):
-
-        # Have the DimensionPresenters say that their Y buttons are unchecked
-        for p in self.mock_dim_presenters:
-            p.get_y_state = mock.MagicMock(return_value=False)
-
-        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
-        stack_pres.set_dict(self.fake_dict)
-
-        self.assertEqual(stack_pres._dims_with_y_pressed(), set())
 
     def test_single_y_button_pressed(self):
 
@@ -284,25 +284,35 @@ class StackPresenterTest(unittest.TestCase):
 
         self.assertEqual(stack_pres._dims_with_y_pressed(), {'z'})
 
-    def test_no_buttons_pressed_reverses(self):
-        ''' Test that attempting to uncheck a button when no other buttons have been pressed causes the
-        StackPresenter to reverse this.'''
+    def test_uncheck_y_creates_onedim_plot(self):
 
-        '''
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters:
-            p.get_y_state = mock.MagicMock(return_value=False)
             p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        # Create fake slider values for the two dimensions in the first element of the dataset
+        self.mock_dim_presenters[0].get_slider_value = mock.MagicMock(return_value = 8)
+        self.mock_dim_presenters[1].get_slider_value = mock.MagicMock(return_value = 5)
+
+        # Create the slice dictionary that matches the fake slider values
+        slice = {'x': 8, 'y': 5}
+
+        # Tell the Presenter that corresponds with dimension 'z' to report that its X button is checked
+        self.mock_dim_presenters[2].get_x_state = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters[2].is_enabled = mock.MagicMock(return_value = False)
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
         stack_pres.set_dict(self.fake_dict)
 
-        # Tell the StackPresenter than the Y button on the 'z' dimension of the "threedims" dataset has been unchecked
-        stack_pres.y_button_press('z', False)
+        # Send the instruction to uncheck the Y button for dimension 'x'
+        stack_pres.y_button_press('x', False)
 
-        # Check that Y button has been rechecked through its presenter
-        self.mock_dim_presenters[2].set_y_state.assert_called_once_with(True)
-        '''
+        # Check that this causes the slider and stepper buttons to reappear for the 'x' dimension
+        self.mock_dim_presenters[0].enable_dimension.assert_called_once()
 
-    def test_x_then_y_press_creates_onedim_plot(self):
-        pass
+        # Check that this causes the master to create a one-dimensional plot with the correct arguments
+        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
+                                                                            'z',
+                                                                            slice)

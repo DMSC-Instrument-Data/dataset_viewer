@@ -17,3 +17,19 @@ class DimensionPresenterInterface(ABC):
     @abstractmethod
     def set_y_state(self, state):
         pass
+
+    @abstractmethod
+    def disable_dimension(self):
+        pass
+
+    @abstractmethod
+    def enable_dimension(self):
+        pass
+
+    @abstractmethod
+    def is_enabled(self):
+        pass
+
+    @abstractmethod
+    def get_slider_value(self):
+        pass

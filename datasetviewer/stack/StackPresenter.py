@@ -86,19 +86,23 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
 
-        num_dims_with_x_pressed = len(dims_with_x_pressed)
         num_dims_with_y_pressed = len(dims_with_y_pressed)
 
-        if num_dims_with_x_pressed == 0:
-            # revert
+        if num_dims_with_y_pressed == 0:
+
+            self._dim_presenters[self._current_face][dim_name].enable_dimension()
+
+            self._master.create_onedim_plot(self._current_face,
+                                            dims_with_x_pressed.pop(),
+                                            self._create_slice_dictionary())
+
             return
 
-        elif num_dims_with_x_pressed == 1 and num_dims_with_y_pressed == 0:
-            # 1D plot time!!!
+        if num_dims_with_y_pressed == 1:
             return
 
-        elif num_dims_with_x_pressed == 1 and num_dims_with_y_pressed == 1:
-            pass
+        if num_dims_with_y_pressed == 2:
+            return
 
     def slider_change(self, dim_name, val):
         pass
@@ -115,3 +119,9 @@ class StackPresenter(StackPresenterInterface):
 
         return {dimname for dimname in self._dim_presenters[self._current_face].keys()
                 if self._dim_presenters[self._current_face][dimname].get_y_state()}
+
+    def _create_slice_dictionary(self):
+
+        return {dimname : self._dim_presenters[self._current_face][dimname].get_slider_value()
+                for dimname in self._dim_presenters[self._current_face].keys()
+                if self._dim_presenters[self._current_face][dimname].is_enabled() }
