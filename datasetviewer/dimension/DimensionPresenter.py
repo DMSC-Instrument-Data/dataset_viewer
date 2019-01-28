@@ -44,13 +44,13 @@ class DimensionPresenter(DimensionPresenterInterface):
 
             new_slider_val = self._view.get_slider_value()
             self._view.set_stepper_value(new_slider_val)
-            self._stack_master.slider_change(self._dim_name, new_slider_val)
+            self._stack_master.slice_change()
 
         elif command == Command.STEPPERCHANGE:
 
             new_stepper_val = self._view.get_stepper_value()
             self._view.set_slider_value(new_stepper_val)
-            self._stack_master.stepper_change(self._dim_name, new_stepper_val)
+            self._stack_master.slice_change()
 
         else:
             raise ValueError("DimensionPresenter received an unrecognised command: {}".format(str(command)))

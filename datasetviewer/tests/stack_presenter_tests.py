@@ -460,3 +460,60 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
                                                                             'z',
                                                                             slice)
+
+    def test_press_x_changes_twodim_plot(self):
+
+        # Have the DimensionPresenters say that their X and Y buttons are unchecked
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        # Create fake slider values for a single dimension in the first element of the dataset
+        self.mock_dim_presenters['z'].get_slider_value = mock.MagicMock(return_value = 3)
+
+        # Create the slice dictionary that matches the fake slider values
+        slice = {'z': 3}
+
+        # Set the DimensionPresenter for the 'y' dimension to report that it's disabled and its X button is checked
+        self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = True)
+
+        def mock_y_disable():
+            self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = False)
+
+        # Create a mock so that the Presenter can behave as if its button has been unchecked
+        self.mock_dim_presenters['y'].disable_dimension = mock.MagicMock(side_effect = mock_y_disable)
+
+        '''
+        Set the DimensionPresenter for the 'y' dimension to report that it's disabled and its X button is checked
+        but that it has not yet been disabled
+        '''
+        self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value = False)
+        self.mock_dim_presenters['z'].get_x_state = mock.MagicMock(return_value = True)
+
+        self.mock_dim_presenters['x'].is_enabled = mock.MagicMock(return_value = False)
+        self.mock_dim_presenters['x'].get_y_state = mock.MagicMock(return_value = True)
+
+        def mock_z_enable():
+            self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value = True)
+
+        # Create a mock so that the Presenter can behave as if its button has been unchecked
+        self.mock_dim_presenters['z'].enable_dimension = mock.MagicMock(side_effect = mock_z_enable)
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # reset mock for y presenter here
+
+        # Send the instruction to check the Y button for dimension 'y'
+        stack_pres.x_button_press('y', True)
+
+        self.mock_dim_presenters['z'].enable_dimension.assert_called_once()
+        self.mock_dim_presenters['z'].set_x_state.assert_called_once_with(False)
+
+        self.assertEquals(self.mock_dim_presenters['y'].disable_dimension.call_count, 2)
+
+        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
+                                                                            'y',
+                                                                            'x',
+                                                                            slice)

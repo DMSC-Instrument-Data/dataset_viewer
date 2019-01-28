@@ -27,11 +27,7 @@ class StackPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def slider_change(self, dim_name, val):
-        pass
-
-    @abstractmethod
-    def stepper_change(self, dim_name, val):
+    def slice_change(self):
         pass
 
     @abstractmethod

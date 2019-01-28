@@ -91,20 +91,31 @@ class StackPresenter(StackPresenterInterface):
 
         num_dims_with_y_pressed = len(dims_with_y_pressed)
 
+        previous_x_button = dims_with_x_pressed - set(dim_name)
+        previous_x_button = previous_x_button.pop()
+
+        print(previous_x_button)
+        self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
+        self._dim_presenters[self._current_face][previous_x_button].set_x_state(False)
+
+        self._dim_presenters[self._current_face][dim_name].disable_dimension()
+
         if num_dims_with_y_pressed == 0:
-
-            previous_x_button = dims_with_x_pressed - set(dim_name)
-            previous_x_button = previous_x_button.pop()
-
-            self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
-            self._dim_presenters[self._current_face][previous_x_button].set_x_state(False)
-
-            self._dim_presenters[self._current_face][dim_name].disable_dimension()
 
             self._master.create_onedim_plot(self._current_face,
                                             dim_name,
                                             self._create_slice_dictionary())
 
+            return
+
+        if num_dims_with_y_pressed == 1:
+
+            self._master.create_twodim_plot(self._current_face,
+                                            dim_name,
+                                            dims_with_y_pressed.pop(),
+                                            self._create_slice_dictionary())
+
+            return
 
     def y_button_press(self, dim_name, state):
 
@@ -151,10 +162,7 @@ class StackPresenter(StackPresenterInterface):
 
             return
 
-    def slider_change(self, dim_name, val):
-        pass
-
-    def stepper_change(self, dim_name, val):
+    def slice_change(self):
         pass
 
     def _dims_with_x_pressed(self):
