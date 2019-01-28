@@ -124,4 +124,6 @@ class PlotPresenter(PlotPresenterInterface):
         self._view.plot_line(data.isel(slice))
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
-        pass
+
+        data = self._dict[key].data
+        self._view.plot_image(data.isel(slice).transpose(y_dim, x_dim))

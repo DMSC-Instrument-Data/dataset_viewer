@@ -146,4 +146,21 @@ class PlotPresenterTest(unittest.TestCase):
 
         arr = self.fake_dict[fake_key].data.isel(fake_slice)
 
-        arr.equals(self.mock_plot_view.plot_line.call_args[0][0])
+        self.assertTrue(arr.equals(self.mock_plot_view.plot_line.call_args[0][0]))
+
+    def test_create_twodim_plot(self):
+
+        plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+        plot_pres.set_dict(self.fake_dict)
+
+        fake_key = "threedims"
+        fake_x = 'x'
+        fake_y = 'y'
+        fake_slice = {'z': 4}
+
+        plot_pres.create_twodim_plot(fake_key, fake_x, fake_y, fake_slice)
+
+        arr = self.fake_dict[fake_key].data.isel(fake_slice).transpose(fake_y, fake_x)
+
+        self.assertTrue(arr.equals(self.mock_plot_view.plot_image.call_args[0][0]))
