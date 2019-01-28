@@ -102,7 +102,8 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._main_view.update_toolbar()
 
     def create_onedim_plot(self, key, x_dim, slice):
-        pass
+
+        self._plot_presenter.create_onedim_plot(key, x_dim, slice)
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
         pass

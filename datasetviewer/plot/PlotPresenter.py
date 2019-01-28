@@ -117,3 +117,6 @@ class PlotPresenter(PlotPresenterInterface):
 
         self._main_presenter = master
         master.subscribe_plot_presenter(self)
+
+    def create_onedim_plot(self, key, x_dim, slice):
+        pass

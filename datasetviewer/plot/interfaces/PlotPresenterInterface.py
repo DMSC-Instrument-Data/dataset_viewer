@@ -21,3 +21,7 @@ class PlotPresenterInterface(ABC):
     @abstractmethod
     def set_dict(self, dict):
         pass
+
+    @abstractmethod
+    def create_onedim_plot(self, key, x_dim, slice):
+        pass
