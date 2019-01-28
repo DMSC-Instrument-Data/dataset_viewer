@@ -308,6 +308,13 @@ class StackPresenter(StackPresenterInterface):
                                             dims_with_x_checked.pop(),
                                             self._create_slice_dictionary())
 
+        else:
+
+            self._master.create_twodim_plot(self._current_face,
+                                            dims_with_x_checked.pop(),
+                                            dims_with_y_checked.pop(),
+                                            self._create_slice_dictionary())
+
     def _dims_with_x_checked(self):
         """
         Find the dimensions that have their X button checked.
