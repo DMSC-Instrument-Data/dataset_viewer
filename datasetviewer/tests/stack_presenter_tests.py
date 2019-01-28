@@ -163,7 +163,6 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.change_stack_face = mock.Mock()
 
         stack_pres.set_dict(self.fake_dict)
-        stack_pres.create_default_button_press.assert_called_once()
         stack_pres.change_stack_face.assert_called_once_with(self.first_key)
 
     def test_default_single_button_press(self):
@@ -484,6 +483,7 @@ class StackPresenterTest(unittest.TestCase):
 
         # Set the DimensionPresenter for the 'y' dimension to report that it's disabled and its X button is checked
         self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters['y'].get_x_state = mock.MagicMock(return_value = True)
 
         def mock_y_disable():
             self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = False)
