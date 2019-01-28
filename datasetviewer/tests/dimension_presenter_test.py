@@ -126,11 +126,23 @@ class DimensionPresenterTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             dim_pres.notify(fake_enum)
 
+    def test_get_x_state(self):
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.get_x_state()
+        self.mock_dim_view.get_x_state.assert_called_once()
+
     def test_set_x_state(self):
 
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.set_x_state(True)
         self.mock_dim_view.set_x_state.assert_called_once_with(True)
+
+    def test_get_y_state(self):
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+        dim_pres.get_y_state()
+        self.mock_dim_view.get_y_state.assert_called_once()
 
     def test_set_y_state(self):
 
