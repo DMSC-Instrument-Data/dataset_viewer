@@ -284,6 +284,8 @@ class StackPresenter(StackPresenterInterface):
             previous_y_button = dims_with_y_checked - set(recent_y_button)
             previous_y_button = previous_y_button.pop()
 
+            print(previous_y_button)
+
             # Disable the DimensionView elements for the most recent Y button to be checked
             self._dim_presenters[self._current_face][recent_y_button].disable_dimension()
 

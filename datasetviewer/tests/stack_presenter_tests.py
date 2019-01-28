@@ -402,16 +402,14 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.register_master(self.mock_main_presenter)
         stack_pres.set_dict(self.fake_dict)
 
-        # self.mock_dim_presenters['y'].reset_mock()
-
         # Send the instruction to check the Y button for dimension 'z'
         stack_pres.y_button_change('z', True)
 
         # Check that this causes the slider and stepper buttons to disappear for the 'z' dimension
         self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
 
-        # Check that this causes the slider and stepper buttons to reappear for the 'y' dimension
-        self.mock_dim_presenters['y'].disable_dimension.assert_called_once()
+        # Check that this causes the slider and stepper buttons to reappear for the 'x' dimension
+        self.mock_dim_presenters['x'].enable_dimension.assert_called_once()
 
         # Check that this causes the master to create a two-dimensional plot with the correct arguments
         self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
