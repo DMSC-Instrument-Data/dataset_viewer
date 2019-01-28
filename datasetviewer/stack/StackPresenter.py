@@ -305,8 +305,10 @@ class StackPresenter(StackPresenterInterface):
 
     def _dims_with_x_checked(self):
         """
-        Create a set of names for all the DimensionViews for the current key containing the names of the dimensions with
-        a checked X button.
+        Find the dimensions that have their X button checked.
+
+        Returns:
+            set: A set of the names of the dimensions that have a checked X button.
         """
 
         return {dimname for dimname in self._dim_presenters[self._current_face].keys()
@@ -314,8 +316,10 @@ class StackPresenter(StackPresenterInterface):
 
     def _dims_with_y_checked(self):
         """
-        Create a set of names for all the DimensionViews for the current key containing the names of the dimensions with
-        a checked Y button.
+        Find the dimensions that have their Y button checked.
+
+        Returns:
+            set: A set of the names of the dimensions that have a checked Y button.
         """
 
         return {dimname for dimname in self._dim_presenters[self._current_face].keys()
@@ -323,8 +327,11 @@ class StackPresenter(StackPresenterInterface):
 
     def _create_slice_dictionary(self):
         """
-        Create dictionary containing the names of the dimensions for which no X/Y button is checked and their current
-        slider/stepper value.
+        Find the slider values of the dimensions for which no buttons are checked.
+
+        Returns:
+            dict: A dictionary consisting of elemenets with a dimension name as the dictionary key and the slider value
+                as the dictionary value.
         """
 
         return {dimname : self._dim_presenters[self._current_face][dimname].get_slider_value()

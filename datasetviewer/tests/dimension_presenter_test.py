@@ -34,7 +34,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.register_stack_master(self.mock_stack_pres)
 
-        dim_pres.notify(Command.XBUTTONPRESS)
+        dim_pres.notify(Command.XBUTTONCHANGE)
         self.mock_dim_view.get_x_state.assert_called_once()
         self.mock_stack_pres.x_button_change.assert_called_once_with(self.fake_dim_name, fake_x_state)
 
@@ -47,7 +47,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.register_stack_master(self.mock_stack_pres)
 
-        dim_pres.notify(Command.YBUTTONPRESS)
+        dim_pres.notify(Command.YBUTTONCHANGE)
         self.mock_dim_view.get_y_state.assert_called_once()
         self.mock_stack_pres.y_button_change.assert_called_once_with(self.fake_dim_name, fake_y_state)
 
@@ -60,7 +60,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.register_stack_master(self.mock_stack_pres)
 
-        dim_pres.notify(Command.XBUTTONPRESS)
+        dim_pres.notify(Command.XBUTTONCHANGE)
         self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
         self.mock_stack_pres.x_button_change.assert_not_called()
 
@@ -73,7 +73,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.register_stack_master(self.mock_stack_pres)
 
-        dim_pres.notify(Command.YBUTTONPRESS)
+        dim_pres.notify(Command.YBUTTONCHANGE)
         self.mock_dim_view.set_y_state.assert_called_once_with(not fake_y_state)
         self.mock_stack_pres.y_button_change.assert_not_called()
 
@@ -86,7 +86,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         dim_pres.register_stack_master(self.mock_stack_pres)
 
-        dim_pres.notify(Command.XBUTTONPRESS)
+        dim_pres.notify(Command.XBUTTONCHANGE)
         self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
         self.mock_stack_pres.x_button_change.assert_not_called()
 
