@@ -99,8 +99,8 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
 
-        if len(dims_with_x_pressed) > 2:
-            raise ValueError("Error: Too many X buttons pressed: " + str(dims_with_x_pressed))
+        if len(dims_with_x_pressed) > 2 or not dims_with_x_pressed:
+            raise ValueError("Error: Too many or too few X buttons pressed: " + str(dims_with_x_pressed))
 
         num_dims_with_y_pressed = len(dims_with_y_pressed)
 
@@ -134,8 +134,8 @@ class StackPresenter(StackPresenterInterface):
 
         num_dims_with_y_pressed = len(dims_with_y_pressed)
 
-        if len(dims_with_x_pressed) > 1:
-            raise ValueError("Error: Too many X buttons pressed: " + str(dims_with_x_pressed))
+        if len(dims_with_x_pressed) > 1 or not dims_with_x_pressed:
+            raise ValueError("Error: Too many X or too few X buttons pressed: " + str(dims_with_x_pressed))
 
         if num_dims_with_y_pressed == 0:
 

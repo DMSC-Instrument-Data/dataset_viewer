@@ -511,13 +511,16 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.register_master(self.mock_main_presenter)
         stack_pres.set_dict(self.fake_dict)
 
-        # reset mock for y presenter here
+        # Reset the mock so that we ignore the function calls made in `set_dict`
+        self.mock_dim_presenters['z'].reset_mock()
 
         # Send the instruction to check the Y button for dimension 'y'
         stack_pres.x_button_press('y', True)
 
-        self.mock_dim_presenters['z'].enable_dimension.assert_called()
+        #
+        self.mock_dim_presenters['z'].enable_dimension.assert_called_once()
 
+        # ??
         self.assertEquals(self.mock_dim_presenters['y'].disable_dimension.call_count, 2)
 
         self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
@@ -525,46 +528,74 @@ class StackPresenterTest(unittest.TestCase):
                                                                             'x',
                                                                             slice)
 
-    def test_x_too_buttons_pressed_throws(self):
+    def test_x_wrong_number_buttons_pressed_throws(self):
+        ''' Test that the `x_button_press` function throws an exception when an incorrect number of X/Y buttons have
+        been pressed. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
         stack_pres.set_dict(self.fake_dict)
 
-        # Make the DimensionPresenters report that every Y button has been pressed
+        # Make the DimensionPresenters report that every X button has been pressed and no Y button has been pressed
         for p in self.mock_dim_presenters.values():
             p.get_x_state = mock.MagicMock(return_value=True)
             p.get_y_state = mock.MagicMock(return_value=False)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             stack_pres.x_button_press('x', True)
 
-        # Make the DimensionPresenters report that every X button has been pressed
+        # Make the DimensionPresenters report that no X buttons have been pressed and a single Y has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        self.mock_dim_presenters['x'].get_y_state = mock.MagicMock(return_Value = True)
+
+        with self.assertRaises(ValueError):
+            stack_pres.x_button_press('x', True)
+
+        # Make the DimensionPresenters report that every Y button has been pressed and a single X has been pressed
         for p in self.mock_dim_presenters.values():
             p.get_x_state = mock.MagicMock(return_value=False)
             p.get_y_state = mock.MagicMock(return_value=True)
 
-        with self.assertRaises(Exception):
+        self.mock_dim_presenters['x'].get_x_state = mock.MagicMock(return_Value=True)
+
+        with self.assertRaises(ValueError):
             stack_pres.x_button_press('x', True)
 
-    def test_y_too_many_buttons_pressed_throws(self):
+    def test_y_wrong_number_buttons_pressed_throws(self):
+        ''' Test that the `y_button_press` function throws an exception when an incorrect number of X/Y buttons have
+        been pressed. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
         stack_pres.set_dict(self.fake_dict)
 
-        # Make the DimensionPresenters report that every Y button has been pressed
+        # Make the DimensionPresenters report that every X button has been pressed and no Y has been pressed
         for p in self.mock_dim_presenters.values():
-            p.get_x_state = mock.MagicMock(return_value=False)
-            p.get_y_state = mock.MagicMock(return_value=True)
+            p.get_x_state = mock.MagicMock(return_value=True)
+            p.get_y_state = mock.MagicMock(return_value=False)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             stack_pres.y_button_press('x', True)
 
-        # Make the DimensionPresenters report that every X button has been pressed
+        # Make the DimensionPresenters report that no X buttons have been pressed and a single Y button has been pressed
         for p in self.mock_dim_presenters.values():
             p.get_x_state = mock.MagicMock(return_value=True)
             p.get_y_state = mock.MagicMock(return_value=False)
 
-        with self.assertRaises(Exception):
+        self.mock_dim_presenters['x'].get_y_state = mock.MagicMock(return_Value=True)
+
+        with self.assertRaises(ValueError):
+            stack_pres.y_button_press('x', True)
+
+        # Make the DimensionPresenters report that every Y button has been pressed and a single X button has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=True)
+
+        self.mock_dim_presenters['x'].get_x_state = mock.MagicMock(return_Value=True)
+
+        with self.assertRaises(ValueError):
             stack_pres.y_button_press('x', True)
