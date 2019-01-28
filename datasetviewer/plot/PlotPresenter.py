@@ -120,3 +120,6 @@ class PlotPresenter(PlotPresenterInterface):
 
     def create_onedim_plot(self, key, x_dim, slice):
         pass
+
+    def create_twodim_plot(self, key, x_dim, y_dim, slice):
+        pass

@@ -116,3 +116,12 @@ class MainViewPresenterTest(unittest.TestCase):
         main_view_presenter.create_onedim_plot("fakekey",'xdim',{})
 
         self.mock_plot_presenter.create_onedim_plot.assert_called_once_with("fakekey", 'xdim', {})
+
+    def test_create_twodim_plot(self):
+
+        main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
+        main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
+
+        main_view_presenter.create_twodim_plot("fakekey",'xdim', 'ydim', {})
+
+        self.mock_plot_presenter.create_twodim_plot.assert_called_once_with("fakekey", 'xdim', 'ydim', {})
