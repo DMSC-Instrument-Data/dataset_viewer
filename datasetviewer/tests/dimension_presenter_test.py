@@ -145,6 +145,8 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres.enable_dimension()
         self.mock_dim_view.enable_slider.assert_called_once()
         self.mock_dim_view.enable_stepper.assert_called_once()
+        self.mock_dim_view.set_x_state.assert_called_once_with(False)
+        self.mock_dim_view.set_y_state.assert_called_once_with(False)
         self.assertTrue(dim_pres.is_enabled())
 
         dim_pres.disable_dimension()

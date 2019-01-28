@@ -181,7 +181,16 @@ class StackPresenterTest(unittest.TestCase):
 
         # Check that just the X button has been pressed for the first dimension
         self.mock_dim_presenters[x_button_to_press].set_x_state.assert_called_once_with(True)
+        self.mock_dim_presenters[x_button_to_press].set_y_state.assert_called_once_with(False)
         self.mock_dim_presenters[x_button_to_press].disable_dimension.assert_called_once()
+
+        # Check that the other buttons have been released for the other dimensions
+        for dim in self.fake_dict["twodims"].data.dims:
+
+            if dim == x_button_to_press:
+                continue
+
+            self.mock_dim_presenters[dim].enable_dimension.assert_called_once()
 
     def test_default_two_button_press(self):
 
@@ -453,7 +462,6 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.x_button_press('z', True)
 
         self.mock_dim_presenters['y'].enable_dimension.assert_called_once()
-        self.mock_dim_presenters['y'].set_x_state.assert_called_once_with(False)
 
         self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
 
@@ -508,8 +516,7 @@ class StackPresenterTest(unittest.TestCase):
         # Send the instruction to check the Y button for dimension 'y'
         stack_pres.x_button_press('y', True)
 
-        self.mock_dim_presenters['z'].enable_dimension.assert_called_once()
-        self.mock_dim_presenters['z'].set_x_state.assert_called_once_with(False)
+        self.mock_dim_presenters['z'].enable_dimension.assert_called()
 
         self.assertEquals(self.mock_dim_presenters['y'].disable_dimension.call_count, 2)
 

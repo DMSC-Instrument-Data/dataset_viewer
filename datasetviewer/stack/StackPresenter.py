@@ -69,7 +69,10 @@ class StackPresenter(StackPresenterInterface):
         elif n_dims == 2:
 
             self._dim_presenters[first_key][first_dataset.dims[0]].set_x_state(True)
+            self._dim_presenters[first_key][first_dataset.dims[0]].set_y_state(False)
             self._dim_presenters[first_key][first_dataset.dims[0]].disable_dimension()
+
+            self._dim_presenters[first_key][first_dataset.dims[1]].enable_dimension()
 
         else:
 
@@ -78,6 +81,13 @@ class StackPresenter(StackPresenterInterface):
 
             self._dim_presenters[first_key][first_dataset.dims[1]].set_y_state(True)
             self._dim_presenters[first_key][first_dataset.dims[1]].disable_dimension()
+
+        for dim_name in self._dim_presenters[first_key].keys():
+
+            if dim_name in [first_dataset.dims[0], first_dataset.dims[1]]:
+                continue
+
+            self._dim_presenters[first_key][dim_name].enable_dimension()
 
     def change_stack_face(self, key):
 
@@ -98,7 +108,6 @@ class StackPresenter(StackPresenterInterface):
         previous_x_button = previous_x_button.pop()
 
         self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
-        self._dim_presenters[self._current_face][previous_x_button].set_x_state(False)
 
         self._dim_presenters[self._current_face][dim_name].disable_dimension()
 
@@ -155,7 +164,6 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[self._current_face][dim_name].disable_dimension()
 
             self._dim_presenters[self._current_face][previous_y_button].enable_dimension()
-            self._dim_presenters[self._current_face][previous_y_button].set_y_state(False)
 
             self._master.create_twodim_plot(self._current_face,
                                             dims_with_x_pressed.pop(),

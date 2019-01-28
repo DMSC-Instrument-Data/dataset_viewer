@@ -73,6 +73,8 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.enable_slider()
         self._view.enable_stepper()
+        self._view.set_x_state(False)
+        self._view.set_y_state(False)
         self._enabled = True
 
     def disable_dimension(self):
