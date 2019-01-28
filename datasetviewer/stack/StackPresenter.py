@@ -89,12 +89,14 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_pressed = self._dims_with_x_pressed()
         dims_with_y_pressed = self._dims_with_y_pressed()
 
+        if len(dims_with_x_pressed) > 2:
+            raise ValueError("Error: Too many X buttons pressed: " + str(dims_with_x_pressed))
+
         num_dims_with_y_pressed = len(dims_with_y_pressed)
 
         previous_x_button = dims_with_x_pressed - set(dim_name)
         previous_x_button = previous_x_button.pop()
 
-        print(previous_x_button)
         self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
         self._dim_presenters[self._current_face][previous_x_button].set_x_state(False)
 
@@ -106,16 +108,15 @@ class StackPresenter(StackPresenterInterface):
                                             dim_name,
                                             self._create_slice_dictionary())
 
-            return
-
-        if num_dims_with_y_pressed == 1:
+        elif num_dims_with_y_pressed == 1:
 
             self._master.create_twodim_plot(self._current_face,
                                             dim_name,
                                             dims_with_y_pressed.pop(),
                                             self._create_slice_dictionary())
 
-            return
+        else:
+            raise ValueError("Error: Too many Y buttons pressed: " + str(num_dims_with_y_pressed))
 
     def y_button_press(self, dim_name, state):
 
@@ -123,6 +124,9 @@ class StackPresenter(StackPresenterInterface):
         dims_with_y_pressed = self._dims_with_y_pressed()
 
         num_dims_with_y_pressed = len(dims_with_y_pressed)
+
+        if len(dims_with_x_pressed) > 1:
+            raise ValueError("Error: Too many X buttons pressed: " + str(dims_with_x_pressed))
 
         if num_dims_with_y_pressed == 0:
 
@@ -132,9 +136,7 @@ class StackPresenter(StackPresenterInterface):
                                             dims_with_x_pressed.pop(),
                                             self._create_slice_dictionary())
 
-            return
-
-        if num_dims_with_y_pressed == 1:
+        elif num_dims_with_y_pressed == 1:
 
             self._dim_presenters[self._current_face][dim_name].disable_dimension()
 
@@ -145,7 +147,7 @@ class StackPresenter(StackPresenterInterface):
 
             return
 
-        if num_dims_with_y_pressed == 2:
+        elif num_dims_with_y_pressed == 2:
 
             previous_y_button = dims_with_y_pressed - set(dim_name)
             previous_y_button = previous_y_button.pop()
@@ -160,7 +162,8 @@ class StackPresenter(StackPresenterInterface):
                                             dim_name,
                                             self._create_slice_dictionary())
 
-            return
+        else:
+            raise ValueError("Error: Too many Y buttons pressed: " + str(num_dims_with_y_pressed))
 
     def slice_change(self):
         pass

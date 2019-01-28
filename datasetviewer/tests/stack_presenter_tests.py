@@ -517,3 +517,47 @@ class StackPresenterTest(unittest.TestCase):
                                                                             'y',
                                                                             'x',
                                                                             slice)
+
+    def test_x_too_buttons_pressed_throws(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # Make the DimensionPresenters report that every Y button has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=True)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        with self.assertRaises(Exception):
+            stack_pres.x_button_press('x', True)
+
+        # Make the DimensionPresenters report that every X button has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=True)
+
+        with self.assertRaises(Exception):
+            stack_pres.x_button_press('x', True)
+
+    def test_y_too_many_buttons_pressed_throws(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # Make the DimensionPresenters report that every Y button has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=False)
+            p.get_y_state = mock.MagicMock(return_value=True)
+
+        with self.assertRaises(Exception):
+            stack_pres.y_button_press('x', True)
+
+        # Make the DimensionPresenters report that every X button has been pressed
+        for p in self.mock_dim_presenters.values():
+            p.get_x_state = mock.MagicMock(return_value=True)
+            p.get_y_state = mock.MagicMock(return_value=False)
+
+        with self.assertRaises(Exception):
+            stack_pres.y_button_press('x', True)
