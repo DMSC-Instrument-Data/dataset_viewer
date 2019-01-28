@@ -103,7 +103,7 @@ class StackPresenter(StackPresenterInterface):
         # Set the current 'face' of the Stack to correspond with the first element in the dataset
         self.change_stack_face(first_key)
 
-        # Call the function that manages the key pressed and widget visibility for the default plot
+        # Call the function that manages the key checked and widget visibility for the default plot
         self.create_default_button_press(first_key)
 
     def create_default_button_press(self, key):
@@ -112,7 +112,7 @@ class StackPresenter(StackPresenterInterface):
         Create the default button-configuration for the starting plot upon loading data or changing the dictionary
         element in the PreviewView. For 1D data this does nothing. For 2D data this selects the first dimension as the X
         axis and creates a 1D plot. For data with 3+ dimensions this selects the first dimension as the X axis, the
-        second dimension as the Y axis, and creates a 2D plot. The sliders/steppers/buttons are enabled or disabled
+        second dimension as the Y axis, and creates a 2D plot. The sliders/steppers are enabled or disabled
         accordingly.
 
         """
@@ -231,7 +231,7 @@ class StackPresenter(StackPresenterInterface):
         """
 
         Manage the plot change when the state of a Y button changes. This may involve releasing a previous Y button.
-        Having zero Y buttons pressed is permitted as this leads to the creation of a 1D plot.
+        Having zero Y buttons checked is permitted as this leads to the creation of a 1D plot.
 
         Args:
             recent_y_button (str): The name of the dimension for the Y button that had its state change.
@@ -239,49 +239,49 @@ class StackPresenter(StackPresenterInterface):
                 button may be unselected to allow the user to switch between 2D plot and 1D plots.
 
         Raises:
-            ValueError: If an unexpected number of X or Y buttons have been pressed. Ideally this will be prevented from
+            ValueError: If an unexpected number of X or Y buttons have been checked. Ideally this will be prevented from
                 happening in the DimensionPresenter.
 
         """
 
-        dims_with_x_pressed = self._dims_with_x_checked()
-        dims_with_y_pressed = self._dims_with_y_checked()
+        dims_with_x_checked = self._dims_with_x_checked()
+        dims_with_y_checked = self._dims_with_y_checked()
 
-        num_dims_with_y_pressed = len(dims_with_y_pressed)
+        num_dims_with_y_checked = len(dims_with_y_checked)
 
         # Raise an Exception if the number of X buttons checked has any value other than 1
-        if len(dims_with_x_pressed) != 1:
-            raise ValueError("Error: Too many or too few X buttons pressed: " + str(dims_with_x_pressed))
+        if len(dims_with_x_checked) != 1:
+            raise ValueError("Error: Too many or too few X buttons checked: " + str(dims_with_x_checked))
 
         # No Y buttons checked - Create a 1D plot
-        if num_dims_with_y_pressed == 0:
+        if num_dims_with_y_checked == 0:
 
             # Release the recent Y button as this state change indicates that the button was unchecked
             self._dim_presenters[self._current_face][recent_y_button].enable_dimension()
 
             self._master.create_onedim_plot(self._current_face,
-                                            dims_with_x_pressed.pop(),
+                                            dims_with_x_checked.pop(),
                                             self._create_slice_dictionary())
 
         # One Y button checked - Go from a 1D to a 2D plot. No need to release previous Y button.
-        elif num_dims_with_y_pressed == 1:
+        elif num_dims_with_y_checked == 1:
 
             # Disable the Y button as this state change indicates the button was checked
             self._dim_presenters[self._current_face][recent_y_button].disable_dimension()
 
             self._master.create_twodim_plot(self._current_face,
-                                            dims_with_x_pressed.pop(),
+                                            dims_with_x_checked.pop(),
                                             recent_y_button,
                                             self._create_slice_dictionary())
 
         # Two Y buttons checked - Change the 2D plot. Must release previous Y button.
-        elif num_dims_with_y_pressed == 2:
+        elif num_dims_with_y_checked == 2:
 
             '''
             Determine the name of the previous Y button. This is found by taking the set of all Y buttons that have been
             checked minus a set containing only the latest Y button to be checked.
             '''
-            previous_y_button = dims_with_y_pressed - set(recent_y_button)
+            previous_y_button = dims_with_y_checked - set(recent_y_button)
             previous_y_button = previous_y_button.pop()
 
             # Disable the DimensionView elements for the most recent Y button to be checked
@@ -291,13 +291,13 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[self._current_face][previous_y_button].enable_dimension()
 
             self._master.create_twodim_plot(self._current_face,
-                                            dims_with_x_pressed.pop(),
+                                            dims_with_x_checked.pop(),
                                             recent_y_button,
                                             self._create_slice_dictionary())
 
-        # More than two Y buttons pressed - Raise an Exception
+        # More than two Y buttons checked - Raise an Exception
         else:
-            raise ValueError("Error: Too many Y buttons pressed: " + str(num_dims_with_y_pressed))
+            raise ValueError("Error: Too many Y buttons checked: " + str(num_dims_with_y_checked))
 
     def slice_change(self):
         """ Instruct the MainViewPresenter to draw a new plot when a slider/stepper value has been changed. """
