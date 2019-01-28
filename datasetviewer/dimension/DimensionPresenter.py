@@ -28,7 +28,7 @@ class DimensionPresenter(DimensionPresenterInterface):
                 self._view.set_x_state(not new_x_state)
 
             else:
-                self._stack_master.x_button_press(self._dim_name, new_x_state)
+                self._stack_master.x_button_change(self._dim_name, new_x_state)
 
         elif command == Command.YBUTTONPRESS:
 
@@ -38,7 +38,7 @@ class DimensionPresenter(DimensionPresenterInterface):
                 self._view.set_y_state(not new_y_state)
 
             else:
-                self._stack_master.y_button_press(self._dim_name, new_y_state)
+                self._stack_master.y_button_change(self._dim_name, new_y_state)
 
         elif command == Command.SLIDERCHANGE:
 

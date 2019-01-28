@@ -11,7 +11,7 @@ class StackPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def create_default_button_press(self):
+    def create_default_button_press(self, key):
         pass
 
     @abstractmethod
@@ -19,11 +19,11 @@ class StackPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def x_button_press(self, dim_name, state):
+    def x_button_change(self, dim_name, state):
         pass
 
     @abstractmethod
-    def y_button_press(self, dim_name, state):
+    def y_button_change(self, dim_name, state):
         pass
 
     @abstractmethod
@@ -31,11 +31,11 @@ class StackPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def _dims_with_x_pressed(self):
+    def _dims_with_x_checked(self):
         pass
 
     @abstractmethod
-    def _dims_with_y_pressed(self):
+    def _dims_with_y_checked(self):
         pass
 
     @abstractmethod

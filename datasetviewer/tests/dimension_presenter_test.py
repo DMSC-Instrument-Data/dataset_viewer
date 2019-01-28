@@ -36,7 +36,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.XBUTTONPRESS)
         self.mock_dim_view.get_x_state.assert_called_once()
-        self.mock_stack_pres.x_button_press.assert_called_once_with(self.fake_dim_name, fake_x_state)
+        self.mock_stack_pres.x_button_change.assert_called_once_with(self.fake_dim_name, fake_x_state)
 
     def test_notify_y_press_calls_stack(self):
 
@@ -49,7 +49,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.YBUTTONPRESS)
         self.mock_dim_view.get_y_state.assert_called_once()
-        self.mock_stack_pres.y_button_press.assert_called_once_with(self.fake_dim_name, fake_y_state)
+        self.mock_stack_pres.y_button_change.assert_called_once_with(self.fake_dim_name, fake_y_state)
 
     def test_notify_x_press_reverts_press(self):
 
@@ -62,7 +62,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.XBUTTONPRESS)
         self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
-        self.mock_stack_pres.x_button_press.assert_not_called()
+        self.mock_stack_pres.x_button_change.assert_not_called()
 
     def test_notify_y_press_reverts_press(self):
 
@@ -75,7 +75,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.YBUTTONPRESS)
         self.mock_dim_view.set_y_state.assert_called_once_with(not fake_y_state)
-        self.mock_stack_pres.y_button_press.assert_not_called()
+        self.mock_stack_pres.y_button_change.assert_not_called()
 
     def test_x_cannot_be_unchecked(self):
 
@@ -88,7 +88,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.notify(Command.XBUTTONPRESS)
         self.mock_dim_view.set_x_state.assert_called_once_with(not fake_x_state)
-        self.mock_stack_pres.x_button_press.assert_not_called()
+        self.mock_stack_pres.x_button_change.assert_not_called()
 
     def test_notify_slider_change(self):
 
