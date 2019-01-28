@@ -196,7 +196,7 @@ class StackPresenter(StackPresenterInterface):
         num_dims_with_y_checked = len(dims_with_y_checked)
 
         '''
-        Determine the name of the previous X button. This is found by taking the set of all X buttons that have been 
+        Determine the name of the previous X button. This is found by taking the set of all X buttons that have been
         checked minus a set containing only the latest X button to be checked.
         '''
         previous_x_button = dims_with_x_checked - set(recent_x_button)
@@ -278,7 +278,7 @@ class StackPresenter(StackPresenterInterface):
         elif num_dims_with_y_pressed == 2:
 
             '''
-            Determine the name of the previous Y button. This is found by taking the set of all Y buttons that have been 
+            Determine the name of the previous Y button. This is found by taking the set of all Y buttons that have been
             checked minus a set containing only the latest Y button to be checked.
             '''
             previous_y_button = dims_with_y_pressed - set(recent_y_button)
