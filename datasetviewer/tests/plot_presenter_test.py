@@ -4,7 +4,6 @@ import mock
 import xarray as xr
 import numpy as np
 
-from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
 from datasetviewer.plot.PlotPresenter import PlotPresenter
@@ -16,7 +15,6 @@ class PlotPresenterTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.mock_main_view = mock.create_autospec(MainViewInterface)
         self.mock_plot_view = mock.create_autospec(PlotViewInterface)
 
         self.mock_main_presenter = mock.create_autospec(MainViewPresenterInterface)
@@ -133,3 +131,19 @@ class PlotPresenterTest(unittest.TestCase):
 
         plot_pres.create_default_plot("onedim")
         self.mock_main_presenter.update_toolbar.assert_called_once()
+
+    def test_create_onedim_plot(self):
+
+        plot_pres = PlotPresenter(self.mock_plot_view)
+        plot_pres.register_master(self.mock_main_presenter)
+        plot_pres.set_dict(self.fake_dict)
+
+        fake_key = "threedims"
+        fake_x = 'x'
+        fake_slice = {'y': 2, 'z': 3}
+
+        plot_pres.create_onedim_plot(fake_key, fake_x, fake_slice)
+
+        arr = self.fake_dict[fake_key].data.isel(fake_slice)
+
+        arr.equals(self.mock_plot_view.plot_line.call_args[0][0])
