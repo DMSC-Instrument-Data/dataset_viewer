@@ -91,6 +91,9 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._stack_master = stack_master
 
+    def get_x_state(self):
+        pass
+
     def set_x_state(self, state):
         """
 
@@ -114,6 +117,9 @@ class DimensionPresenter(DimensionPresenterInterface):
         """
 
         self._view.set_y_state(state)
+
+    def get_y_state(self):
+        pass
 
     def enable_dimension(self):
         """

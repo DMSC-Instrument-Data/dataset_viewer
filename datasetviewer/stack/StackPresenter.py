@@ -298,7 +298,15 @@ class StackPresenter(StackPresenterInterface):
 
     def slice_change(self):
         """ Instruct the MainViewPresenter to draw a new plot when a slider/stepper value has been changed. """
-        pass
+
+        dims_with_x_checked = self._dims_with_x_checked()
+        dims_with_y_checked = self._dims_with_y_checked()
+
+        if len(dims_with_y_checked) == 0:
+
+            self._master.create_onedim_plot(self._current_face,
+                                            dims_with_x_checked.pop(),
+                                            self._create_slice_dictionary())
 
     def _dims_with_x_checked(self):
         """

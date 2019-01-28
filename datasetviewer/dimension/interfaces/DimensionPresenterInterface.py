@@ -11,7 +11,15 @@ class DimensionPresenterInterface(ABC):
         pass
 
     @abstractmethod
+    def get_x_state(self):
+        pass
+
+    @abstractmethod
     def set_x_state(self, state):
+        pass
+
+    @abstractmethod
+    def get_y_state(self):
         pass
 
     @abstractmethod

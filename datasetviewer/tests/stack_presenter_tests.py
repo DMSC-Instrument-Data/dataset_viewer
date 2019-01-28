@@ -600,3 +600,40 @@ class StackPresenterTest(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             stack_pres.y_button_change('x', True)
+
+    def test_slice_change_onedim_plot(self):
+        ''' Test that the correc functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # Make the DimensionPresenters report that the 'x' dimension is the chosen X button
+        self.mock_dim_presenters['x'].get_y_state = mock.MagicMock(return_value = True)
+        self.mock_dim_presenters['x'].get_y_state = mock.MagicMock(return_value=False)
+        self.mock_dim_presenters['x'].is_enabled = mock.MagicMock(return_value = False)
+
+        # Make the DimensionPresenters report that the 'y' and 'z'  dimension are enabled and have no checked buttons
+        self.mock_dim_presenters['y'].get_x_state = mock.MagicMock(return_value=False)
+        self.mock_dim_presenters['y'].get_y_state = mock.MagicMock(return_value=False)
+        self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value=True)
+        self.mock_dim_presenters['z'].get_x_state = mock.MagicMock(return_value=False)
+        self.mock_dim_presenters['z'].get_y_state = mock.MagicMock(return_value=False)
+        self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value=True)
+
+        # Also provide fake slider values for the mock DimensionPresenters that have no buttons pressed
+        self.mock_dim_presenters['y'].get_slider_value = mock.MagicMock(return_value = 2)
+        self.mock_dim_presenters['z'].get_slider_value = mock.MagicMock(return_value = 11)
+
+        # Generate the expected dictionary for this slice
+        slice = {'y': 2, 'z': 11}
+
+        '''
+        Call the slice change function with the current DimensionPresenter setup. This should cause the StackPresenter
+        to inform the MainPresenter to generate a 1D plot as only a single X button has been selected.
+        '''
+        stack_pres.slice_change()
+
+        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
+                                                                            'x',
+                                                                            slice)
