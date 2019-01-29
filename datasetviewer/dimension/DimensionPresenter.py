@@ -190,7 +190,8 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def get_slider_value(self):
         """
-        Obtain the current slider value on the DimensionView (should be in sync with stepper value).
+        Obtain the current slider value on the DimensionView. This should be in sync with the stepper, so there is no
+        equivalent method for finding the stepper value.
 
         Returns:
             int: The current value of the slider (and stepper).

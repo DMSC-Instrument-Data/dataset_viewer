@@ -66,10 +66,7 @@ class PlotPresenter(PlotPresenterInterface):
             self._view.label_x_axis(data.dims[0])
             self._view.label_y_axis(data.dims[1])
 
-        self._draw_plot()
-
-        # Update the toolbar so that it returns to this plot when the "Home" button is pressed
-        self._main_presenter.update_toolbar()
+        self._update_plot()
 
     def _clear_plot(self):
         """ Erases the previous plot and plot elements if they exist. """
@@ -98,9 +95,18 @@ class PlotPresenter(PlotPresenterInterface):
         except Exception:
             pass
 
-    def _draw_plot(self):
-        """ Redraw the plot in the view after an update has occurred."""
+    def _update_plot(self):
+        """
+            Redraw the plot in the view after an update has occurred.
+
+            Note:
+                This function must be called every time new data has been plotted or the scale is changed. If it isn't
+                called then the previous plot will remain visible and the "Home" button on the toolbar won't work
+                correctly.
+        """
+
         self._view.draw_plot()
+        self._main_presenter.update_toolbar()
 
     def register_master(self, master):
         """
@@ -119,20 +125,43 @@ class PlotPresenter(PlotPresenterInterface):
         master.subscribe_plot_presenter(self)
 
     def create_onedim_plot(self, key, x_dim, slice):
+        """
+
+        Create a 1D plot by using the input parameters.
+
+        Args:
+            key (str): The key for the dataset to be plotted.
+            x_dim (str): The dimension that should be used for the x-axis.
+            slice (dict): A dictionary of name-stepper value pairs indicating how the data array should be sliced.
+
+        """
 
         self._clear_plot()
         data = self._dict[key].data
         self._view.plot_line(data.isel(slice))
         self._view.label_x_axis(x_dim)
-        self._draw_plot()
-        self._main_presenter.update_toolbar()
+
+        # Update plot and toolbar
+        self._update_plot()
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
+        """
+
+        Create a 2D plot by using the input parameters.
+
+        Args:
+            key (str): The key for the dataset to be plotted.
+            x_dim (str): The name of the dimension that should be used for the x-axis.
+            y_dim (str): The name of the dimension that should be used for the y-axis.
+            slice (dict): A dictionary of name-stepper value pairs indicating how the data array should be sliced.
+
+        """
 
         self._clear_plot()
         data = self._dict[key].data
         self._view.plot_image(data.isel(slice).transpose(y_dim, x_dim))
         self._view.label_x_axis(x_dim)
         self._view.label_y_axis(y_dim)
-        self._draw_plot()
-        self._main_presenter.update_toolbar()
+
+        # Update plot and toolbar
+        self._update_plot()

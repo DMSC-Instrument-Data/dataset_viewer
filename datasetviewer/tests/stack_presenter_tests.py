@@ -61,7 +61,7 @@ class StackPresenterTest(unittest.TestCase):
                     self.mock_dim_widgets[data.dims[i]].get_presenter = mock.MagicMock(return_value = mock_dim_presenter)
 
         # Instruct the mock DimensionViewFactory to return the mock widgets
-        self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = lambda name, shape: self.mock_dim_widgets[name])
+        self.mock_dim_fact.create_widgets = mock.MagicMock(side_effect = lambda name, shape: self.mock_dim_widgets[name])
         self.mock_stack_view.create_stack_element = mock.MagicMock(side_effect = [i for i in range(len(self.fake_dict.keys()))])
         self.mock_stack_view.count = mock.MagicMock(return_value = len(self.fake_dict.keys()))
 
@@ -114,8 +114,8 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.set_dict(self.fake_dict)
 
         # Check that the DimensionViewFactory received the expected calls and the expected number of calls
-        self.mock_dim_fact.create_widget.assert_has_calls(expected_factory_calls)
-        self.assertEqual(self.mock_dim_fact.create_widget.call_count, self.expected_factory_call_count)
+        self.mock_dim_fact.create_widgets.assert_has_calls(expected_factory_calls)
+        self.assertEqual(self.mock_dim_fact.create_widgets.call_count, self.expected_factory_call_count)
 
     def test_get_dim_presenter(self):
         ''' Test that a presenter is retrieved from all of the mock widgets that are created by the
@@ -633,7 +633,7 @@ class StackPresenterTest(unittest.TestCase):
                                                                             'x',
                                                                             slice)
     def test_slice_change_twodim_plot(self):
-        ''' Test that the correc functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
+        ''' Test that the correct functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)

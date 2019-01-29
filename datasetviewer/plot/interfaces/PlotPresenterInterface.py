@@ -15,7 +15,7 @@ class PlotPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def _draw_plot(self):
+    def _update_plot(self):
         pass
 
     @abstractmethod

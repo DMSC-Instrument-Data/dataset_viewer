@@ -92,7 +92,7 @@ class StackPresenter(StackPresenterInterface):
                 for i in range(len(data.dims)):
 
                     # Create a widget for every dimension in the dataset
-                    w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
+                    w = self._dim_fact.create_widgets(data.dims[i], data.shape[i])
 
                     # Obtain the presenter for the widget
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
@@ -100,7 +100,7 @@ class StackPresenter(StackPresenterInterface):
                     # Store the presenter in a dictionary
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
-                    # Place the widget in the Stack
+                    # Place the widgets in the StackView's GridLayout
                     for j, widget in enumerate(w.get_widgets()):
                         self._view.add_dimension_widget(idx, i, j, widget)
 
@@ -117,6 +117,9 @@ class StackPresenter(StackPresenterInterface):
         axis and creates a 1D plot. For data with 3+ dimensions this selects the first dimension as the X axis, the
         second dimension as the Y axis, and creates a 2D plot. The sliders/steppers are enabled or disabled
         accordingly.
+
+        Args:
+            key (str): The key of the dataset for which the default plot will be generated.
 
         """
 
@@ -315,7 +318,7 @@ class StackPresenter(StackPresenterInterface):
                                             dims_with_x_checked.pop(),
                                             self._create_slice_dictionary())
 
-        # Two Y checked - Create a 2D plo
+        # Two Y checked - Create a 2D plot
         else:
 
             self._master.create_twodim_plot(self._current_face,
@@ -356,7 +359,7 @@ class StackPresenter(StackPresenterInterface):
 
         return {dimname : self._dim_presenters[self._current_face][dimname].get_slider_value()
                 for dimname in self._dim_presenters[self._current_face].keys()
-                if self._dim_presenters[self._current_face][dimname].is_enabled() }
+                if self._dim_presenters[self._current_face][dimname].is_enabled()}
 
     def _clear_stack(self):
         """ Clear any previous widgets on the StackView whenever a new file has been loaded. """
