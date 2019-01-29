@@ -13,7 +13,7 @@ class StackViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def add_dimension_view(self, idx, dim_view):
+    def add_dimension_widget(self, idx, x, y, widget):
         pass
 
     @abstractmethod

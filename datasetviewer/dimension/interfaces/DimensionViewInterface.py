@@ -59,3 +59,7 @@ class DimensionViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def disable_stepper(self):
         pass
+
+    @abstractmethod
+    def get_widgets(self):
+        pass

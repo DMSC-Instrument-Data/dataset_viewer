@@ -91,7 +91,7 @@ class StackPresenter(StackPresenterInterface):
 
                 for i in range(len(data.dims)):
 
-                    # Create a widget for ever dimension in the dataset
+                    # Create a widget for every dimension in the dataset
                     w = self._dim_fact.create_widget(data.dims[i], data.shape[i])
 
                     # Obtain the presenter for the widget
@@ -101,7 +101,8 @@ class StackPresenter(StackPresenterInterface):
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
                     # Place the widget in the Stack
-                    self._view.add_dimension_view(idx, w)
+                    for j, widget in enumerate(w.get_widgets()):
+                        self._view.add_dimension_widget(idx, i, j, widget)
 
         first_key = list(dict.keys())[0]
 

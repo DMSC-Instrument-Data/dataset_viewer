@@ -7,4 +7,4 @@ class DimensionViewFactory(DimensionViewFactoryInterface):
         self.parent = parent
 
     def create_widget(self, dim_name, dim_size):
-        return DimensionWidget(dim_name, dim_size, self.parent)
+        return DimensionWidget(dim_name, dim_size)

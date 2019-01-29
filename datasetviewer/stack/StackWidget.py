@@ -1,6 +1,6 @@
 from datasetviewer.stack.interfaces.StackViewInterface import StackViewInterface
 from datasetviewer.stack.StackPresenter import StackPresenter
-from PyQt5.QtWidgets import QStackedWidget, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QStackedWidget, QWidget, QGridLayout
 
 class StackWidget(QStackedWidget, StackViewInterface):
 
@@ -10,18 +10,20 @@ class StackWidget(QStackedWidget, StackViewInterface):
 
         self._presenter = StackPresenter(self, dim_fact)
 
+        self.setMinimumHeight(300)
+
     def create_stack_element(self):
 
-        hbox = QWidget()
-        layout = QVBoxLayout()
-        hbox.setLayout(layout)
-        return self.addWidget(hbox)
+        grid = QWidget()
+        layout = QGridLayout()
+        grid.setLayout(layout)
+        return self.addWidget(grid)
 
-    def add_dimension_view(self, idx, dim_view):
+    def add_dimension_widget(self, idx, x, y, widget):
 
-        hbox = self.widget(idx)
-        layout = hbox.layout()
-        layout.addWidget(dim_view)
+        grid = self.widget(idx)
+        layout = grid.layout()
+        layout.addWidget(widget, x, y)
 
     def change_stack_face(self, idx):
         self.setCurrentIndex(idx)

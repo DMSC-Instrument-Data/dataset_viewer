@@ -1,19 +1,15 @@
 from datasetviewer.dimension.interfaces.DimensionViewInterface import DimensionViewInterface
 from datasetviewer.dimension.DimensionPresenter import DimensionPresenter
 from datasetviewer.dimension.Command import Command
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QPushButton, QSlider, QSpinBox
+from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox
 from PyQt5.QtCore import Qt
 
-class DimensionWidget(QWidget, DimensionViewInterface):
+class DimensionWidget(DimensionViewInterface):
 
-    def __init__(self, dim_name, dim_size, parent = None):
-
-        QWidget.__init__(self, parent)
+    def __init__(self, dim_name, dim_size):
 
         self.dim_name = dim_name
         self.dim_size = dim_size
-
-        layout = QHBoxLayout()
 
         self._presenter = DimensionPresenter(self, dim_name)
 
@@ -44,14 +40,6 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         self.y_button.clicked.connect(lambda: self._presenter.notify(Command.YBUTTONCHANGE))
         self.slider.valueChanged.connect(lambda: self._presenter.notify(Command.SLIDERCHANGE))
         self.stepper.valueChanged.connect(lambda: self._presenter.notify(Command.STEPPERCHANGE))
-
-        # Construct layout
-        layout.addWidget(self.label)
-        layout.addWidget(self.x_button)
-        layout.addWidget(self.y_button)
-        layout.addWidget(self.slider)
-        layout.addWidget(self.stepper)
-        self.setLayout(layout)
 
     def get_x_state(self):
         return self.x_button.isChecked()
@@ -91,3 +79,6 @@ class DimensionWidget(QWidget, DimensionViewInterface):
 
     def disable_stepper(self):
         self.stepper.setVisible(False)
+
+    def get_widgets(self):
+        return [self.label, self.x_button, self.y_button, self.slider, self.stepper]
