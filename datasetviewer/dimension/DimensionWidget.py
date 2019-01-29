@@ -68,8 +68,14 @@ class DimensionWidget(QWidget, DimensionViewInterface):
     def get_slider_value(self):
         return self.slider.value()
 
+    def set_slider_value(self, val):
+        self.slider.setValue(val)
+
     def get_stepper_value(self):
         return self.stepper.value()
+
+    def set_stepper_value(self, val):
+        self.stepper.setValue(val)
 
     def get_presenter(self):
         return self._presenter

@@ -42,6 +42,7 @@ class StackPresenter(StackPresenterInterface):
         self._master = None
         self._dim_presenters = {}
         self._current_face = None
+        self._stack_idx = {}
 
     def register_master(self, master):
         """
@@ -72,12 +73,13 @@ class StackPresenter(StackPresenterInterface):
         self._dict = dict
 
         # Clear the DimensionViews that were on the Stack
-        self._view.clear_stack()
+        self._clear_stack()
 
         for key in dict.keys():
 
             # Create a new Stack element for every dataset in the dictionary
-            self._view.create_stack_element(key)
+            idx = self._view.create_stack_element()
+            self._stack_idx[key] = idx
             self._dim_presenters[key] = {}
             data = dict[key].data
 
@@ -96,7 +98,7 @@ class StackPresenter(StackPresenterInterface):
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
                     # Place the widget in the Stack
-                    self._view.add_dimension_view(key, w)
+                    self._view.add_dimension_view(idx, w)
 
         first_key = list(dict.keys())[0]
 
@@ -159,7 +161,7 @@ class StackPresenter(StackPresenterInterface):
 
         """
 
-        self._view.change_stack_face(key)
+        self._view.change_stack_face(self._stack_idx[key])
         self._current_face = key
         self.create_default_button_press(key)
 
@@ -349,3 +351,8 @@ class StackPresenter(StackPresenterInterface):
         return {dimname : self._dim_presenters[self._current_face][dimname].get_slider_value()
                 for dimname in self._dim_presenters[self._current_face].keys()
                 if self._dim_presenters[self._current_face][dimname].is_enabled() }
+
+    def _clear_stack(self):
+
+        for idx in range(self._view.count() - 1, -1, -1):
+            self._view.delete_widget(idx)

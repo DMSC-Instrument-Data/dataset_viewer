@@ -36,13 +36,17 @@ class StackPresenterTest(unittest.TestCase):
         above dictionary.
         '''
         self.expected_factory_call_count = 0
+        stack_counter = 0
 
         self.mock_dim_widgets = DataSet()
         self.mock_dim_presenters = DataSet()
+        self.stack_idx = {}
 
         for key in self.fake_dict.keys():
 
             data = self.fake_dict[key].data
+            self.stack_idx[key] = stack_counter
+            stack_counter += 1
 
             if len(data.dims) > 1:
 
@@ -58,6 +62,8 @@ class StackPresenterTest(unittest.TestCase):
 
         # Instruct the mock DimensionViewFactory to return the mock widgets
         self.mock_dim_fact.create_widget = mock.MagicMock(side_effect = lambda name, shape: self.mock_dim_widgets[name])
+        self.mock_stack_view.create_stack_element = mock.MagicMock(side_effect = [i for i in range(len(self.fake_dict.keys()))])
+        self.mock_stack_view.count = mock.MagicMock(return_value = len(self.fake_dict.keys()))
 
     def test_presenter_throws_if_args_none(self):
         ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
@@ -76,14 +82,6 @@ class StackPresenterTest(unittest.TestCase):
 
         self.mock_main_presenter.subscribe_stack_presenter.assert_called_once_with(stack_pres)
 
-    def test_clear_stack(self):
-        ''' Test that the stack is cleared whenever it received new data. '''
-
-        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
-        stack_pres.set_dict(self.fake_dict)
-
-        self.mock_stack_view.clear_stack.assert_called_once()
-
     def test_correct_stacks_created(self):
         ''' Test that the number of stacks created upon receiving new data matches the number of elements in the data
         dictionary. '''
@@ -91,9 +89,6 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 
-        expected_calls = [mock.call(key) for key in self.fake_dict.keys()]
-
-        self.mock_stack_view.create_stack_element.assert_has_calls(expected_calls)
         self.assertEqual(self.mock_stack_view.create_stack_element.call_count, len(self.fake_dict))
 
     def test_correct_dims_created(self):
@@ -148,7 +143,7 @@ class StackPresenterTest(unittest.TestCase):
 
             if len(fake_data.dims) > 1:
                 for i in range(len(fake_data.dims)):
-                    mock_add_dims_calls.append(mock.call(key,self.mock_dim_widgets[fake_data.dims[i]]))
+                    mock_add_dims_calls.append(mock.call(self.stack_idx[key],self.mock_dim_widgets[fake_data.dims[i]]))
                     mock_dim_view_idx += 1
 
         self.mock_stack_view.add_dimension_view.assert_has_calls(mock_add_dims_calls)
@@ -218,7 +213,7 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
 
-        self.mock_stack_view.change_stack_face.assert_called_once_with(self.first_key)
+        self.mock_stack_view.change_stack_face.assert_called_once_with(self.stack_idx[self.first_key])
 
     def test_call_to_register_master(self):
         ''' Test that the DimensionPresenters are assigned the StackPresenter as master after their creation. '''
@@ -673,3 +668,21 @@ class StackPresenterTest(unittest.TestCase):
                                                                             'x',
                                                                             'y',
                                                                             slice)
+
+    def clear_stack_test(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        self.mock_stack_view.reset_mock()
+
+        stack_pres._clear_stack()
+
+        stack_idxs = [3, 2, 1, 0]
+        clear_calls = []
+
+        for idx in stack_idxs:
+            clear_calls.append(mock.call(idx))
+
+        self.mock_stack_view.delete_widget.assert_has_calls(clear_calls)

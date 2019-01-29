@@ -9,17 +9,17 @@ class Meta(ABCMeta, type(QtCore.QObject)):
 class StackViewInterface(with_metaclass(Meta)):
 
     @abstractmethod
-    def clear_stack(self):
+    def create_stack_element(self):
         pass
 
     @abstractmethod
-    def create_stack_element(self, key):
+    def add_dimension_view(self, idx, dim_view):
         pass
 
     @abstractmethod
-    def add_dimension_view(self, key, dim_view):
+    def change_stack_face(self, idx):
         pass
 
     @abstractmethod
-    def change_stack_face(self, key):
+    def delete_widget(self, idx):
         pass

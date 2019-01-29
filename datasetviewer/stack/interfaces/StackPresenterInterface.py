@@ -41,3 +41,7 @@ class StackPresenterInterface(ABC):
     @abstractmethod
     def _create_slice_dictionary(self):
         pass
+
+    @abstractmethod
+    def _clear_stack(self):
+        pass
