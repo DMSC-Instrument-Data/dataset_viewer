@@ -202,7 +202,7 @@ class StackPresenter(StackPresenterInterface):
         Determine the name of the previous X button. This is found by taking the set of all X buttons that have been
         checked minus a set containing only the latest X button to be checked.
         '''
-        previous_x_button = dims_with_x_checked - set([recent_x_button])
+        previous_x_button = dims_with_x_checked - {recent_x_button}
         previous_x_button = previous_x_button.pop()
 
         # Release the previous X button and enable its slider and stepper
@@ -211,7 +211,7 @@ class StackPresenter(StackPresenterInterface):
         # Disable the slider and stepper of the most recent X button to be checked
         self._dim_presenters[self._current_face][recent_x_button].disable_dimension()
 
-        # No Y buttons checked- Create a 1D plot
+        # No Y buttons checked - Create a 1D plot
         if num_dims_with_y_checked == 0:
 
             self._master.create_onedim_plot(self._current_face,
@@ -284,7 +284,7 @@ class StackPresenter(StackPresenterInterface):
             Determine the name of the previous Y button. This is found by taking the set of all Y buttons that have been
             checked minus a set containing only the latest Y button to be checked.
             '''
-            previous_y_button = dims_with_y_checked - set([recent_y_button])
+            previous_y_button = dims_with_y_checked - {recent_y_button}
             previous_y_button = previous_y_button.pop()
 
             # Disable the DimensionView elements for the most recent Y button to be checked
@@ -308,12 +308,14 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_checked = self._dims_with_x_checked()
         dims_with_y_checked = self._dims_with_y_checked()
 
+        # One Y button checked - Create a 1D plot
         if len(dims_with_y_checked) == 0:
 
             self._master.create_onedim_plot(self._current_face,
                                             dims_with_x_checked.pop(),
                                             self._create_slice_dictionary())
 
+        # Two Y checked - Create a 2D plo
         else:
 
             self._master.create_twodim_plot(self._current_face,
@@ -348,7 +350,7 @@ class StackPresenter(StackPresenterInterface):
         Find the slider values of the dimensions for which no buttons are checked.
 
         Returns:
-            dict: A dictionary consisting of elemenets with a dimension name as the dictionary key and the slider value
+            dict: A dictionary consisting of elements with a dimension name as the dictionary key and the slider value
                 as the dictionary value.
         """
 
@@ -357,6 +359,7 @@ class StackPresenter(StackPresenterInterface):
                 if self._dim_presenters[self._current_face][dimname].is_enabled() }
 
     def _clear_stack(self):
+        """ Clear any previous widgets on the StackView whenever a new file has been loaded. """
 
         for idx in range(self._view.count() - 1, -1, -1):
             self._view.delete_widget(idx)

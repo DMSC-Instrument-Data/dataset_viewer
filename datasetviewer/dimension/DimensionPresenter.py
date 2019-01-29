@@ -132,6 +132,16 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.set_x_state(state)
 
+    def get_y_state(self):
+        """ Determine if the Y button associated with this Presenter is checked or unchecked.
+
+        Returns:
+            bool: True if the button is checked and False if the button is unchecked.
+
+        """
+
+        return self._view.get_y_state()
+
     def set_y_state(self, state):
         """
 
@@ -144,19 +154,9 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.set_y_state(state)
 
-    def get_y_state(self):
-        """ Determine if the Y button associated with this Presenter is checked or unchecked.
-
-        Returns:
-            bool: True if the button is checked and False if the button is unchecked.
-
-        """
-
-        return self._view.get_y_state()
-
     def enable_dimension(self):
         """
-        Enable a dimension by making its slider and stepper useable, and by unchecking its X and Y buttons.
+        Enable a dimension by making its slider and stepper usable, and by unchecking its X and Y buttons.
         """
 
         self._view.enable_slider()

@@ -33,8 +33,9 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
     def register_master(self, master):
         """
 
-        Register the MainViewPresenter as the FileLoaderPresenter's master. Subscribing in the MainViewPresenter
-        isn't necessary as the MainViewPresenter doesn't send instructions to the FileLoaderPresenter.
+        Register the MainViewPresenter as the FileLoaderPresenter's master. The MainViewPresenter doesn't have a
+        `subscribe_file_loader_presenter` method as it doesn't send instructions to the FileLoaderPresenter, so it
+        doesn't need to store a reference to it.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
@@ -70,6 +71,7 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
                 dict = self._load_data(file_path)
                 self._main_presenter.set_dict(dict)
 
+            # Instruct the view to show a message if a valid filename was given but the file is invalid
             except (ValueError, OSError) as e:
                 self._view.show_reject_file_message(str(e))
 
