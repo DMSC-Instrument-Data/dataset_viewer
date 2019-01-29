@@ -125,6 +125,7 @@ class PlotPresenter(PlotPresenterInterface):
         self._view.plot_line(data.isel(slice))
         self._view.label_x_axis(x_dim)
         self._draw_plot()
+        self._main_presenter.update_toolbar()
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
 
@@ -134,3 +135,4 @@ class PlotPresenter(PlotPresenterInterface):
         self._view.label_x_axis(x_dim)
         self._view.label_y_axis(y_dim)
         self._draw_plot()
+        self._main_presenter.update_toolbar()

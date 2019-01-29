@@ -11,8 +11,8 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
     attempts to open this file and pass the data to the MainViewPresenter.
 
     Private Attributes:
-        _main_presenter (str): The MainViewPresenter object. This is set to None in the constructor and assigned with
-            the `register_master` method.
+        _main_presenter (MainViewPresenter): The MainViewPresenter object. This is set to None in the constructor and
+            assigned with the `register_master` method.
         _view (FileLoaderView): The FileLoaderView that this Presenter will manage.
 
     Raises:

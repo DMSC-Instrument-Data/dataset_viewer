@@ -3,6 +3,25 @@ from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresente
 from datasetviewer.dimension.Command import Command
 
 class DimensionPresenter(DimensionPresenterInterface):
+    """
+
+    Presenter for overseeing the behaviour of the X/Y buttons, slider, and stepper for a single dimension. Prevents
+    unchecking of an X button or having two buttons checked on the same dimension. Also makes sure that slider and
+    stepper are in sync. Answers to StackPresenter rather than MainViewPresenter when user interacts with the
+    DimensionView elements.
+
+    Private Attributes:
+        _view (DimensionView): The DimensionView object. Set in constructor.
+        _dim_name (str): The name of this dimension. Required when communicating with StackPresenter so that it knows
+            which dimension called it.
+        _stack_master (StackPresenter): The StackPresenter that controls all DimensionPresenters. Defaults to None.
+        _enabled (bool): Used to determine if a Dimension is enabled or not. When a button is successfully pressed on
+            a button then it becomes disabled and its slider and stepper become hidden.
+
+    Raises:
+        ValueError: If the `dim_view` or `dim_name` are None.
+
+    """
 
     def __init__(self, dim_view, dim_name):
 

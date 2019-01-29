@@ -139,6 +139,7 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.set_dict(self.fake_dict)
 
         self.mock_plot_view.reset_mock()
+        self.mock_main_presenter.reset_mock()
 
         fake_key = "threedims"
         fake_x = 'x'
@@ -151,6 +152,7 @@ class PlotPresenterTest(unittest.TestCase):
         self.assertTrue(arr.equals(self.mock_plot_view.plot_line.call_args[0][0]))
         self.mock_plot_view.label_x_axis.assert_called_once_with('x')
         self.mock_plot_view.draw_plot.assert_called_once()
+        self.mock_main_presenter.update_toolbar.assert_called_once()
 
     def test_create_twodim_plot(self):
 
@@ -159,6 +161,7 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.set_dict(self.fake_dict)
 
         self.mock_plot_view.reset_mock()
+        self.mock_main_presenter.reset_mock()
 
         fake_key = "threedims"
         fake_x = 'x'
@@ -173,3 +176,4 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.label_x_axis.assert_called_once_with('x')
         self.mock_plot_view.label_y_axis.assert_called_once_with('y')
         self.mock_plot_view.draw_plot.assert_called_once()
+        self.mock_main_presenter.update_toolbar.assert_called_once()
