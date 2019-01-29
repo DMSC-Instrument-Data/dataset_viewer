@@ -202,13 +202,13 @@ class StackPresenter(StackPresenterInterface):
         Determine the name of the previous X button. This is found by taking the set of all X buttons that have been
         checked minus a set containing only the latest X button to be checked.
         '''
-        previous_x_button = dims_with_x_checked - set(recent_x_button)
+        previous_x_button = dims_with_x_checked - set([recent_x_button])
         previous_x_button = previous_x_button.pop()
 
         # Release the previous X button and enable its slider and stepper
         self._dim_presenters[self._current_face][previous_x_button].enable_dimension()
 
-        # Disable the slider and stepper of the most recent X button to be checked.
+        # Disable the slider and stepper of the most recent X button to be checked
         self._dim_presenters[self._current_face][recent_x_button].disable_dimension()
 
         # No Y buttons checked- Create a 1D plot
@@ -284,7 +284,7 @@ class StackPresenter(StackPresenterInterface):
             Determine the name of the previous Y button. This is found by taking the set of all Y buttons that have been
             checked minus a set containing only the latest Y button to be checked.
             '''
-            previous_y_button = dims_with_y_checked - set(recent_y_button)
+            previous_y_button = dims_with_y_checked - set([recent_y_button])
             previous_y_button = previous_y_button.pop()
 
             # Disable the DimensionView elements for the most recent Y button to be checked

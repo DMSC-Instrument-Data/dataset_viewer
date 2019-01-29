@@ -69,16 +69,16 @@ class DimensionWidget(DimensionViewInterface):
         return self._presenter
 
     def enable_slider(self):
-        self.slider.setVisible(True)
+        self.slider.show()
 
     def enable_stepper(self):
-        self.stepper.setVisible(True)
+        self.stepper.show()
 
     def disable_slider(self):
-        self.slider.setVisible(False)
+        self.slider.hide()
 
     def disable_stepper(self):
-        self.stepper.setVisible(False)
+        self.stepper.hide()
 
     def get_widgets(self):
         return [self.label, self.x_button, self.y_button, self.slider, self.stepper]
