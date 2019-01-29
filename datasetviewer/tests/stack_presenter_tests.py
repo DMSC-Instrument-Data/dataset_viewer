@@ -686,3 +686,22 @@ class StackPresenterTest(unittest.TestCase):
             clear_calls.append(mock.call(idx))
 
         self.mock_stack_view.delete_widget.assert_has_calls(clear_calls)
+
+    def test_new_file_erases_previous_information(self):
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        new_dict = DataSet()
+        new_dict["twodims"] = self.fake_dict["twodims"]
+        new_dict["fourdims"] = self.fake_dict["fourdims"]
+
+        self.mock_stack_view.create_stack_element = mock.MagicMock()
+
+        stack_pres.set_dict(new_dict)
+
+        self.assertEquals(len(stack_pres._stack_idx),len(new_dict.keys()))
+        self.assertEquals(len(stack_pres._dim_presenters), len(new_dict.keys()))
+        self.assertEquals(len(stack_pres._dim_presenters["twodims"]), 2)
+        self.assertEquals(len(stack_pres._dim_presenters["fourdims"]), 4)
