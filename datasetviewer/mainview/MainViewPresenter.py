@@ -55,8 +55,8 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         self._dict = dict
         self._plot_presenter.set_dict(dict)
-        self._preview_presenter.set_dict(dict)
         self._stack_presenter.set_dict(dict)
+        self._preview_presenter.set_dict(dict)
 
     def subscribe_preview_presenter(self, prev):
         """Sets the preview_presenter attribute so that it can be controlled when a file has been loaded.
