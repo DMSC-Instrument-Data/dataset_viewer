@@ -107,9 +107,10 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[0])
         self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[1])
 
-    def test_draw_plot(self):
+    def test_update_plot(self):
         '''
-        Test that the presenter calls the PlotView's draw function after receiving new data.
+        Test that calling `_update_plot` in the PlotPresenter causes the PlotView to redraw the plot and causes the
+        MainPresenter to update the toolbar.
         '''
 
         self.mock_plot_view.draw_plot = mock.MagicMock()
@@ -118,21 +119,19 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
 
+        self.mock_plot_view.reset_mock()
+        self.mock_main_presenter.reset_mock()
+
+        plot_pres._update_plot()
+
         self.mock_plot_view.draw_plot.assert_called_once()
-
-    def test_new_data_updates_toolbar(self):
-        '''
-        Test that creating a new plot causes the toolbar to be updated.
-        '''
-
-        plot_pres = PlotPresenter(self.mock_plot_view)
-        plot_pres.register_master(self.mock_main_presenter)
-        plot_pres._dict = self.fake_dict
-
-        plot_pres.create_default_plot("onedim")
         self.mock_main_presenter.update_toolbar.assert_called_once()
 
     def test_create_onedim_plot(self):
+        '''
+        Test that calling the 1D plot function when given a dictionary key, a dimension, and a dictionary of slices
+        creates the expected array and passes it to the PlotView.
+        '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -141,20 +140,35 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.reset_mock()
         self.mock_main_presenter.reset_mock()
 
+        '''
+        Create fake parameters that correspond with a request to generate a 1D plot from the "threedims" dataset using
+        'x' as the x-axis and slider/stepper values of 2 and 3 for the remaining dimensions.
+        '''
         fake_key = "threedims"
         fake_x = 'x'
         fake_slice = {'y': 2, 'z': 3}
 
         plot_pres.create_onedim_plot(fake_key, fake_x, fake_slice)
 
+        # Generate the expected sliced array from these parameters
         arr = self.fake_dict[fake_key].data.isel(fake_slice)
 
+        '''
+        Check for equality between the array that has just been created and the argument sent to the PlotView. This is
+        done using xarray's built in equality function.
+        '''
         self.assertTrue(arr.equals(self.mock_plot_view.plot_line.call_args[0][0]))
-        self.mock_plot_view.label_x_axis.assert_called_once_with('x')
+
+        # Check that the axis label has changed and the relevant plot elements are updated
+        self.mock_plot_view.label_x_axis.assert_called_once_with(fake_x)
         self.mock_plot_view.draw_plot.assert_called_once()
         self.mock_main_presenter.update_toolbar.assert_called_once()
 
     def test_create_twodim_plot(self):
+        '''
+        Test that calling the 2D plot function when given a dictionary key, x and y dimensions, and a dictionary of
+        slices creates the expected array and passes it to the PlotView.
+        '''
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -163,6 +177,10 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.reset_mock()
         self.mock_main_presenter.reset_mock()
 
+        '''
+        Create fake parameters that correspond with a request to generate a 1D plot from the "threedims" dataset using
+        'x' as the x-axis, 'y' as the y-axis, and a slider/stepper value of 4 for the remaining dimension.
+        '''
         fake_key = "threedims"
         fake_x = 'x'
         fake_y = 'y'
@@ -170,10 +188,17 @@ class PlotPresenterTest(unittest.TestCase):
 
         plot_pres.create_twodim_plot(fake_key, fake_x, fake_y, fake_slice)
 
+        # Generate the expected sliced array from these parameters
         arr = self.fake_dict[fake_key].data.isel(fake_slice).transpose(fake_y, fake_x)
 
+        '''
+        Check for equality between the array that has just been created and the argument sent to the PlotView. This is
+        done using xarray's built in equality function.
+        '''
         self.assertTrue(arr.equals(self.mock_plot_view.plot_image.call_args[0][0]))
-        self.mock_plot_view.label_x_axis.assert_called_once_with('x')
-        self.mock_plot_view.label_y_axis.assert_called_once_with('y')
+
+        # Check that the x and y axes labels have been changed, and that the relevant Plot elements have been updated
+        self.mock_plot_view.label_x_axis.assert_called_once_with(fake_x)
+        self.mock_plot_view.label_y_axis.assert_called_once_with(fake_y)
         self.mock_plot_view.draw_plot.assert_called_once()
         self.mock_main_presenter.update_toolbar.assert_called_once()
