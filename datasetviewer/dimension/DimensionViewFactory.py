@@ -1,5 +1,5 @@
 from datasetviewer.dimension.interfaces.DimensionViewFactoryInterface import DimensionViewFactoryInterface
-from datasetviewer.dimension.DimensionWidget import DimensionWidget
+from datasetviewer.dimension.DimensionWidgets import DimensionWidgets
 
 class DimensionViewFactory(DimensionViewFactoryInterface):
 
@@ -7,4 +7,4 @@ class DimensionViewFactory(DimensionViewFactoryInterface):
         self.parent = parent
 
     def create_widget(self, dim_name, dim_size):
-        return DimensionWidget(dim_name, dim_size)
+        return DimensionWidgets(dim_name, dim_size)

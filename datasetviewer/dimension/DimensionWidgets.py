@@ -4,7 +4,7 @@ from datasetviewer.dimension.Command import Command
 from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox
 from PyQt5.QtCore import Qt
 
-class DimensionWidget(DimensionViewInterface):
+class DimensionWidgets(DimensionViewInterface):
 
     def __init__(self, dim_name, dim_size):
 

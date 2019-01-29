@@ -92,6 +92,13 @@ class DimensionPresenter(DimensionPresenterInterface):
         self._stack_master = stack_master
 
     def get_x_state(self):
+        """ Determine if the X button associated with this Presenter is checked or unchecked.
+
+        Returns:
+            bool: True if the button is checked and False if the button is unchecked.
+
+        """
+
         return self._view.get_x_state()
 
     def set_x_state(self, state):
@@ -119,6 +126,13 @@ class DimensionPresenter(DimensionPresenterInterface):
         self._view.set_y_state(state)
 
     def get_y_state(self):
+        """ Determine if the Y button associated with this Presenter is checked or unchecked.
+
+        Returns:
+            bool: True if the button is checked and False if the button is unchecked.
+
+        """
+
         return self._view.get_y_state()
 
     def enable_dimension(self):
