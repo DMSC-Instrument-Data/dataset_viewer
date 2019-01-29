@@ -75,6 +75,9 @@ class StackPresenter(StackPresenterInterface):
         # Clear the DimensionViews that were on the Stack
         self._clear_stack()
 
+        self._dim_presenters = {}
+        self._stack_idx = {}
+
         for key in dict.keys():
 
             # Create a new Stack element for every dataset in the dictionary
@@ -101,6 +104,8 @@ class StackPresenter(StackPresenterInterface):
                     self._view.add_dimension_view(idx, w)
 
         first_key = list(dict.keys())[0]
+
+        print(self._stack_idx)
 
         # Set the current 'face' of the Stack to correspond with the first element in the dataset
         self.change_stack_face(first_key)

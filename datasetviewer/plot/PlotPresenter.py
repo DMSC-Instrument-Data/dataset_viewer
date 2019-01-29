@@ -120,10 +120,17 @@ class PlotPresenter(PlotPresenterInterface):
 
     def create_onedim_plot(self, key, x_dim, slice):
 
+        self._clear_plot()
         data = self._dict[key].data
         self._view.plot_line(data.isel(slice))
+        self._view.label_x_axis(x_dim)
+        self._draw_plot()
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
 
+        self._clear_plot()
         data = self._dict[key].data
         self._view.plot_image(data.isel(slice).transpose(y_dim, x_dim))
+        self._view.label_x_axis(x_dim)
+        self._view.label_y_axis(y_dim)
+        self._draw_plot()

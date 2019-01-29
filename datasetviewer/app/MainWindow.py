@@ -1,6 +1,8 @@
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.fileloader.FileLoaderWidget import FileLoaderWidget
+from datasetviewer.stack.StackWidget import StackWidget
+from datasetviewer.dimension.DimensionViewFactory import DimensionViewFactory
 from datasetviewer.preview.PreviewWidget import PreviewWidget
 from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
 from datasetviewer.plot.PlotWidget import PlotWidget
@@ -28,7 +30,11 @@ class MainWindow(MainViewInterface, QMainWindow):
         self.toolbar = NavigationToolbar(plot_widget, self)
         self.addToolBar(self.toolbar)
 
-        MainViewPresenter(self, file_loader_presenter, preview_presenter, plot_presenter)
+        dim_fact = DimensionViewFactory(self)
+        stack_widget = StackWidget(dim_fact, self)
+        stack_presenter = stack_widget.get_presenter()
+
+        MainViewPresenter(self, file_loader_presenter, preview_presenter, plot_presenter, stack_presenter)
 
         # Action for exiting the program
         exitAct = QAction("Exit", self)
@@ -43,8 +49,9 @@ class MainWindow(MainViewInterface, QMainWindow):
         gridLayout = QGridLayout()
         centralWidget.setLayout(gridLayout)
 
-        gridLayout.addWidget(preview_widget, 0, 0)
-        gridLayout.addWidget(plot_widget, 0, 1)
+        gridLayout.addWidget(preview_widget, 0, 0, 2, 1)
+        gridLayout.addWidget(plot_widget, 0, 1, 1, 1)
+        gridLayout.addWidget(stack_widget, 1, 1, 1, 1)
 
         self.setWindowTitle("Dataset Viewer")
         self.show()

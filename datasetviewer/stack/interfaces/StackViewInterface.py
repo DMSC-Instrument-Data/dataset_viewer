@@ -23,3 +23,7 @@ class StackViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def delete_widget(self, idx):
         pass
+
+    @abstractmethod
+    def get_presenter(self):
+        pass
