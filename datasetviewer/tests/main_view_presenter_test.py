@@ -32,7 +32,7 @@ class MainViewPresenterTest(unittest.TestCase):
                                     self.mock_file_loader_presenter,
                                     self.mock_stack_presenter]
 
-        # Create a fake data dictionary
+        # Create a fake data dictionary that contains two datasets
         self.fake_dict = DataSet()
         self.fake_dict["good"] = Variable("good", xr.DataArray(np.random.rand(3, 4, 5), dims=['x', 'y', 'z']))
         self.fake_dict["valid"] = Variable("valid", xr.DataArray(np.random.rand(3), dims=['b']))
@@ -109,19 +109,32 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_main_view.update_toolbar.assert_called_once()
 
     def test_create_onedim_plot(self):
+        ''' Test that calling the `create_onedim_plot` method in the MainViewPresenter leads to a function of the same
+        name being called in the PlotPresenter.'''
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
-        main_view_presenter.create_onedim_plot("fakekey",'xdim',{})
+        fake_key = "fakekey"
+        fake_dim = 'xdim'
+        fake_dict = {}
 
-        self.mock_plot_presenter.create_onedim_plot.assert_called_once_with("fakekey", 'xdim', {})
+        main_view_presenter.create_onedim_plot(fake_key, fake_dim, fake_dict)
+
+        self.mock_plot_presenter.create_onedim_plot.assert_called_once_with(fake_key, fake_dim, fake_dict)
 
     def test_create_twodim_plot(self):
+        ''' Test that calling the `create_twodim_plot` method in the MainViewPresenter leads to a function of the same
+        name being called in the PlotPresenter.'''
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
 
-        main_view_presenter.create_twodim_plot("fakekey",'xdim', 'ydim', {})
+        fake_key = "fakekey"
+        fake_xdim = 'xdim'
+        fake_ydim = 'ydim'
+        fake_dict = {}
 
-        self.mock_plot_presenter.create_twodim_plot.assert_called_once_with("fakekey", 'xdim', 'ydim', {})
+        main_view_presenter.create_twodim_plot(fake_key, fake_xdim, fake_ydim, fake_dict)
+
+        self.mock_plot_presenter.create_twodim_plot.assert_called_once_with(fake_key, fake_xdim, fake_ydim, fake_dict)
