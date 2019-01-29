@@ -138,6 +138,8 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
 
+        self.mock_plot_view.reset_mock()
+
         fake_key = "threedims"
         fake_x = 'x'
         fake_slice = {'y': 2, 'z': 3}
@@ -147,12 +149,16 @@ class PlotPresenterTest(unittest.TestCase):
         arr = self.fake_dict[fake_key].data.isel(fake_slice)
 
         self.assertTrue(arr.equals(self.mock_plot_view.plot_line.call_args[0][0]))
+        self.mock_plot_view.label_x_axis.assert_called_once_with('x')
+        self.mock_plot_view.draw_plot.assert_called_once()
 
     def test_create_twodim_plot(self):
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
+
+        self.mock_plot_view.reset_mock()
 
         fake_key = "threedims"
         fake_x = 'x'
@@ -164,3 +170,6 @@ class PlotPresenterTest(unittest.TestCase):
         arr = self.fake_dict[fake_key].data.isel(fake_slice).transpose(fake_y, fake_x)
 
         self.assertTrue(arr.equals(self.mock_plot_view.plot_image.call_args[0][0]))
+        self.mock_plot_view.label_x_axis.assert_called_once_with('x')
+        self.mock_plot_view.label_y_axis.assert_called_once_with('y')
+        self.mock_plot_view.draw_plot.assert_called_once()

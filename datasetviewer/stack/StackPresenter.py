@@ -105,8 +105,6 @@ class StackPresenter(StackPresenterInterface):
 
         first_key = list(dict.keys())[0]
 
-        print(self._stack_idx)
-
         # Set the current 'face' of the Stack to correspond with the first element in the dataset
         self.change_stack_face(first_key)
 
