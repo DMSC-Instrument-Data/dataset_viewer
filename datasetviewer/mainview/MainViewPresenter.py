@@ -47,9 +47,7 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         Note:
             The PlotPresenter, StackPresenter, and PreviewPresenter must be registered with master before this method is
-            called. The StackPresenter needs to receive data before the PreviewPresenter, as the Preview automatically
-            makes a 'selection' after FileLoading which sends an instruction to the StackPresenter. If this takes place
-            before the StackPresenter has access to the data dictionary then it will result in a KeyError.
+            called.
 
         Args:
             dict (DataSet): The data dictionary.

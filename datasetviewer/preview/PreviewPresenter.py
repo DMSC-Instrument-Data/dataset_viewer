@@ -37,10 +37,13 @@ class PreviewPresenter(PreviewPresenterInterface):
         """
 
         self._dict = dict
+
+        self._block_signal(True)
         self._view.clear_preview()
         self._view.reset_selection()
         self._populate_preview_list()
         self._view.select_first_item()
+        self._block_signal(False)
 
     def register_master(self, master):
         """
@@ -120,3 +123,6 @@ class PreviewPresenter(PreviewPresenterInterface):
 
         else:
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
+
+    def _block_signal(self, bool):
+        self._view.block_signal(bool)

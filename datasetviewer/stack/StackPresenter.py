@@ -153,6 +153,7 @@ class StackPresenter(StackPresenterInterface):
             # Allow the second dimension to be used in sliding
             self._dim_presenters[key][dataset.dims[1]].enable_dimension()
 
+
         # Data has three or more dimensions - Press the first X button and the second Y button
         else:
 
@@ -166,6 +167,7 @@ class StackPresenter(StackPresenterInterface):
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:
+                self._dim_presenters[key][dim_name].reset_slice()
                 continue
 
             self._dim_presenters[key][dim_name].enable_dimension()

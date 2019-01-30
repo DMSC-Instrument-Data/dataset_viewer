@@ -25,3 +25,7 @@ class PreviewPresenterInterface(ABC):
     @abstractmethod
     def notify(self, command):
         pass
+
+    @abstractmethod
+    def _block_signal(self, bool):
+        pass

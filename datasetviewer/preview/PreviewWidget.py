@@ -16,7 +16,7 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         self.itemSelectionChanged.connect(self.record_selection)
 
         self.setMinimumWidth(200)
-        self.setMinimumHeight(600)
+        # self.setMinimumHeight(600)
 
     def reset_selection(self):
         self._selected_item = None
@@ -39,3 +39,6 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
     def select_first_item(self):
         self.setCurrentItem(self.item(0))
+
+    def block_signal(self, bool):
+        self.blockSignals(bool)

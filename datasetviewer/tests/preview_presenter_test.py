@@ -143,3 +143,11 @@ class PreviewPresenterTest(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             prev_presenter.notify(fake_enum.bad_command)
+
+    def test_set_dict_blocks_signal(self):
+
+        prev_presenter = PreviewPresenter(self.mock_preview_view)
+        prev_presenter.register_master(self.mock_master_presenter)
+
+        prev_presenter.set_dict(self.fake_data)
+        self.mock_preview_view.block_signal.assert_has_calls([mock.call(True), mock.call(False)])

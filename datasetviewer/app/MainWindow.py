@@ -50,8 +50,8 @@ class MainWindow(MainViewInterface, QMainWindow):
         centralWidget.setLayout(gridLayout)
 
         gridLayout.addWidget(preview_widget, 0, 0, 2, 1)
-        gridLayout.addWidget(plot_widget, 0, 1, 1, 1)
-        gridLayout.addWidget(stack_widget, 1, 1, 1, 1)
+        gridLayout.addWidget(plot_widget, 0, 1, 1, 2)
+        gridLayout.addWidget(stack_widget, 1, 1, 1, 2)
 
         self.setWindowTitle("Dataset Viewer")
         self.show()
