@@ -7,7 +7,8 @@ class StackPresenter(StackPresenterInterface):
 
     Args:
         stack_view (StackView): Instance of a StackView.
-        dim_fact (DimensionViewFactory): A DimensionViewFactory for creating the DimensionViews that populate the Stack.
+        dim_fact (DimensionViewFactory): A DimensionViewFactory for creating the Dimension widgets that populate the
+            Stack.
 
     Private Attributes:
         _view (StackView): StackView associated with this Presenter. Assigned during initialisation.
@@ -18,11 +19,13 @@ class StackPresenter(StackPresenterInterface):
         _master (MainViewPresenter): Central Presenter that managed interaction between this and other Presenters.
             Defaults to None. Assigned in `register_master` method.
         _dim_presenters (Dictionary): Dictionary for storing the DimensionViews for all of the Dimensions contained in
-            the dataset. Defaults to an empty dictionary as is populated during `set_dict`.
+            the dataset. Defaults to an empty dictionary and is populated during `set_dict`.
         _current_face (str): The key corresponding with the dataset that has been most recently selected in the
             PreviewView. Defaults to None and is assigned to the first key in the dataset in the `set_dict` method.
             Changed during calls to `set_current_face` when a message is received from the PreviewPresenter indicating
             a different dictionary element has been selected.
+        _stack_idx (dict): Keeps a record of dataset keys and which index they have on the StackView's widget stack.
+            Defaults to None as it set during `_set_dict`.
 
     Raises:
         ValueError: If the StackView or the DimensionViewFactory are None.
@@ -62,8 +65,8 @@ class StackPresenter(StackPresenterInterface):
     def set_dict(self, dict):
         """
 
-        Assign the _dict variable in the StackPresenter and create the required number of DimensionViews and elements
-        on the StackPresenter.
+        Assigns the _dict variable in the StackPresenter, creates the required amount of Dimension widgets, and then
+        places these widgets on the StackView.
 
         Args:
             dict (DataSet): An OrderedDict of xarray Datasets.
@@ -75,6 +78,7 @@ class StackPresenter(StackPresenterInterface):
         # Clear the DimensionViews that were on the Stack
         self._clear_stack()
 
+        # Clear the information about the previous presenters/widgets
         self._dim_presenters = {}
         self._stack_idx = {}
 
@@ -82,22 +86,27 @@ class StackPresenter(StackPresenterInterface):
 
             # Create a new Stack element for every dataset in the dictionary
             idx = self._view.create_stack_element()
+
+            # Record which index on the Stack this dataset has
             self._stack_idx[key] = idx
+
+            # Prepare a dictionary for the presenters for this dataset will use
             self._dim_presenters[key] = {}
+
             data = dict[key].data
 
-            # Ignore data with a single dimension as they will not need DimensionViews
+            # Ignore data with a single dimension as they will not need Dimension widgets
             if len(data.dims) > 1:
 
                 for i in range(len(data.dims)):
 
-                    # Create a widget for every dimension in the dataset
+                    # Create a set of widgets for every dimension in the dataset
                     w = self._dim_fact.create_widgets(data.dims[i], data.shape[i])
 
                     # Obtain the presenter for the widget
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
 
-                    # Store the presenter in a dictionary
+                    # Store the presenter in the dictionary using the key and the dimension name
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
                     # Place the widgets in the StackView's GridLayout
@@ -106,7 +115,10 @@ class StackPresenter(StackPresenterInterface):
 
         first_key = list(dict.keys())[0]
 
-        # Set the current 'face' of the Stack to correspond with the first element in the dataset
+        '''
+        Set the current 'face' of the Stack to correspond with the first element in the dataset so that the widgets for
+        are visible after loading a file.
+        '''
         self.change_stack_face(first_key)
 
     def create_default_button_press(self, key):
@@ -136,9 +148,9 @@ class StackPresenter(StackPresenterInterface):
         elif n_dims == 2:
 
             self._dim_presenters[key][dataset.dims[0]].set_x_state(True)
-            self._dim_presenters[key][dataset.dims[0]].set_y_state(False)
             self._dim_presenters[key][dataset.dims[0]].disable_dimension()
 
+            # Allow the second dimension to be used in sliding
             self._dim_presenters[key][dataset.dims[1]].enable_dimension()
 
         # Data has three or more dimensions - Press the first X button and the second Y button
@@ -150,6 +162,7 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[key][dataset.dims[1]].set_y_state(True)
             self._dim_presenters[key][dataset.dims[1]].disable_dimension()
 
+        # Enable the remaining dimensions
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:
@@ -176,7 +189,7 @@ class StackPresenter(StackPresenterInterface):
         """
 
         Manage the DimensionView changes when a new X button is checked and release the previous X button to ensure
-        that only one is checked at a time.
+        that only one X is checked at a time.
 
         Args:
             recent_x_button (str): The name of the dimension for the most recently checked X button.
@@ -308,17 +321,18 @@ class StackPresenter(StackPresenterInterface):
     def slice_change(self):
         """ Instruct the MainViewPresenter to draw a new plot when a slider/stepper value has been changed. """
 
+        # These sets should contain only one element
         dims_with_x_checked = self._dims_with_x_checked()
         dims_with_y_checked = self._dims_with_y_checked()
 
-        # One Y button checked - Create a 1D plot
+        # No Y buttons checked - Create a 1D plot
         if len(dims_with_y_checked) == 0:
 
             self._master.create_onedim_plot(self._current_face,
                                             dims_with_x_checked.pop(),
                                             self._create_slice_dictionary())
 
-        # Two Y checked - Create a 2D plot
+        # One Y checked - Create a 2D plot
         else:
 
             self._master.create_twodim_plot(self._current_face,

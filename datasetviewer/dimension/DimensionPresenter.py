@@ -103,7 +103,7 @@ class DimensionPresenter(DimensionPresenterInterface):
         Register the StackPresenter as the DimensionPresenter's master.
 
         Args:
-            master (StackPresenter): An instance of a StackPresenter.
+            stack_master (StackPresenter): An instance of a StackPresenter.
 
         """
         assert (isinstance(stack_master, StackPresenterInterface))
@@ -167,8 +167,8 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def disable_dimension(self):
         """
-        Disable a dimension by greying-out its slider and stepper. Checking the X/Y button is handled when the user
-        makes this action.
+        Disable a dimension by hiding its slider and stepper. Checking the X/Y button is handled when the user makes
+        this action.
         """
 
         self._view.disable_slider()
@@ -178,7 +178,7 @@ class DimensionPresenter(DimensionPresenterInterface):
     def is_enabled(self):
         """
         Determine if a dimension is "enabled" (it is not an X or Y axis so its sliders may be used) or "disabled" (it
-        is being used as an X or Y axis so its slider and stepper are greyed-out). Used for determining how to slice
+        is being used as an X or Y axis so its slider and stepper are invisible). Used for determining how to slice
         the data array.
 
         Returns:

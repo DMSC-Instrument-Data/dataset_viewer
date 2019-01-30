@@ -21,8 +21,7 @@ class StackWidget(QStackedWidget, StackViewInterface):
 
     def add_dimension_widget(self, idx, x, y, widget):
 
-        grid = self.widget(idx)
-        layout = grid.layout()
+        layout = self.widget(idx).layout()
         layout.addWidget(widget, x, y)
 
     def change_stack_face(self, idx):
