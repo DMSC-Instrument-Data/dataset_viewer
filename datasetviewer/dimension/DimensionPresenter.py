@@ -198,3 +198,8 @@ class DimensionPresenter(DimensionPresenterInterface):
         """
 
         return self._view.get_slider_value()
+
+    def reset_slice(self):
+
+        self._view.set_slider_value(0)
+        self._view.set_stepper_value(0)

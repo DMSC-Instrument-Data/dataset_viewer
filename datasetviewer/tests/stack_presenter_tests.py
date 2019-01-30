@@ -305,9 +305,9 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['x'].enable_dimension.assert_called_once()
 
         # Check that this causes the master to create a one-dimensional plot with the correct arguments
-        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
-                                                                            'z',
-                                                                            slice)
+        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",    # The key of the dataset
+                                                                            'z',            # The x dimension
+                                                                            slice)          # The slice dictionary
 
     def test_check_y_goes_to_twodim_from_onedim(self):
 
@@ -409,10 +409,10 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['x'].enable_dimension.assert_called_once()
 
         # Check that this causes the master to create a two-dimensional plot with the correct arguments
-        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
-                                                                            'y',
-                                                                            'z',
-                                                                            slice)
+        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",    # The key of the dataset
+                                                                            'y',            # The x dimension
+                                                                            'z',            # The y dimension
+                                                                            slice)          # The slice dictionary
 
     def test_change_onedim_plot(self):
 
@@ -464,9 +464,9 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
 
         # Check that the function for creating a 1D plot was called with the expected arguments
-        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
-                                                                            'z',
-                                                                            slice)
+        self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",    # The key of the dataset
+                                                                            'z',            # The x dimension
+                                                                            slice)          # The slice dictionary
 
     def test_press_x_changes_twodim_plot(self):
         '''Test that selecting an X button when another X button and Y button have already be pressed causes the
@@ -529,10 +529,10 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['y'].disable_dimension.assert_called_once()
 
         # Check that a call to `create_twodim_plot` is made with the correct arguments
-        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
-                                                                            'y',
-                                                                            'x',
-                                                                            slice)
+        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims", # The key of the dataset
+                                                                            'y',         # The x dimension
+                                                                            'x',         # The y dimension
+                                                                            slice)       # The slice dictionary
 
     def test_x_wrong_number_buttons_pressed_throws(self):
         ''' Test that the `x_button_change` function throws an exception when an incorrect number of X/Y buttons have
@@ -678,10 +678,10 @@ class StackPresenterTest(unittest.TestCase):
         '''
         stack_pres.slice_change()
 
-        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",
-                                                                            'x',
-                                                                            'y',
-                                                                            slice)
+        self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims",    # The key of the dataset
+                                                                            'x',            # The x dimension
+                                                                            'y',            # The y dimension
+                                                                            slice)          # The slice dictionary
 
     def clear_stack_test(self):
         ''' Test that the clear stack function makes the expected calls to the StackView.'''

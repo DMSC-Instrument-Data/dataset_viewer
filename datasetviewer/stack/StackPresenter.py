@@ -169,6 +169,7 @@ class StackPresenter(StackPresenterInterface):
                 continue
 
             self._dim_presenters[key][dim_name].enable_dimension()
+            self._dim_presenters[key][dim_name].reset_slice()
 
     def change_stack_face(self, key):
         """
@@ -206,9 +207,7 @@ class StackPresenter(StackPresenterInterface):
         dims_with_x_checked = self._dims_with_x_checked()
         dims_with_y_checked = self._dims_with_y_checked()
 
-        '''
-        Raise an Exception if the number of X buttons checked is not equal to 2.
-        '''
+        # Raise an Exception if the number of X buttons checked is not equal to 2.
         if len(dims_with_x_checked) != 2:
             raise ValueError("Error: Too many or too few X buttons checked: " + str(dims_with_x_checked))
 

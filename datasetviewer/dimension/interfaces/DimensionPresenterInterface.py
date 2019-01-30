@@ -41,3 +41,7 @@ class DimensionPresenterInterface(ABC):
     @abstractmethod
     def get_slider_value(self):
         pass
+
+    @abstractmethod
+    def reset_slice(self):
+        pass

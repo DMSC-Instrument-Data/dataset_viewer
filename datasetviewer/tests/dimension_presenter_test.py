@@ -241,3 +241,12 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres.get_slider_value()
         self.mock_dim_view.get_slider_value.assert_called_once()
+
+    def test_reset_slide(self):
+
+        dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
+
+        dim_pres.reset_slice()
+
+        self.mock_dim_view.set_slider_value.assert_called_once_with(0)
+        self.mock_dim_view.set_stepper_value.assert_called_once_with(0)
