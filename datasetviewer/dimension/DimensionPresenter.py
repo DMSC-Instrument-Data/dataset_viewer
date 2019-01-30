@@ -200,6 +200,10 @@ class DimensionPresenter(DimensionPresenterInterface):
         return self._view.get_slider_value()
 
     def reset_slice(self):
+        """
+        Set the slider and stepper values back to zero. Must block signals when this is done otherwise the program
+        will view this as an action from the user and call notify.
+        """
 
         self._block_signal(True)
         self._view.set_slider_value(0)
@@ -207,5 +211,11 @@ class DimensionPresenter(DimensionPresenterInterface):
         self._block_signal(False)
 
     def _block_signal(self, bool):
+        """
+        Blocks or unblocks signals from the slider and stepper.
+
+            Args:
+                bool (bool): Indicates if the slider and stepper's ability to send signals should be switched on or off.
+        """
 
         self._view.block_signal(bool)
