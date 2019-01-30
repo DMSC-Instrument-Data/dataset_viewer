@@ -32,10 +32,13 @@ class StackPresenterTest(unittest.TestCase):
         self.first_key = list(self.fake_dict.keys())[0]
 
         '''
-        Find the expected number of calls that will be made to the DimensionViewFactory create_widget method for the
-        above dictionary.
+        Find the expected number of calls that will be made to the DimensionViewFactory create_widgets method for the
+        above dictionary. This is equal to the total number of dimensions for all datasets that have at least two
+        dimensions.
         '''
         self.expected_factory_call_count = 0
+
+        # Prepare a Stack counter to mimic the behaviour of the Stack creation
         stack_counter = 0
 
         self.mock_dim_widgets = DataSet()
@@ -75,7 +78,7 @@ class StackPresenterTest(unittest.TestCase):
             StackPresenter(self.mock_stack_view, None)
 
     def test_register_master(self):
-        ''' '''
+        ''' Test the two-way relationship between the StackPresenter and the MainViewPresenter. '''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -93,8 +96,7 @@ class StackPresenterTest(unittest.TestCase):
 
     def test_correct_dims_created(self):
         ''' Test that the function for generating the dimension widgets makes the correct calls the correct number
-        of times and with the correct arguments. This needs to be one call for every dimension in the entire
-        dictionary minus the 1D datasets. '''
+        of times. This needs to be one call for every dimension in the entire dictionary minus the 1D datasets. '''
 
         expected_factory_calls = []
 
@@ -597,7 +599,7 @@ class StackPresenterTest(unittest.TestCase):
             stack_pres.y_button_change('x', True)
 
     def test_slice_change_onedim_plot(self):
-        ''' Test that the correc functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
+        ''' Test that the correct functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -670,24 +672,32 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)
 
     def clear_stack_test(self):
+        ''' Test that the clear stack function makes the expected calls to the StackView.'''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
+
+        # By setting this data we create four elements on the StackView for the four datasets
         stack_pres.set_dict(self.fake_dict)
 
+        # Dismiss the first call made to `clear_stack` upon data loading
         self.mock_stack_view.reset_mock()
-
         stack_pres._clear_stack()
 
         stack_idxs = [3, 2, 1, 0]
         clear_calls = []
 
+        # Create mock calls consisting of the Stack indexes from the largest index to the smallest
         for idx in stack_idxs:
             clear_calls.append(mock.call(idx))
 
+        # Check that the mock Stack view received identical calls to its `delete_widget` function
         self.mock_stack_view.delete_widget.assert_has_calls(clear_calls)
+        self.assertEqual(self.mock_stack_view.delete_widget.call_count, len(stack_idxs))
 
     def test_new_file_erases_previous_information(self):
+        ''' Test that loading one dataset and then another dataset clears any previous information about presenters and
+        indexes on the StackPresenter.'''
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -699,9 +709,13 @@ class StackPresenterTest(unittest.TestCase):
 
         self.mock_stack_view.create_stack_element = mock.MagicMock()
 
+        # Call `set_dict` a second time with a different dataset
         stack_pres.set_dict(new_dict)
 
+        # Check that the Stack index dictionary has the expected size
         self.assertEquals(len(stack_pres._stack_idx),len(new_dict.keys()))
+
+        # Check that the Presenter dictionaries have the expected sizes
         self.assertEquals(len(stack_pres._dim_presenters), len(new_dict.keys()))
         self.assertEquals(len(stack_pres._dim_presenters["twodims"]), 2)
         self.assertEquals(len(stack_pres._dim_presenters["fourdims"]), 4)
