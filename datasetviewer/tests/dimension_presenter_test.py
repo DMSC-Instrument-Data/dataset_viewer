@@ -243,6 +243,7 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.get_slider_value.assert_called_once()
 
     def test_reset_slide(self):
+        ''' Test that resetting the DimensionPresenter causes the slider and stepper values to be set to zero.'''
 
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
 
