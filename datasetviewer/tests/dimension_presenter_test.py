@@ -234,8 +234,8 @@ class DimensionPresenterTest(unittest.TestCase):
         self.assertFalse(dim_pres.is_enabled())
 
     def test_get_slider_value(self):
-        ''' Test that getting the slider value from the DimensionPresenter causes a method with the same name to be called in
-        the DimensionView.'''
+        ''' Test that getting the slider value from the DimensionPresenter causes a method with the same name to be
+        called in the DimensionView.'''
 
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
 

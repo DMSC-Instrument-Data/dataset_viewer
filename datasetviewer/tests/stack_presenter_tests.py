@@ -439,7 +439,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['y'].enable_dimension = mock.MagicMock(side_effect = mock_y_enable)
 
         '''
-        Set the DimensionPresenter for the 'z' dimension to report that its X button is checked but that it has not yet 
+        Set the DimensionPresenter for the 'z' dimension to report that its X button is checked but that it has not yet
         been disabled. This matches the conditions of a recent button push that hasn't yet been interpreted by the
         StackPresenter. Once this button push is accepted we expect the StackPresenter to disable this Dimension.
         '''
