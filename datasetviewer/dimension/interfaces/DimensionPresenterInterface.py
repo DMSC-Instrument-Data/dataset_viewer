@@ -45,3 +45,7 @@ class DimensionPresenterInterface(ABC):
     @abstractmethod
     def reset_slice(self):
         pass
+
+    @abstractmethod
+    def _block_signal(self, bool):
+        pass

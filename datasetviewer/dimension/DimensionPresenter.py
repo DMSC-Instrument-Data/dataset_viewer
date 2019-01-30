@@ -201,5 +201,11 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def reset_slice(self):
 
+        self._block_signal(True)
         self._view.set_slider_value(0)
         self._view.set_stepper_value(0)
+        self._block_signal(False)
+
+    def _block_signal(self, bool):
+
+        self._view.block_signal(bool)

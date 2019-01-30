@@ -57,3 +57,7 @@ class DimensionViewInterface(ABC):
     @abstractmethod
     def get_widgets(self):
         pass
+
+    @abstractmethod
+    def block_signal(self, bool):
+        pass

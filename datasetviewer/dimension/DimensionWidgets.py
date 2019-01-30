@@ -38,7 +38,7 @@ class DimensionWidgets(DimensionViewInterface):
         # Set up signals
         self.x_button.clicked.connect(lambda: self._presenter.notify(Command.XBUTTONCHANGE))
         self.y_button.clicked.connect(lambda: self._presenter.notify(Command.YBUTTONCHANGE))
-        self.slider.valueChanged.connect(lambda: self._presenter.notify(Command.SLIDERCHANGE))
+        self.slider.sliderMoved.connect(lambda: self._presenter.notify(Command.SLIDERCHANGE))
         self.stepper.valueChanged.connect(lambda: self._presenter.notify(Command.STEPPERCHANGE))
 
     def get_x_state(self):
@@ -82,3 +82,8 @@ class DimensionWidgets(DimensionViewInterface):
 
     def get_widgets(self):
         return [self.label, self.x_button, self.y_button, self.slider, self.stepper]
+
+    def block_signal(self, bool):
+
+        self.slider.blockSignals(bool)
+        self.stepper.blockSignals(bool)

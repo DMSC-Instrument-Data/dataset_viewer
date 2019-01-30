@@ -10,7 +10,7 @@ class StackWidget(QStackedWidget, StackViewInterface):
 
         self._presenter = StackPresenter(self, dim_fact)
 
-        self.setMinimumHeight(300)
+        # self.setMinimumHeight(300)
 
     def create_stack_element(self):
 
