@@ -116,7 +116,7 @@ class StackPresenter(StackPresenterInterface):
         first_key = list(dict.keys())[0]
 
         '''
-        Set the current 'face' of the Stack to correspond with the first element in the dataset so that the widgets for
+        Set the current 'face' of the Stack to correspond with the first element in the dataset so that its widgets
         are visible after loading a file.
         '''
         self.change_stack_face(first_key)
@@ -166,7 +166,7 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[key][dataset.dims[1]].set_x_state(False)
             self._dim_presenters[key][dataset.dims[1]].disable_dimension()
 
-        # Enable the remaining dimensions
+        # Enable the remaining dimensions and reset their sliders/steppers
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:

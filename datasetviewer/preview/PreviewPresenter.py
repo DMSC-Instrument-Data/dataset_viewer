@@ -29,7 +29,8 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def set_dict(self, dict):
         """Sets the `_data` attribute and then sets up a preview by clearing the previous contents, populating the list,
-            and selecting the first item on the list.
+            and selecting the first item on the list. Signal needs to be blocked while this takes place because PyQt
+            views this as a selection and calls `notify`.
 
         Args:
             dict (DataSet): An OrderedDict of xarray Datasets.

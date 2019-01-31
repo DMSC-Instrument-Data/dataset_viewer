@@ -15,7 +15,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         _plot_presenter (PlotPresenter): The Presenter that handles the behaviour of the PlotView. Defaults to None.
         _file_loader_presenter (FileLoaderPresenter): The presenter that handles the behaviour of the FileLoaderView.
             Defaults to None.
-        -_dict (DataSet): An OrderedDict of Variables. Defaults to None.
+        _dict (DataSet): An OrderedDict of Variables. Defaults to None.
 
     Raises:
         ValueError: If the MainView or any of the SubPresenters are None.
