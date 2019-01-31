@@ -15,3 +15,10 @@ From top directory run
 ## Flake8
 
 `python setup.py flake8`
+
+## Issues
+
+* Inconsistent spacing of dimension elements (slider, buttons, etc) 
+* Preview pane uses up more space than plot and sliders (Potential solution [here](https://stackoverflow.com/questions/6337589/qlistwidget-adjust-size-to-content))
+* Possible to squeeze plot out of existence which creates a `ValueError` for 2D plots and a `UserWarning` for 1D plots
+* Default plot may be too small and requires window to be resized
