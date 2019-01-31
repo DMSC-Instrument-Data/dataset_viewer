@@ -145,6 +145,8 @@ class PreviewPresenterTest(unittest.TestCase):
             prev_presenter.notify(fake_enum.bad_command)
 
     def test_set_dict_blocks_signal(self):
+        ''' Test that creating the Preview blocks signals from the PreviewView in order to prevent triggering `notify`
+        prematurely. '''
 
         prev_presenter = PreviewPresenter(self.mock_preview_view)
         prev_presenter.register_master(self.mock_master_presenter)
