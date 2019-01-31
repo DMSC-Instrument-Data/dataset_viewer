@@ -251,4 +251,6 @@ class DimensionPresenterTest(unittest.TestCase):
 
         self.mock_dim_view.set_slider_value.assert_called_once_with(0)
         self.mock_dim_view.set_stepper_value.assert_called_once_with(0)
+
+        # Check that the signal was blocked while the slider and stepper values were modified
         self.mock_dim_view.block_signal.assert_has_calls([mock.call(True), mock.call(False)])

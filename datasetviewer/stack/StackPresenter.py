@@ -166,7 +166,7 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[key][dataset.dims[1]].set_x_state(False)
             self._dim_presenters[key][dataset.dims[1]].disable_dimension()
 
-        # Enable the remaining dimensions and reset their sliders/steppers
+        # Enable the remaining dimensions and reset the sliders/steppers for every dimension
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:
