@@ -1,11 +1,11 @@
 from datasetviewer.dimension.interfaces.DimensionViewFactoryInterface import DimensionViewFactoryInterface
-from datasetviewer.dimension.DimensionWidgets import DimensionWidgets
+from datasetviewer.dimension.DimensionWidget import DimensionWidget
 
 class DimensionViewFactory(DimensionViewFactoryInterface):
     """ Basic Factory for creation DimensionWidgets objects. """
 
-    def __init__(self):
-        pass
+    def __init__(self, parent):
+        self.parent = parent
 
     def create_widgets(self, dim_name, dim_size):
         """
@@ -17,7 +17,7 @@ class DimensionViewFactory(DimensionViewFactoryInterface):
             dim_size (int): The size of the dimension. Required for setting up the slider and stepper.
 
         Returns:
-            DimensionWidgets: A DimensionWidgets object that owns a label, two buttons, a slider, and a stepper.
+            DimensionWidget: A DimensionWidgets object that owns a label, two buttons, a slider, and a stepper.
 
         """
-        return DimensionWidgets(dim_name, dim_size)
+        return DimensionWidget(dim_name, dim_size, self.parent)

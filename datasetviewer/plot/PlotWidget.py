@@ -8,12 +8,11 @@ from datasetviewer.plot.PlotPresenter import PlotPresenter
 class PlotWidget(FigureCanvas, PlotViewInterface):
 
     def __init__(self):
+
         self.figure = Figure()
         self.ax = self.figure.add_subplot(1, 1, 1)
         FigureCanvas.__init__(self, self.figure)
-
         self._presenter = PlotPresenter(self)
-
         self.line = None
         self.im = None
         self.cbar = None

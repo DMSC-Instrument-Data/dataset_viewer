@@ -60,10 +60,8 @@ class DimensionPresenter(DimensionPresenterInterface):
             Undo the change in X if this results in the X button being unchecked, or if the press took place on a
             Dimension for which the Y button has already been checked.
             '''
-            if (new_x_state and self._view.get_y_state()) \
-                    or not new_x_state:
+            if (new_x_state and self._view.get_y_state()) or not new_x_state:
                 self._view.set_x_state(not new_x_state)
-
             else:
                 self._stack_master.x_button_change(self._dim_name, new_x_state)
 
@@ -76,7 +74,6 @@ class DimensionPresenter(DimensionPresenterInterface):
             '''
             if new_y_state and self._view.get_x_state():
                 self._view.set_y_state(not new_y_state)
-
             else:
                 self._stack_master.y_button_change(self._dim_name, new_y_state)
 

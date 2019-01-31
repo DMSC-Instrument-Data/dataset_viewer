@@ -148,8 +148,8 @@ class StackPresenterTest(unittest.TestCase):
                     mock_add_dims_calls.append(mock.call(self.stack_idx[key],self.mock_dim_widgets[fake_data.dims[i]]))
                     mock_dim_view_idx += 1
 
-        # self.mock_stack_view.add_dimension_widget.assert_has_calls(mock_add_dims_calls)
-        # self.assertEqual(self.mock_stack_view.add_dimension_view.call_count, self.expected_factory_call_count)
+        self.mock_stack_view.add_dimension_widget.assert_has_calls(mock_add_dims_calls)
+        self.assertEqual(self.mock_stack_view.add_dimension_widget.call_count, self.expected_factory_call_count)
 
     def test_call_to_button_and_face(self):
         ''' Test that creating a default plot leads to a call to the function that creates the appropriate button

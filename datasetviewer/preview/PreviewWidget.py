@@ -11,10 +11,8 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
         QListWidget.__init__(self, parent)
 
         self._selected_item = None
-
         self._presenter = PreviewPresenter(self)
         self.itemSelectionChanged.connect(self.record_selection)
-
         self.setMinimumWidth(200)
         # self.setMinimumHeight(600)
 

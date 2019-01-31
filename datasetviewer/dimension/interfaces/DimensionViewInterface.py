@@ -1,6 +1,12 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
+from PyQt5 import QtCore
 
-class DimensionViewInterface(ABC):
+from six import with_metaclass
+
+class Meta(ABCMeta, type(QtCore.QObject)):
+    pass
+
+class DimensionViewInterface(with_metaclass(Meta)):
 
     @abstractmethod
     def get_x_state(self):

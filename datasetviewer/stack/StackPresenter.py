@@ -110,8 +110,7 @@ class StackPresenter(StackPresenterInterface):
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
                     # Place the widgets in the StackView's GridLayout
-                    for j, widget in enumerate(w.get_widgets()):
-                        self._view.add_dimension_widget(idx, i, j, widget)
+                    self._view.add_dimension_widget(idx, w)
 
         first_key = list(dict.keys())[0]
 
@@ -233,14 +232,12 @@ class StackPresenter(StackPresenterInterface):
 
         # No Y buttons checked - Create a 1D plot
         if num_dims_with_y_checked == 0:
-
             self._master.create_onedim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
                                             recent_x_button,                    # The x dimension
                                             self._create_slice_dictionary())    # The slice dictionary
 
         # Single Y button checked - Create a 2D plot
         elif num_dims_with_y_checked == 1:
-
             self._master.create_twodim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
                                             recent_x_button,                    # The x dimension
                                             dims_with_y_checked.pop(),          # The y dimension
@@ -333,14 +330,12 @@ class StackPresenter(StackPresenterInterface):
 
         # No Y buttons checked - Create a 1D plot
         if len(dims_with_y_checked) == 0:
-
             self._master.create_onedim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
                                             dims_with_x_checked.pop(),          # The x dimension
                                             self._create_slice_dictionary())    # The slice dictionary
 
         # One Y checked - Create a 2D plot
         else:
-
             self._master.create_twodim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
                                             dims_with_x_checked.pop(),          # The x dimension
                                             dims_with_y_checked.pop(),          # The y dimension

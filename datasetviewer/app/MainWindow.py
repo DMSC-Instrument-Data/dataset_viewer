@@ -30,7 +30,7 @@ class MainWindow(MainViewInterface, QMainWindow):
         self.toolbar = NavigationToolbar(plot_widget, self)
         self.addToolBar(self.toolbar)
 
-        dim_fact = DimensionViewFactory()
+        dim_fact = DimensionViewFactory(self)
         stack_widget = StackWidget(dim_fact, self)
         stack_presenter = stack_widget.get_presenter()
 

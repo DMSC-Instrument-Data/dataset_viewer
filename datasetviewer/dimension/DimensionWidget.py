@@ -1,23 +1,32 @@
 from datasetviewer.dimension.interfaces.DimensionViewInterface import DimensionViewInterface
 from datasetviewer.dimension.DimensionPresenter import DimensionPresenter
 from datasetviewer.dimension.Command import Command
-from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox
+from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox, QWidget, QHBoxLayout
 from PyQt5.QtCore import Qt
 
-class DimensionWidgets(DimensionViewInterface):
+class DimensionWidget(QWidget, DimensionViewInterface):
 
-    def __init__(self, dim_name, dim_size):
+    def __init__(self, dim_name, dim_size, parent):
+
+        QWidget.__init__(self, parent)
 
         self.dim_name = dim_name
         self.dim_size = dim_size
 
+        layout = QHBoxLayout()
+
         self._presenter = DimensionPresenter(self, dim_name)
 
-        self.label = QLabel()
-        self.label.setText(dim_name)
+        label = QLabel()
+        label.setText(dim_name)
+        label.setFixedWidth(30)
+
+        # label.setAlignment(Qt.AlignLeft)
 
         self.x_button = QPushButton("X")
         self.y_button = QPushButton("Y")
+        self.x_button.setFixedWidth(50)
+        self.y_button.setFixedWidth(50)
 
         self.slider = QSlider(Qt.Horizontal)
         self.stepper = QSpinBox()
@@ -34,12 +43,20 @@ class DimensionWidgets(DimensionViewInterface):
 
         # Initialise stepper
         self.stepper.setRange(0, dim_size - 1)
+        self.stepper.setFixedWidth(40)
 
         # Set up signals
         self.x_button.clicked.connect(lambda: self._presenter.notify(Command.XBUTTONCHANGE))
         self.y_button.clicked.connect(lambda: self._presenter.notify(Command.YBUTTONCHANGE))
-        self.slider.sliderMoved.connect(lambda: self._presenter.notify(Command.SLIDERCHANGE))
+        self.slider.valueChanged.connect(lambda: self._presenter.notify(Command.SLIDERCHANGE))
         self.stepper.valueChanged.connect(lambda: self._presenter.notify(Command.STEPPERCHANGE))
+
+        layout.addWidget(label)
+        layout.addWidget(self.x_button)
+        layout.addWidget(self.y_button)
+        layout.addWidget(self.slider)
+        layout.addWidget(self.stepper)
+        self.setLayout(layout)
 
     def get_x_state(self):
         return self.x_button.isChecked()
