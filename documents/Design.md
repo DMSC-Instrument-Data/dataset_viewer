@@ -32,6 +32,7 @@ These sequence diagrams illustrate the object interactions that occur in the cas
     * having a summary of its contents appear in a preview pane,
     * creating and setting up the widgets that appear on the Stack,
     * generating a default plot
+* Changing a selection on the Preview
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
 ### Stepper Change
@@ -39,15 +40,18 @@ These sequence diagrams illustrate the object interactions that occur in the cas
 ### Loading a File 
 ![Loading a File Sequence Diagram](FileLoad.png)
 ### Stack Preparation
-![Stack Presenter Diagram](LoadDatatoStackPresenter.png)
+![Stack Presenter Diagram](LoadDatatoStackPresenter.png)  
 Note: As the `DimensionView` doesn't inherit from `QWidget` but simply stores the Dimension View elements (label, buttons, etc), it can't be placed on the Stack. Instead the widgets it contains are retrieved from the `DimensionView` via a call to `get_widgets` and the items this method returns are placed in the Stack one-by-one.
 Afterwards the `StackPresenter` instructs the Stack to set the face corresponding with the first dataset to be visible, as this will contain the sliders for the first dataset.
-## Default Button/Slider/Stepper Configuration
-![Default Button Diagram](DefaultButtons.png)
+### Default Button/Slider/Stepper Configuration
+![Default Button Diagram](DefaultButtons.png)  
 Note: This takes place after loading a file or selecting a different element from the preview. If the data only has a single dimension then nothing takes place.
-## Default Plot Preparation
-![Default Plot](DefaultPlot.png)
-Note: The toolbar that allows zooming and reseting the plot is in the MainView, so it must be informed whenever a new dataset is loaded or an existing dataset is sliced in a new way.
+### Default Plot Preparation
+![Default Plot](DefaultPlot.png)  
+Note: The toolbar that allows zooming and resetting the plot is in the MainView, so it must be informed whenever a new dataset is loaded or an existing dataset is sliced in a new way.
+### Selection Change
+![Selection Change](SelectionChange.png)  
+Note: The `PreviewPresenter` must call `text()` on the object returned by the `PreviewView` as it is a type of `QWidget`. This is then sent to the `MainViewPresenter`. The creation of a default button arrangement and a default plot follows the sequence of events shown above.
 ## Development Principles
 * All programming will follow a test-driven development approach
 * At least one reviewer must examine the code and this reviewer cannot be the developer of the feature
