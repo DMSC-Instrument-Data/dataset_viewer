@@ -84,7 +84,7 @@ class StackPresenter(StackPresenterInterface):
 
         for key in dict.keys():
 
-            # Create a new Stack element for every dataset in the dictionary
+            # Create a new Stack element for every dataset in the dictionary and obtain its index
             idx = self._view.create_stack_element()
 
             # Record which index on the Stack this dataset has
