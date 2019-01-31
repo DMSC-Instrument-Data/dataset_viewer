@@ -148,6 +148,7 @@ class StackPresenter(StackPresenterInterface):
         elif n_dims == 2:
 
             self._dim_presenters[key][dataset.dims[0]].set_x_state(True)
+            self._dim_presenters[key][dataset.dims[0]].set_y_state(False)
             self._dim_presenters[key][dataset.dims[0]].disable_dimension()
 
             # Allow the second dimension to be used in sliding
@@ -158,9 +159,11 @@ class StackPresenter(StackPresenterInterface):
         else:
 
             self._dim_presenters[key][dataset.dims[0]].set_x_state(True)
+            self._dim_presenters[key][dataset.dims[0]].set_y_state(False)
             self._dim_presenters[key][dataset.dims[0]].disable_dimension()
 
             self._dim_presenters[key][dataset.dims[1]].set_y_state(True)
+            self._dim_presenters[key][dataset.dims[1]].set_x_state(False)
             self._dim_presenters[key][dataset.dims[1]].disable_dimension()
 
         # Enable the remaining dimensions
@@ -322,8 +325,10 @@ class StackPresenter(StackPresenterInterface):
     def slice_change(self):
         """ Instruct the MainViewPresenter to draw a new plot when a slider/stepper value has been changed. """
 
-        # These sets should contain only one element
+        # This set should contain only one element
         dims_with_x_checked = self._dims_with_x_checked()
+
+        # This set can contain 1 or 0 elements
         dims_with_y_checked = self._dims_with_y_checked()
 
         # No Y buttons checked - Create a 1D plot
