@@ -228,7 +228,7 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.reset_mock()
 
         # Check that the slider and stepper have become visible, and that the buttons are not altered.
-        dim_pres._disable_dimension()
+        dim_pres.disable_dimension()
         self.mock_dim_view.disable_slider.assert_called_once()
         self.mock_dim_view.disable_stepper.assert_called_once()
         self.mock_dim_view.set_x_state.assert_not_called()

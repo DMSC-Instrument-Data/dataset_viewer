@@ -216,7 +216,7 @@ class StackPresenter(StackPresenterInterface):
         self._dim_presenters[self._current_stack_face][previous_x_button].enable_dimension()
 
         # Disable the slider and stepper of the most recent X button to be checked
-        self._dim_presenters[self._current_stack_face][recent_x_button]._disable_dimension()
+        self._dim_presenters[self._current_stack_face][recent_x_button].disable_dimension()
 
         # No Y buttons checked - Create a 1D plot
         if num_dims_with_y_checked == 0:
@@ -275,7 +275,7 @@ class StackPresenter(StackPresenterInterface):
         elif num_dims_with_y_checked == 1:
 
             # Disable the Y button as this state change indicates the button was checked
-            self._dim_presenters[self._current_stack_face][recent_y_button]._disable_dimension()
+            self._dim_presenters[self._current_stack_face][recent_y_button].disable_dimension()
 
             self._master.create_twodim_plot(self._current_stack_face,           # They key of the dataset to plot/slice
                                             dims_with_x_checked.pop(),          # The x dimension
@@ -293,7 +293,7 @@ class StackPresenter(StackPresenterInterface):
             previous_y_button = previous_y_button.pop()
 
             # Disable the DimensionView elements for the most recent Y button to be checked
-            self._dim_presenters[self._current_stack_face][recent_y_button]._disable_dimension()
+            self._dim_presenters[self._current_stack_face][recent_y_button].disable_dimension()
 
             # Enable the DimensionView elements for the previous Y button that was checked
             self._dim_presenters[self._current_stack_face][previous_y_button].enable_dimension()

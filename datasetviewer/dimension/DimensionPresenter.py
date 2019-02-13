@@ -96,57 +96,52 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def register_stack_master(self, stack_master):
         """
-
         Register the StackPresenter as the DimensionPresenter's master.
 
         Args:
             stack_master (StackPresenter): An instance of a StackPresenter.
-
         """
+
         assert (isinstance(stack_master, StackPresenterInterface))
 
         self._stack_master = stack_master
 
     def get_x_state(self):
-        """ Determine if the X button associated with this Presenter is checked or unchecked.
+        """
+        Determine if the X button associated with this Presenter is checked or unchecked.
 
         Returns:
             bool: True if the button is checked and False if the button is unchecked.
-
         """
 
         return self._view.get_x_state()
 
     def set_x_state(self, state):
         """
-
         Set the state of the X button controlled by this Presenter.
 
         Args:
             state (bool): The new state for the X button.
-
         """
 
         self._view.set_x_state(state)
 
     def get_y_state(self):
-        """ Determine if the Y button associated with this Presenter is checked or unchecked.
+        """
+        Determine if the Y button associated with this Presenter is checked or unchecked.
 
         Returns:
             bool: True if the button is checked and False if the button is unchecked.
-
         """
 
         return self._view.get_y_state()
 
     def set_y_state(self, state):
         """
-
         Set the state of the Y button controlled by this Presenter.
 
         Args:
             state (bool): The new state for the Y button.
-
         """
 
         self._view.set_y_state(state)
@@ -163,7 +158,7 @@ class DimensionPresenter(DimensionPresenterInterface):
         self._view.set_y_state(False)
         self._enabled = True
 
-    def _disable_dimension(self):
+    def disable_dimension(self):
         """
         Disable a dimension by hiding its slider and stepper. Checking the X/Y button is handled when the user makes
         this action.
@@ -226,7 +221,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.set_x_state(True)
         self._view.set_y_state(False)
-        self._disable_dimension()
+        self.disable_dimension()
 
     def set_as_y(self):
         """
@@ -236,4 +231,4 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.set_y_state(True)
         self._view.set_x_state(False)
-        self._disable_dimension()
+        self.disable_dimension()

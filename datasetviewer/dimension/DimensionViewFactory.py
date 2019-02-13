@@ -2,10 +2,15 @@ from datasetviewer.dimension.interfaces.DimensionViewFactoryInterface import Dim
 from datasetviewer.dimension.DimensionWidget import DimensionWidget
 
 class DimensionViewFactory(DimensionViewFactoryInterface):
-    """ Factory Method realisation for creating DimensionWidget QtWidgets. """
+    """
+    Factory Method realisation for creating DimensionWidget QtWidgets.
+
+    Private Attributes:
+        _parent (QMainWindow): The MainWindow that acts as the parent of the widgets created by the factory.
+    """
 
     def __init__(self, parent):
-        self.parent = parent
+        self._parent = parent
 
     def create_widgets(self, dim_name, dim_size):
         """
@@ -20,4 +25,4 @@ class DimensionViewFactory(DimensionViewFactoryInterface):
             DimensionWidget: A DimensionWidgets object that consists of a label, two buttons, a slider, and a stepper.
 
         """
-        return DimensionWidget(dim_name, dim_size, self.parent)
+        return DimensionWidget(dim_name, dim_size, self._parent)

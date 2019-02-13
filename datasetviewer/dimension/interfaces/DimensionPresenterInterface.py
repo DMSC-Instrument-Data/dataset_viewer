@@ -27,7 +27,7 @@ class DimensionPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def _disable_dimension(self):
+    def disable_dimension(self):
         pass
 
     @abstractmethod
