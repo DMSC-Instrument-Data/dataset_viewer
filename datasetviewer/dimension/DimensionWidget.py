@@ -87,16 +87,16 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         return self._presenter
 
     def enable_slider(self):
-        self.slider.setDisabled(False)
+        self.slider.setVisible(True)
 
     def enable_stepper(self):
-        self.stepper.setDisabled(False)
+        self.stepper.setVisible(True)
 
     def disable_slider(self):
-        self.slider.setDisabled(True)
+        self.slider.setVisible(False)
 
     def disable_stepper(self):
-        self.stepper.setDisabled(True)
+        self.stepper.setVisible(False)
 
     def get_widgets(self):
         return [self.label, self.x_button, self.y_button, self.slider, self.stepper]
