@@ -158,11 +158,12 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.enable_slider()
         self._view.enable_stepper()
+        self._reset_slice()
         self._view.set_x_state(False)
         self._view.set_y_state(False)
         self._enabled = True
 
-    def disable_dimension(self):
+    def _disable_dimension(self):
         """
         Disable a dimension by hiding its slider and stepper. Checking the X/Y button is handled when the user makes
         this action.
@@ -196,7 +197,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         return self._view.get_slider_value()
 
-    def reset_slice(self):
+    def _reset_slice(self):
         """
         Set the slider and stepper values back to zero. Must block signals when this is done otherwise the program will
         view this as an action from the user and call notify.
@@ -211,8 +212,28 @@ class DimensionPresenter(DimensionPresenterInterface):
         """
         Blocks or unblocks signals from the slider and stepper.
 
-            Args:
-                bool (bool): Indicates if the slider and stepper's ability to send signals should be switched on or off.
+        Args:
+            bool (bool): Indicates if the slider and stepper's ability to send signals should be switched on or off.
         """
 
         self._view.block_signal(bool)
+
+    def set_as_x(self):
+        """
+        Sets a dimension as the x-axis by checking the X button, unchecking the Y button, and then resetting and
+        disabling the slider and stepper.
+        """
+
+        self._view.set_x_state(True)
+        self._view.set_y_state(False)
+        self._disable_dimension()
+
+    def set_as_y(self):
+        """
+        Sets a dimension as the y-axis by checking the Y button, unchecking the X button, and then resetting and
+        disabling the slider and stepper.
+        """
+
+        self._view.set_y_state(True)
+        self._view.set_x_state(False)
+        self._disable_dimension()

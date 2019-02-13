@@ -31,11 +31,11 @@ class StackPresenterTest(unittest.TestCase):
 
         self.first_key = list(self.fake_dict.keys())[0]
 
-        '''
+        """
         Find the expected number of calls that will be made to the DimensionViewFactory create_widgets method for the
         above dictionary. This is equal to the total number of dimensions for all datasets that have at least two
         dimensions.
-        '''
+        """
         self.expected_factory_call_count = 0
 
         # Prepare a Stack counter to mimic the behaviour of the Stack creation
@@ -69,7 +69,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.count = mock.MagicMock(return_value = len(self.fake_dict.keys()))
 
     def test_presenter_throws_if_args_none(self):
-        ''' Test that exceptions are thrown if the DimensionViewFactory or StackView are None. '''
+        """ Test that exceptions are thrown if the DimensionViewFactory or StackView are None. """
 
         with self.assertRaises(ValueError):
             StackPresenter(None, self.mock_dim_fact)
@@ -78,7 +78,7 @@ class StackPresenterTest(unittest.TestCase):
             StackPresenter(self.mock_stack_view, None)
 
     def test_register_master(self):
-        ''' Test the two-way relationship between the StackPresenter and the MainViewPresenter. '''
+        """ Test the two-way relationship between the StackPresenter and the MainViewPresenter. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -86,8 +86,8 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_main_presenter.subscribe_stack_presenter.assert_called_once_with(stack_pres)
 
     def test_correct_stacks_created(self):
-        ''' Test that the number of stacks created upon receiving new data matches the number of elements in the data
-        dictionary. '''
+        """ Test that the number of stacks created upon receiving new data matches the number of elements in the data
+        dictionary. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -95,8 +95,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(self.mock_stack_view.create_stack_element.call_count, len(self.fake_dict))
 
     def test_correct_dims_created(self):
-        ''' Test that the function for generating the dimension widgets makes the correct calls the correct number
-        of times. This needs to be one call for every dimension in the entire dictionary minus the 1D datasets. '''
+        """ Test that the function for generating the dimension widgets makes the correct calls the correct number
+        of times. This needs to be one call for every dimension in the entire dictionary minus the 1D datasets. """
 
         expected_factory_calls = []
 
@@ -120,8 +120,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(self.mock_dim_fact.create_widgets.call_count, self.expected_factory_call_count)
 
     def test_get_dim_presenter(self):
-        ''' Test that a presenter is retrieved from all of the mock widgets that are created by the
-        DimensionViewFactory '''
+        """ Test that a presenter is retrieved from all of the mock widgets that are created by the
+        DimensionViewFactory """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -130,7 +130,7 @@ class StackPresenterTest(unittest.TestCase):
             w.get_presenter.assert_called_once()
 
     def test_add_dimension_view_to_stack(self):
-        ''' Test that the DimensionView is added to the correct index in the Stack '''
+        """ Test that the DimensionView is added to the correct index in the Stack """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -152,8 +152,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(self.mock_stack_view.add_dimension_widget.call_count, self.expected_factory_call_count)
 
     def test_call_to_button_and_face(self):
-        ''' Test that creating a default plot leads to a call to the function that creates the appropriate button
-        configuration for the default plot. '''
+        """ Test that creating a default plot leads to a call to the function that creates the appropriate button
+        configuration for the default plot. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.create_default_button_press = mock.Mock()
@@ -171,22 +171,16 @@ class StackPresenterTest(unittest.TestCase):
         first_twodim["twodims"] = self.fake_dict["twodims"]
         first_twodim["onedim"] = self.fake_dict["onedim"]
         x_button_to_press = self.fake_dict["twodims"].data.dims[0]
+        dim_to_reset = self.fake_dict["twodims"].data.dims[1]
 
         # Send the dictionary to the mock StackPresenter
         stack_pres.set_dict(first_twodim)
 
         # Check that just the X button has been pressed for the first dimension
-        self.mock_dim_presenters[x_button_to_press].set_x_state.assert_called_once_with(True)
-        # self.mock_dim_presenters[x_button_to_press].set_y_state.assert_called_once_with(False)
-        self.mock_dim_presenters[x_button_to_press].disable_dimension.assert_called_once()
+        self.mock_dim_presenters[x_button_to_press].set_as_x.assert_called_once()
 
-        # Check that the buttons have been released for the other dimensions
-        for dim in self.fake_dict["twodims"].data.dims:
-
-            if dim == x_button_to_press:
-                continue
-
-            self.mock_dim_presenters[dim].enable_dimension.assert_called_once()
+        # Check that the buttons have been released for the remaining dimension
+        self.mock_dim_presenters[dim_to_reset].enable_dimension.assert_called_once()
 
     def test_default_two_button_press(self):
 
@@ -198,19 +192,20 @@ class StackPresenterTest(unittest.TestCase):
         first_threedim["onedim"] = self.fake_dict["onedim"]
         x_button_to_press = self.fake_dict["threedims"].data.dims[0]
         y_button_to_press = self.fake_dict["threedims"].data.dims[1]
+        dim_to_reset = self.fake_dict["threedims"].data.dims[2]
 
         # Send the dictionary to the mock StackPresenter
         stack_pres.set_dict(first_threedim)
 
-        # Check that just the X button has been pressed for the first dimension
-        self.mock_dim_presenters[x_button_to_press].set_x_state.assert_called_once_with(True)
-        self.mock_dim_presenters[x_button_to_press].disable_dimension.assert_called_once()
+        # Check that the expected button presses have been made
+        self.mock_dim_presenters[x_button_to_press].set_as_x.assert_called_once()
+        self.mock_dim_presenters[y_button_to_press].set_as_y.assert_called_once()
 
-        self.mock_dim_presenters[y_button_to_press].set_y_state.assert_called_once_with(True)
-        self.mock_dim_presenters[y_button_to_press].disable_dimension.assert_called_once()
+        # Check that the last dimension (isn't used for X or Y) has been reset
+        self.mock_dim_presenters[dim_to_reset].enable_dimension.assert_called_once()
 
     def test_change_stack_face(self):
-        ''' Test the change of the Stack face once a different element on the Preview has been selected. '''
+        """ Test the change of the Stack face once a different element on the Preview has been selected. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -218,7 +213,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_stack_view.change_stack_face.assert_called_once_with(self.stack_idx[self.first_key])
 
     def test_call_to_register_master(self):
-        ''' Test that the DimensionPresenters are assigned the StackPresenter as master after their creation. '''
+        """ Test that the DimensionPresenters are assigned the StackPresenter as master after their creation. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.set_dict(self.fake_dict)
@@ -227,8 +222,8 @@ class StackPresenterTest(unittest.TestCase):
             pres.register_stack_master.assert_called_once_with(stack_pres)
 
     def test_no_y_buttons_pressed(self):
-        ''' Test that the `_dims_with_y_checked` method returns the expected value when no Y buttons have been
-        pressed. '''
+        """ Test that the `_dims_with_y_checked` method returns the expected value when no Y buttons have been
+        pressed. """
 
         # Have the DimensionPresenters say that their Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -240,8 +235,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(stack_pres._dims_with_y_checked(), set())
 
     def test_single_x_button_changed(self):
-        ''' Test that the `_dims_with_x_checked` method returns the expected value when a single X button has been
-        pressed. '''
+        """ Test that the `_dims_with_x_checked` method returns the expected value when a single X button has been
+        pressed. """
 
         # Have the DimensionPresenters say that their X buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -256,8 +251,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(stack_pres._dims_with_x_checked(), {'z'})
 
     def test_single_y_button_changed(self):
-        ''' Test that the `_dims_with_y_checked` method returns the expected value when a single Y button has been
-        pressed. '''
+        """ Test that the `_dims_with_y_checked` method returns the expected value when a single Y button has been
+        pressed. """
 
         # Have the DimensionPresenters say that their Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -272,7 +267,7 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(stack_pres._dims_with_y_checked(), {'z'})
 
     def test_uncheck_y_creates_onedim_plot(self):
-        ''' Test that unchecking a Y button that was previously checked causes the creation of a 1D plot. '''
+        """ Test that unchecking a Y button that was previously checked causes the creation of a 1D plot. """
 
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -306,7 +301,7 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)          # The slice dictionary
 
     def test_check_y_goes_to_twodim_from_onedim(self):
-        ''' Test that unselecting a Y button makes the plot switch from 2D to 1D.'''
+        """ Test that unselecting a Y button makes the plot switch from 2D to 1D."""
 
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -335,7 +330,7 @@ class StackPresenterTest(unittest.TestCase):
             self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value=False)
 
         # Create a mock for `disable_dimension` so that the 'z' Presenter can behave as if it's been disabled
-        self.mock_dim_presenters['z'].disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
+        self.mock_dim_presenters['z']._disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -345,7 +340,7 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.y_button_change('z', True)
 
         # Check that this causes the slider and stepper buttons to disappear for the 'z' dimension
-        self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
+        self.mock_dim_presenters['z']._disable_dimension.assert_called_once()
 
         # Check that this causes the master to create a two-dimensional plot with the correct arguments
         self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims", # The dataset to plot/slice
@@ -354,8 +349,8 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)       # The slice dictionary
 
     def test_check_change_y_creates_new_twodim_plot(self):
-        ''' Test that changing the choice in Y dimension releases the previous Y dimension, disabled the slider/stepper
-        for the new Y dimension, and generates a 2D plot.'''
+        """ Test that changing the choice in Y dimension releases the previous Y dimension, disabled the slider/stepper
+        for the new Y dimension, and generates a 2D plot."""
 
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -387,7 +382,7 @@ class StackPresenterTest(unittest.TestCase):
             self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value = False)
 
         # Create a mock for `disable_dimension` so that the 'z` Presenter can behave as if it's been disabled
-        self.mock_dim_presenters['z'].disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
+        self.mock_dim_presenters['z']._disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
 
         def mock_x_enable():
             self.mock_dim_presenters['x'].is_enabled = mock.MagicMock(return_value = True)
@@ -403,7 +398,7 @@ class StackPresenterTest(unittest.TestCase):
         stack_pres.y_button_change('z', True)
 
         # Check that this causes the slider and stepper buttons to disappear for the 'z' dimension
-        self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
+        self.mock_dim_presenters['z']._disable_dimension.assert_called_once()
 
         # Check that this causes the slider and stepper buttons to reappear for the 'x' dimension
         self.mock_dim_presenters['x'].enable_dimension.assert_called_once()
@@ -415,9 +410,9 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)          # The slice dictionary
 
     def test_change_onedim_plot(self):
-        ''' Test that having a single X button pressed and Y no Y buttons pressed then selecting a different X button
+        """ Test that having a single X button pressed and Y no Y buttons pressed then selecting a different X button
         causes the StackPresenter to release the previous X dimension, disable the new X dimension, and create a 1D
-        plot. '''
+        plot. """
 
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -453,7 +448,7 @@ class StackPresenterTest(unittest.TestCase):
             self.mock_dim_presenters['z'].is_enabled = mock.MagicMock(return_value = False)
 
         # Create a mock for `disable_dimension` so that the 'z' Presenter can behave as if it's been disabled
-        self.mock_dim_presenters['z'].disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
+        self.mock_dim_presenters['z']._disable_dimension = mock.MagicMock(side_effect = mock_z_disable)
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -464,7 +459,7 @@ class StackPresenterTest(unittest.TestCase):
 
         # Check that the 'y' dimension was disabled and that 'z' dimension was disabled
         self.mock_dim_presenters['y'].enable_dimension.assert_called_once()
-        self.mock_dim_presenters['z'].disable_dimension.assert_called_once()
+        self.mock_dim_presenters['z']._disable_dimension.assert_called_once()
 
         # Check that the function for creating a 1D plot was called with the expected arguments
         self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",    # The key of the dataset
@@ -472,8 +467,8 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)          # The slice dictionary
 
     def test_press_x_changes_twodim_plot(self):
-        '''Test that selecting an X button when another X button and Y button have already be pressed causes the
-        previous X button to be released and instructs the MainViewPresenter to change the dimensions of the 2D plot.'''
+        """Test that selecting an X button when another X button and Y button have already be pressed causes the
+        previous X button to be released and instructs the MainViewPresenter to change the dimensions of the 2D plot."""
 
         # Have the DimensionPresenters say that their X and Y buttons are unchecked
         for p in self.mock_dim_presenters.values():
@@ -508,7 +503,7 @@ class StackPresenterTest(unittest.TestCase):
             self.mock_dim_presenters['y'].is_enabled = mock.MagicMock(return_value = False)
 
         # Create a mock for `disable_dimension` so that the 'y' Presenter can behave as if it's been disabled
-        self.mock_dim_presenters['y'].disable_dimension = mock.MagicMock(side_effect = mock_y_disable)
+        self.mock_dim_presenters['y']._disable_dimension = mock.MagicMock(side_effect = mock_y_disable)
 
         # Have the mock for the 'x' Presenter report that it's disabled and its Y button is checked
         self.mock_dim_presenters['x'].is_enabled = mock.MagicMock(return_value = False)
@@ -529,7 +524,7 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_dim_presenters['z'].enable_dimension.assert_called_once()
 
         # Check that the new X (dimension 'y') has not been disabled
-        self.mock_dim_presenters['y'].disable_dimension.assert_called_once()
+        self.mock_dim_presenters['y']._disable_dimension.assert_called_once()
 
         # Check that a call to `create_twodim_plot` is made with the correct arguments
         self.mock_main_presenter.create_twodim_plot.assert_called_once_with("threedims", # The key of the dataset
@@ -538,8 +533,8 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)       # The slice dictionary
 
     def test_x_wrong_number_buttons_pressed_throws(self):
-        ''' Test that the `x_button_change` function throws an exception when an incorrect number of X/Y buttons have
-        been pressed. '''
+        """ Test that the `x_button_change` function throws an exception when an incorrect number of X/Y buttons have
+        been pressed. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -576,8 +571,8 @@ class StackPresenterTest(unittest.TestCase):
             stack_pres.x_button_change('x', True)
 
     def test_y_wrong_number_buttons_pressed_throws(self):
-        ''' Test that the `y_button_change` function throws an exception when an incorrect number of X/Y buttons have
-        been pressed. '''
+        """ Test that the `y_button_change` function throws an exception when an incorrect number of X/Y buttons have
+        been pressed. """
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -614,7 +609,7 @@ class StackPresenterTest(unittest.TestCase):
             stack_pres.y_button_change('x', True)
 
     def test_slice_change_onedim_plot(self):
-        ''' Test that the correct functions calls are made when a slider/stepper is changed in the case of a 1D plot.'''
+        """ Test that the correct functions calls are made when a slider/stepper is changed in the case of a 1D plot."""
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -649,8 +644,9 @@ class StackPresenterTest(unittest.TestCase):
         self.mock_main_presenter.create_onedim_plot.assert_called_once_with("threedims",
                                                                             'x',
                                                                             slice)
+
     def test_slice_change_twodim_plot(self):
-        ''' Test that the correct functions calls are made when a slider/stepper is changed in the case of a  1D plot'''
+        """ Test that the correct functions calls are made when a slider/stepper is changed in the case of a  1D plot"""
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -687,7 +683,7 @@ class StackPresenterTest(unittest.TestCase):
                                                                             slice)          # The slice dictionary
 
     def clear_stack_test(self):
-        ''' Test that the clear stack function makes the expected calls to the StackView.'''
+        """ Test that the clear stack function makes the expected calls to the StackView."""
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)
@@ -711,8 +707,8 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEqual(self.mock_stack_view.delete_widget.call_count, len(stack_idxs))
 
     def test_new_file_erases_previous_information(self):
-        ''' Test that loading one dataset and then another dataset clears any previous information about presenters and
-        indexes on the StackPresenter.'''
+        """ Test that loading one dataset and then another dataset clears any previous information about presenters and
+        indexes on the StackPresenter."""
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_fact)
         stack_pres.register_master(self.mock_main_presenter)

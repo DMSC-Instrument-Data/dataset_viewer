@@ -27,7 +27,7 @@ class DimensionPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def disable_dimension(self):
+    def _disable_dimension(self):
         pass
 
     @abstractmethod
@@ -43,9 +43,17 @@ class DimensionPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def reset_slice(self):
+    def _reset_slice(self):
         pass
 
     @abstractmethod
     def _block_signal(self, bool):
+        pass
+
+    @abstractmethod
+    def set_as_x(self):
+        pass
+
+    @abstractmethod
+    def set_as_y(self):
         pass

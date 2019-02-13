@@ -143,37 +143,25 @@ class StackPresenter(StackPresenterInterface):
         if n_dims == 1:
             return
 
-        # Data has two dimensions - Press the first X button
+        # Data has two dimensions - Press the X button of the first dimension and enable the dimension after it
         elif n_dims == 2:
 
-            self._dim_presenters[key][dataset.dims[0]].set_x_state(True)
-            self._dim_presenters[key][dataset.dims[0]].set_y_state(False)
-            self._dim_presenters[key][dataset.dims[0]].disable_dimension()
-
-            # Allow the second dimension to be used in sliding
+            self._dim_presenters[key][dataset.dims[0]].set_as_x()
             self._dim_presenters[key][dataset.dims[1]].enable_dimension()
-
 
         # Data has three or more dimensions - Press the first X button and the second Y button
         else:
 
-            self._dim_presenters[key][dataset.dims[0]].set_x_state(True)
-            self._dim_presenters[key][dataset.dims[0]].set_y_state(False)
-            self._dim_presenters[key][dataset.dims[0]].disable_dimension()
-
-            self._dim_presenters[key][dataset.dims[1]].set_y_state(True)
-            self._dim_presenters[key][dataset.dims[1]].set_x_state(False)
-            self._dim_presenters[key][dataset.dims[1]].disable_dimension()
+            self._dim_presenters[key][dataset.dims[0]].set_as_x()
+            self._dim_presenters[key][dataset.dims[1]].set_as_y()
 
         # Enable the remaining dimensions and reset the sliders/steppers for every dimension
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:
-                self._dim_presenters[key][dim_name].reset_slice()
                 continue
 
             self._dim_presenters[key][dim_name].enable_dimension()
-            self._dim_presenters[key][dim_name].reset_slice()
 
     def change_stack_face(self, key):
         """
@@ -228,7 +216,7 @@ class StackPresenter(StackPresenterInterface):
         self._dim_presenters[self._current_stack_face][previous_x_button].enable_dimension()
 
         # Disable the slider and stepper of the most recent X button to be checked
-        self._dim_presenters[self._current_stack_face][recent_x_button].disable_dimension()
+        self._dim_presenters[self._current_stack_face][recent_x_button]._disable_dimension()
 
         # No Y buttons checked - Create a 1D plot
         if num_dims_with_y_checked == 0:
@@ -287,7 +275,7 @@ class StackPresenter(StackPresenterInterface):
         elif num_dims_with_y_checked == 1:
 
             # Disable the Y button as this state change indicates the button was checked
-            self._dim_presenters[self._current_stack_face][recent_y_button].disable_dimension()
+            self._dim_presenters[self._current_stack_face][recent_y_button]._disable_dimension()
 
             self._master.create_twodim_plot(self._current_stack_face,           # They key of the dataset to plot/slice
                                             dims_with_x_checked.pop(),          # The x dimension
@@ -305,7 +293,7 @@ class StackPresenter(StackPresenterInterface):
             previous_y_button = previous_y_button.pop()
 
             # Disable the DimensionView elements for the most recent Y button to be checked
-            self._dim_presenters[self._current_stack_face][recent_y_button].disable_dimension()
+            self._dim_presenters[self._current_stack_face][recent_y_button]._disable_dimension()
 
             # Enable the DimensionView elements for the previous Y button that was checked
             self._dim_presenters[self._current_stack_face][previous_y_button].enable_dimension()
