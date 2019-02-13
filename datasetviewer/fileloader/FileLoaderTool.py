@@ -2,7 +2,7 @@ from xarray import open_dataset
 from collections import OrderedDict as DataSet
 from datasetviewer.dataset.Variable import Variable
 
-""" Tool for opening an ncs file and converting it to an OrderedDict of Variable objects. """
+""" Collection of functions for opening an ncs file and converting it to an OrderedDict of Variable objects. """
 
 def invalid_dataset(data):
     """
@@ -14,7 +14,6 @@ def invalid_dataset(data):
 
     Returns:
         bool: True if any of the elements are empty, False otherwise.
-
     """
 
     for key in data.variables:
@@ -32,7 +31,6 @@ def dataset_to_dict(data):
 
     Returns:
         DataSet: The xarray data in the form of an OrderedDict.
-
     """
 
     dataset = DataSet()
@@ -55,7 +53,6 @@ def file_to_dict(file_path):
 
     Returns:
         DataSet: An OrderedDict of Variable objects containing a name and a data array.
-
     """
 
     data = open_dataset(file_path)

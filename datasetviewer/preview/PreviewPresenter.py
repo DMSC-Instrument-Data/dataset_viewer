@@ -3,20 +3,22 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 from datasetviewer.preview.Command import Command
 
 class PreviewPresenter(PreviewPresenterInterface):
-    """The subpresenter responsible for managing a PreviewView and providing it with the information that it will display.
+    """
+    The subpresenter responsible for managing a PreviewView and providing it with the information that it will display.
 
     Args:
         preview_view (PreviewView): An instance of a PreviewView.
 
     Private Attributes:
+        _main_presenter (MainViewPresenter): The MainViewPresenter object. This is set to None in the constructor and
+            assigned with the `register_master` method.
         _view (PreviewView): The PreviewView containing interface elements that display a preview of the data. Assigned
             during initialisation.
         _dict (DataSet): The data dictionary from which the preview is generated. Defaults to None. Is assigned once a
             file has been loaded by a user. Defaults to None.
 
-        Raises:
-            ValueError: If the `preview_view` argument is None.
-
+    Raises:
+        ValueError: If the `preview_view` argument is None.
     """
 
     def __init__(self, preview_view):
@@ -24,17 +26,18 @@ class PreviewPresenter(PreviewPresenterInterface):
         if preview_view is None:
             raise ValueError("Error: Cannot create PreviewPresenter when View is None.")
 
+        self._main_presenter = None
         self._view = preview_view
         self._dict = None
 
     def set_dict(self, dict):
-        """Sets the `_data` attribute and then sets up a preview by clearing the previous contents, populating the list,
-            and selecting the first item on the list. Signal needs to be blocked while this takes place because PyQt
-            views this as a selection and calls `notify`.
+        """
+        Sets the `_data` attribute and then sets up a preview by clearing the previous contents, populating the list,
+        and selecting the first item on the list. Signal needs to be blocked while this takes place because PyQt
+        views this as a selection by the user which triggers `notify`.
 
         Args:
             dict (DataSet): An OrderedDict of xarray Datasets.
-
         """
 
         self._dict = dict
@@ -48,14 +51,13 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def register_master(self, master):
         """
-
         Register the MainViewPresenter as the PreviewPresenter's master, and subscribe the MainViewPresenter to the
         PreviewPresenter.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
-
         """
+
         assert (isinstance(master, MainViewPresenterInterface))
 
         self._main_presenter = master
@@ -63,7 +65,6 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _create_preview_text(self, name):
         """
-
         Generate the preview text that should appear for a given dictionary element. The preview consists of the
         name/key and its corresponding data dimensions.
 
@@ -71,8 +72,7 @@ class PreviewPresenter(PreviewPresenterInterface):
             name (str): The name/key associated with an element of the DataSet.
 
         Returns:
-            str: A string containing the element key and its dimensions separated by a newline.
-
+            str: A string containing the element key and its dimensions separated by a new line.
         """
 
         var = self._dict[name]
@@ -82,12 +82,10 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _add_preview_entry(self, name):
         """
-
         Add the preview text consisting of a name/key and data dimensions to the PreviewView.
 
         Args:
             name (str): The name/key associated with a element of the DataSet.
-
         """
 
         entry_text = self._create_preview_text(name)
@@ -95,12 +93,12 @@ class PreviewPresenter(PreviewPresenterInterface):
 
     def _populate_preview_list(self):
         """ Fill the preview pane with the information about all of the elements in the DataSet. """
+
         for key in self._dict.keys():
             self._add_preview_entry(key)
 
     def notify(self, command):
         """
-
         Interpret a command from the PreviewView and take the appropriate action.
 
         Note:
@@ -111,8 +109,8 @@ class PreviewPresenter(PreviewPresenterInterface):
 
         Raises:
             ValueError: If the command isn't recognised.
-
         """
+
         if command == Command.ELEMENTSELECTION:
 
             selection = self._view.get_selected_item()
@@ -126,4 +124,11 @@ class PreviewPresenter(PreviewPresenterInterface):
             raise ValueError("PreviewPresenter received an unrecognised command: {}".format(str(command)))
 
     def _block_signal(self, bool):
+        """
+        Blocks or unblocks signals from list widget. Prevents populating a list from triggering `notify`.
+
+        Args:
+            bool (bool): Indicates if the list widget's ability to send signals should be switched on or off.
+        """
+
         self._view.block_signal(bool)

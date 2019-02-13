@@ -17,7 +17,7 @@ class StackPresenter(StackPresenterInterface):
             initialisation.
         _dict (DataSet): OrderedDict of xarray Datasets. Defaults to None. Assigned in `set_dict` method after file
             loading.
-        _master (MainViewPresenter): Central Presenter that managed interaction between this and other Presenters.
+        _main_presenter (MainViewPresenter): Central Presenter that managed interaction between this and other Presenters.
             Defaults to None. Assigned in `register_master` method.
         _dim_presenters (Dictionary): Dictionary for storing the DimensionViews for all of the Dimensions contained in
             the dataset. Defaults to an empty dictionary and is populated during `set_dict`.
@@ -43,7 +43,7 @@ class StackPresenter(StackPresenterInterface):
         self._view = stack_view
         self._dim_view_factory = dim_fact
         self._dict = None
-        self._master = None
+        self._main_presenter = None
         self._dim_presenters = {}
         self._current_stack_face = None
         self._stack_idx = {}
@@ -59,7 +59,7 @@ class StackPresenter(StackPresenterInterface):
 
         assert (isinstance(master, MainViewPresenterInterface))
 
-        self._master = master
+        self._main_presenter = master
         master.subscribe_stack_presenter(self)
 
     def set_dict(self, dict):
@@ -88,7 +88,7 @@ class StackPresenter(StackPresenterInterface):
             # Record which index on the Stack this dataset has
             self._stack_idx[key] = idx
 
-            # Prepare a dictionary for the presenters for this dataset will use
+            # Prepare a dictionary for the presenters that this dataset will use
             self._dim_presenters[key] = {}
 
             data = dict[key].data
@@ -101,7 +101,7 @@ class StackPresenter(StackPresenterInterface):
                     # Create a dimension widget
                     w = self._dim_view_factory.create_widgets(data.dims[i], data.shape[i])
 
-                    # Get a reference to the presenter created in the wiget
+                    # Get a reference to the presenter created in the widget
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
 
                     # Store the presenter in the dictionary using the key and the dimension name
@@ -162,7 +162,7 @@ class StackPresenter(StackPresenterInterface):
     def change_current_key(self, key):
         """
         Change the visible face on the StackPresenter and create the default button press for that key. Called when a
-        different element has been selected on the PreviewPresenter.
+        different element has been selected on the PreviewPresenter or when a file has been loaded.
 
         Args:
             key (str): They key that the StackPresenter should change to.
@@ -179,8 +179,8 @@ class StackPresenter(StackPresenterInterface):
 
         Args:
             recent_x_button (str): The name of the dimension for the most recently checked X button.
-            state (bool): The state of the X button now has as a result of the press. Should always be True as X
-                buttons should not be unselected.
+            state (bool): The state of the X button now has as a result of the press. Should always be True as X buttons
+                should not be unselected.
 
         Raises:
             ValueError: If an unexpected number of X or Y buttons have been checked. Ideally this will be prevented from
@@ -212,16 +212,16 @@ class StackPresenter(StackPresenterInterface):
 
         # No Y buttons checked - Create a 1D plot
         if num_dims_with_y_checked == 0:
-            self._master.create_onedim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            recent_x_button,                    # The x dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_onedim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    recent_x_button,  # The x dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # Single Y button checked - Create a 2D plot
         elif num_dims_with_y_checked == 1:
-            self._master.create_twodim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            recent_x_button,                    # The x dimension
-                                            dims_with_y_checked.pop(),          # The y dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_twodim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    recent_x_button,  # The x dimension
+                                                    dims_with_y_checked.pop(),  # The y dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # Two or more Y buttons checked - Raise an Exception
         else:
@@ -257,9 +257,9 @@ class StackPresenter(StackPresenterInterface):
             # Release the recent Y button as this state change indicates that the button was unchecked
             self._dim_presenters[self._current_stack_face][recent_y_button].enable_dimension()
 
-            self._master.create_onedim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            dims_with_x_checked.pop(),          # The x dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_onedim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    dims_with_x_checked.pop(),  # The x dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # One Y button checked - Go from a 1D to a 2D plot. No need to release previous Y button.
         elif num_dims_with_y_checked == 1:
@@ -267,10 +267,10 @@ class StackPresenter(StackPresenterInterface):
             # Disable the Y button as this state change indicates the button was checked
             self._dim_presenters[self._current_stack_face][recent_y_button].disable_dimension()
 
-            self._master.create_twodim_plot(self._current_stack_face,           # They key of the dataset to plot/slice
-                                            dims_with_x_checked.pop(),          # The x dimension
-                                            recent_y_button,                    # The y dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_twodim_plot(self._current_stack_face,  # They key of the dataset to plot/slice
+                                                    dims_with_x_checked.pop(),  # The x dimension
+                                                    recent_y_button,  # The y dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # Two Y buttons checked - Change the 2D plot. Must release previous Y button.
         elif num_dims_with_y_checked == 2:
@@ -288,10 +288,10 @@ class StackPresenter(StackPresenterInterface):
             # Enable the DimensionView elements for the previous Y button that was checked
             self._dim_presenters[self._current_stack_face][previous_y_button].enable_dimension()
 
-            self._master.create_twodim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            dims_with_x_checked.pop(),          # The x dimension
-                                            recent_y_button,                    # The y dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_twodim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    dims_with_x_checked.pop(),  # The x dimension
+                                                    recent_y_button,  # The y dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # More than two Y buttons checked - Raise an Exception
         else:
@@ -308,16 +308,16 @@ class StackPresenter(StackPresenterInterface):
 
         # No Y buttons checked - Create a 1D plot
         if len(dims_with_y_checked) == 0:
-            self._master.create_onedim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            dims_with_x_checked.pop(),          # The x dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_onedim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    dims_with_x_checked.pop(),  # The x dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
         # One Y checked - Create a 2D plot
         else:
-            self._master.create_twodim_plot(self._current_stack_face,           # The key of the dataset to plot/slice
-                                            dims_with_x_checked.pop(),          # The x dimension
-                                            dims_with_y_checked.pop(),          # The y dimension
-                                            self._create_slice_dictionary())    # The slice dictionary
+            self._main_presenter.create_twodim_plot(self._current_stack_face,  # The key of the dataset to plot/slice
+                                                    dims_with_x_checked.pop(),  # The x dimension
+                                                    dims_with_y_checked.pop(),  # The y dimension
+                                                    self._create_slice_dictionary())    # The slice dictionary
 
     def _dims_with_x_checked(self):
         """
@@ -347,7 +347,7 @@ class StackPresenter(StackPresenterInterface):
 
         Returns:
             dict: A dictionary consisting of elements with a dimension name as the dictionary key and the slider value
-                  as the dictionary value.
+                as the dictionary value.
         """
 
         return {dimname : self._dim_presenters[self._current_stack_face][dimname].get_slider_value()

@@ -73,7 +73,8 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     def subscribe_plot_presenter(self, plot):
         """
-        Sets the plot_presenter attribute so that it can be controlled when a file has been loaded.
+        Sets the plot_presenter attribute so that it can be controlled when a file has been loaded or the plot is
+        altered.
 
         Args:
             plot (PlotPresenter): An instance of a PlotPresenter.
@@ -83,7 +84,8 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     def subscribe_stack_presenter(self, stack):
         """
-        Sets the stack_presenter attribute so that it can be controlled when a file has been loaded.
+        Sets the stack_presenter attribute so that it can be controlled when a file has been loaded or the preview
+        selection changes.
 
         Args:
             stack (StackPresenter): An instance of a StackPresenter.
@@ -104,7 +106,7 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._stack_presenter.change_current_key(key)
 
     def update_toolbar(self):
-        """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """
+        """ Calls the `update_toolbar` function in the MainWindow so that the "Home" button works works correctly. """
 
         self._main_view.update_toolbar()
 

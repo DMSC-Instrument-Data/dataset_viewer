@@ -5,7 +5,6 @@ from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainVie
 
 class FileLoaderPresenter(FileLoaderPresenterInterface):
     """
-
     Presenter for overseeing the File Loading component of the interface. Receives commands from an associated
     FileLoaderView via a `notify` method. If a `FILEOPENREQUEST` signal is received then the FileLoaderPresenter
     attempts to open this file and pass the data to the MainViewPresenter.
@@ -17,7 +16,6 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
     Raises:
         ValueError: If the `file_loader_view` is None.
-
     """
 
     def __init__(self, file_loader_view):
@@ -32,22 +30,20 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
     def register_master(self, master):
         """
-
         Register the MainViewPresenter as the FileLoaderPresenter's master. The MainViewPresenter doesn't have a
         `subscribe_file_loader_presenter` method as it doesn't send instructions to the FileLoaderPresenter, so it
         doesn't need to store a reference to it.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
-
         """
+
         assert (isinstance(master, MainViewPresenterInterface))
 
         self._main_presenter = master
 
     def notify(self, command):
         """
-
         Interpret a command from the FileLoaderView and take the appropriate action.
 
         Note:
@@ -58,8 +54,8 @@ class FileLoaderPresenter(FileLoaderPresenterInterface):
 
         Raises:
             ValueError: If the command isn't recognised.
-
         """
+
         if command == Command.FILEOPENREQUEST:
             file_path = self._view.get_selected_file_path()[0]
 

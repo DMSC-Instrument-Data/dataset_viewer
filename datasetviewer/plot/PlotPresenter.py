@@ -9,12 +9,14 @@ class PlotPresenter(PlotPresenterInterface):
         plot_view (PreviewView): An instance of a PlotView.
 
     Private Attributes:
+        _main_presenter (MainViewPresenter): The MainViewPresenter object. This is set to None in the constructor and
+            assigned with the `register_master` method.
         _view (PlotView): The PlotView containing the interface elements that display a plot. Assigned
             during initialisation.
         _dict (DataSet): An OrderedDict of xarray Datasets. Defaults to None.
 
-        Raises:
-            ValueError: If the `plot_view` argument is None.
+    Raises:
+        ValueError: If the `plot_view` argument is None.
     """
 
     def __init__(self, plot_view):
@@ -22,6 +24,7 @@ class PlotPresenter(PlotPresenterInterface):
         if plot_view is None:
             raise ValueError("Error: Cannot create PlotPresenter when View is None.")
 
+        self._main_presenter = None
         self._view = plot_view
         self._dict = None
 
@@ -57,14 +60,13 @@ class PlotPresenter(PlotPresenterInterface):
 
             # Slice the array if it is 2D, then create a 1D plot with the first dimension as the X axis
             self._view.plot_line(data.transpose()[0])
-
             self._view.label_x_axis(data.dims[0])
 
         else:
 
             # Slice the array by using the first two dimensions as the X and Y axes if it is 2D or greater
             self._view.plot_image(data.isel({dim:0 for dim in data.dims[2:]})
-                                      .transpose(data.dims[1],data.dims[0]))
+                                      .transpose(data.dims[1], data.dims[0]))
 
             self._view.label_x_axis(data.dims[0])
             self._view.label_y_axis(data.dims[1])
