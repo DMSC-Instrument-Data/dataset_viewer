@@ -30,6 +30,10 @@ class MainWindow(MainViewInterface, QMainWindow):
         self.toolbar = NavigationToolbar(plot_widget, self)
         self.addToolBar(self.toolbar)
 
+        '''
+        Create a DimensionViewFactory and pass this to the StackWidget. This enables it to create DimensionView objects
+        when needed.
+        '''
         dim_view_factory = DimensionViewFactory(self)
         stack_widget = StackWidget(dim_view_factory, self)
         stack_presenter = stack_widget.get_presenter()

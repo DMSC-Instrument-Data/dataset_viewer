@@ -10,11 +10,13 @@ class PreviewWidget(PreviewViewInterface, QListWidget):
 
         QListWidget.__init__(self, parent)
 
+        # Placeholder for the item that is currently selected
         self._selected_item = None
+
+        # Create a PreviewPresenter and give it a reference to the PreviewView
         self._presenter = PreviewPresenter(self)
         self.itemSelectionChanged.connect(self.record_selection)
         self.setMinimumWidth(200)
-        # self.setMinimumHeight(600)
 
     def reset_selection(self):
         self._selected_item = None

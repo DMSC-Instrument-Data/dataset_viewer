@@ -18,6 +18,7 @@ class FileLoaderWidget(QAction, FileLoaderViewInterface):
         # Action for opening a file
         self.triggered.connect(self.open_file)
 
+        # Create a FileLoaderPresenter and give it a reference to the FileLoaderView
         self._presenter = FileLoaderPresenter(self)
 
     def get_selected_file_path(self):

@@ -10,12 +10,13 @@ class DimensionWidget(QWidget, DimensionViewInterface):
 
         QWidget.__init__(self, parent)
 
+        # Create a DimensionPresenter and give it a reference to the DimensionView
+        self._presenter = DimensionPresenter(self, dim_name)
+
         self.dim_name = dim_name
         self.dim_size = dim_size
 
         layout = QHBoxLayout()
-
-        self._presenter = DimensionPresenter(self, dim_name)
 
         label = QLabel()
         label.setText(dim_name)

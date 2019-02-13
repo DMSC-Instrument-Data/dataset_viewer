@@ -12,7 +12,10 @@ class PlotWidget(FigureCanvas, PlotViewInterface):
         self.figure = Figure()
         self.ax = self.figure.add_subplot(1, 1, 1)
         FigureCanvas.__init__(self, self.figure)
+
+        # Create a PlotPresenter and give it a reference to the PlotView
         self._presenter = PlotPresenter(self)
+
         self.line = None
         self.im = None
         self.cbar = None

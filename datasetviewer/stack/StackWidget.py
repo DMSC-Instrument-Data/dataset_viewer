@@ -7,6 +7,8 @@ class StackWidget(QStackedWidget, StackViewInterface):
     def __init__(self, dim_view_factory, parent = None):
 
         QStackedWidget.__init__(self, parent)
+
+        # Create a StackPresenter and give it a reference to the StackView
         self._presenter = StackPresenter(self, dim_view_factory)
 
     def create_stack_element(self):
