@@ -4,8 +4,7 @@ from datasetviewer.dimension.Command import Command
 
 class DimensionPresenter(DimensionPresenterInterface):
     """
-
-    Presenter for overseeing the behaviour of the X/Y buttons, slider, and stepper for a single dimension. Prevents
+    Presenter for overseeing the behaviour of the X/Y buttons, slider, and stepper for a single dimension. Prevents the
     unchecking of an X button or having two buttons checked on the same dimension. Also makes sure that slider and
     stepper are in sync. Answers to StackPresenter rather than MainViewPresenter when user interacts with the
     DimensionView elements.
@@ -16,11 +15,10 @@ class DimensionPresenter(DimensionPresenterInterface):
             which dimension called it.
         _stack_master (StackPresenter): The StackPresenter that controls all DimensionPresenters. Defaults to None.
         _enabled (bool): Used to determine if a Dimension is enabled or not. When a button is successfully pressed on
-            a button then it becomes disabled and its slider and stepper become hidden.
+            a button then it is set to false.
 
     Raises:
         ValueError: If the `dim_view` or `dim_name` are None.
-
     """
 
     def __init__(self, dim_view, dim_name):
@@ -38,7 +36,6 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def notify(self, command):
         """
-
         Interpret a command from the DimensionView and take the appropriate action.
 
         Note:
@@ -49,7 +46,6 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         Raises:
             ValueError: If the command isn't recognised.
-
         """
 
         if command == Command.XBUTTONCHANGE:
@@ -116,7 +112,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         return self._view.get_x_state()
 
-    def set_x_state(self, state):
+    def _set_x_state(self, state):
         """
         Set the state of the X button controlled by this Presenter.
 
@@ -136,7 +132,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         return self._view.get_y_state()
 
-    def set_y_state(self, state):
+    def _set_y_state(self, state):
         """
         Set the state of the Y button controlled by this Presenter.
 
@@ -176,7 +172,6 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         Returns:
             bool: True if the Dimension is enabled and False if the Dimension is disabled.
-
         """
 
         return self._enabled

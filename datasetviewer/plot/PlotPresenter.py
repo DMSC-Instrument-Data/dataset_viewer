@@ -2,7 +2,8 @@ from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterIn
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class PlotPresenter(PlotPresenterInterface):
-    """The subpresenter responsible for managing a PlotView and creating the arrays for it to plot.
+    """
+    The subpresenter responsible for managing a PlotView and creating the arrays for it to plot.
 
     Args:
         plot_view (PreviewView): An instance of a PlotView.

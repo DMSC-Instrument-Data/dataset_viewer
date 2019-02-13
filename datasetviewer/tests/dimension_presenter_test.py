@@ -188,7 +188,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         desired_x_state = True
-        dim_pres.set_x_state(desired_x_state)
+        dim_pres._set_x_state(desired_x_state)
         self.mock_dim_view.set_x_state.assert_called_once_with(desired_x_state)
 
     def test_get_y_state(self):
@@ -205,7 +205,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         dim_pres = DimensionPresenter(self.mock_dim_view, self.fake_dim_name)
         desired_y_state = True
-        dim_pres.set_y_state(desired_y_state)
+        dim_pres._set_y_state(desired_y_state)
         self.mock_dim_view.set_y_state.assert_called_once_with(desired_y_state)
 
     def test_enable_and_disable_dimension(self):

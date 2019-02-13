@@ -1,8 +1,9 @@
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class MainViewPresenter(MainViewPresenterInterface):
-    """ MainViewPresenter that controls SubPresenters and calls their `register_master` method during initialisation.
-        Also controls the MainView by updating its toolbar.
+    """
+    MainViewPresenter that controls SubPresenters and calls their `register_master` method during initialisation. Also
+    controls the MainView by updating its toolbar.
 
     Args:
         mainview (MainView): Instance of a MainView.
@@ -21,7 +22,6 @@ class MainViewPresenter(MainViewPresenterInterface):
 
     Raises:
         ValueError: If the MainView or any of the SubPresenters are None.
-
     """
 
     def __init__(self, mainview, *subpresenters):
