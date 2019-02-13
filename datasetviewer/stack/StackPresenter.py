@@ -12,7 +12,7 @@ class StackPresenter(StackPresenterInterface):
 
     Private Attributes:
         _view (StackView): StackView associated with this Presenter. Assigned during initialisation.
-        _dim_fact (DimensionViewFactory): DimensionViewFactory associated with this Presenter. Assigned during
+        _dim_view_factory (DimensionViewFactory): DimensionViewFactory associated with this Presenter. Assigned during
             initialisation.
         _dict (DataSet): OrderedDict of xarray Datasets. Defaults to None. Assigned in `set_dict` method after file
             loading.
@@ -40,7 +40,7 @@ class StackPresenter(StackPresenterInterface):
             raise ValueError("Error: Cannot create DimensionViewFactory when View is None.")
 
         self._view = stack_view
-        self._dim_fact = dim_fact
+        self._dim_view_factory = dim_fact
         self._dict = None
         self._master = None
         self._dim_presenters = {}
@@ -101,7 +101,7 @@ class StackPresenter(StackPresenterInterface):
                 for i in range(len(data.dims)):
 
                     # Create a set of widgets for every dimension in the dataset
-                    w = self._dim_fact.create_widgets(data.dims[i], data.shape[i])
+                    w = self._dim_view_factory.create_widgets(data.dims[i], data.shape[i])
 
                     # Obtain the presenter for the widget
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()

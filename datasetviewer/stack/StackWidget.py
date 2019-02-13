@@ -4,10 +4,10 @@ from PyQt5.QtWidgets import QStackedWidget, QWidget, QVBoxLayout
 
 class StackWidget(QStackedWidget, StackViewInterface):
 
-    def __init__(self, dim_fact, parent = None):
+    def __init__(self, dim_view_factory, parent = None):
 
         QStackedWidget.__init__(self, parent)
-        self._presenter = StackPresenter(self, dim_fact)
+        self._presenter = StackPresenter(self, dim_view_factory)
 
     def create_stack_element(self):
 
