@@ -38,36 +38,36 @@ class MainViewPresenterTest(unittest.TestCase):
         self.fake_dict["valid"] = Variable("valid", xr.DataArray(np.random.rand(3), dims=['b']))
 
     def test_presenter_throws_if_view_none(self):
-        '''
+        """
         Test that the MainViewPresenter throws an Exception if the MainView is None.
-        '''
+        """
         with self.assertRaises(ValueError):
             MainViewPresenter(None, *self.mock_sub_presenters)
 
     def test_constructor_throws_if_subpresenter_none(self):
-        '''
+        """
         Test that the MainViewPresenter throws an Exception if any of the SubPresenters are None.
-        '''
+        """
         badsubpresenters = self.mock_sub_presenters + [None]
 
         with self.assertRaises(ValueError):
             MainViewPresenter(self.mock_main_view, *badsubpresenters)
 
     def test_constructor_success(self):
-        '''
+        """
         Test that the `register_master` method is called in each of the SubPresenters when the MainViewPresenter is
         initialised.
-        '''
+        """
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
 
         for presenter in self.mock_sub_presenters:
             presenter.register_master.assert_called_once_with(main_view_presenter)
 
     def test_set_dict(self):
-        '''
+        """
         Test that the MainViewPresenter passes a data dictionary to the PreviewPresenter, PlotPresenter, and
         StackPresenter when its data attribute is set.
-        '''
+        """
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_preview_presenter(self.mock_preview_presenter)
@@ -80,10 +80,10 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_stack_presenter.set_dict.assert_called_once_with(self.fake_dict)
 
     def test_create_default_plot(self):
-        '''
+        """
         Test that a call to the MainViewPresenter `create_default_plot` function calls another function of the same
         name in the PlotPresenter
-        '''
+        """
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
@@ -99,18 +99,18 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_stack_presenter.change_stack_face.assert_called_once_with("good")
 
     def test_update_toolbar(self):
-        '''
+        """
         Test that the `update_toolbar` method in the MainViewPresenter calls another function of the same name in the
         MainView.
-        '''
+        """
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.update_toolbar()
         self.mock_main_view.update_toolbar.assert_called_once()
 
     def test_create_onedim_plot(self):
-        ''' Test that calling the `create_onedim_plot` method in the MainViewPresenter leads to a function of the same
-        name being called in the PlotPresenter.'''
+        """ Test that calling the `create_onedim_plot` method in the MainViewPresenter leads to a function of the same
+        name being called in the PlotPresenter."""
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)
@@ -124,8 +124,8 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_plot_presenter.create_onedim_plot.assert_called_once_with(fake_key, fake_dim, fake_dict)
 
     def test_create_twodim_plot(self):
-        ''' Test that calling the `create_twodim_plot` method in the MainViewPresenter leads to a function of the same
-        name being called in the PlotPresenter.'''
+        """ Test that calling the `create_twodim_plot` method in the MainViewPresenter leads to a function of the same
+        name being called in the PlotPresenter."""
 
         main_view_presenter = MainViewPresenter(self.mock_main_view, *self.mock_sub_presenters)
         main_view_presenter.subscribe_plot_presenter(self.mock_plot_presenter)

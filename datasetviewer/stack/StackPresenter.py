@@ -100,16 +100,16 @@ class StackPresenter(StackPresenterInterface):
 
                 for i in range(len(data.dims)):
 
-                    # Create a set of widgets for every dimension in the dataset
+                    # Create a dimension widget
                     w = self._dim_view_factory.create_widgets(data.dims[i], data.shape[i])
 
-                    # Obtain the presenter for the widget
+                    # Get a reference to the presenter created in the wiget
                     self._dim_presenters[key][data.dims[i]] = w.get_presenter()
 
                     # Store the presenter in the dictionary using the key and the dimension name
                     self._dim_presenters[key][data.dims[i]].register_stack_master(self)
 
-                    # Place the widgets in the StackView's GridLayout
+                    # Place the widget in the StackView's VBoxLayout
                     self._view.add_dimension_widget(idx, w)
 
         first_key = list(dict.keys())[0]

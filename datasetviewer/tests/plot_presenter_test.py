@@ -27,17 +27,17 @@ class PlotPresenterTest(unittest.TestCase):
         self.fake_dict["fourdims"] = Variable("fourdims", xr.DataArray(np.random.rand(3, 4, 5, 6), dims=['c', 'd', 'e', 'f']))
 
     def test_presenter_throws_when_view_none(self):
-        '''
+        """
         Test that the PlotPresenter throws an Exception when the PlotView is None.
-        '''
+        """
 
         with self.assertRaises(ValueError):
             PlotPresenter(None)
 
     def test_clear_plot(self):
-        '''
+        """
         Test that loading a new data array causes the previous plot to be cleared.
-        '''
+        """
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -46,10 +46,10 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres._clear_plot.assert_called_once()
 
     def test_plot_call(self):
-        '''
+        """
         Test that creating a default plot with nD data causes the appropriate plot function to be called in the
         PlotView.
-        '''
+        """
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -67,10 +67,10 @@ class PlotPresenterTest(unittest.TestCase):
                                     self.fake_dict["fourdims"].data.isel({'e':0, 'f':0}).transpose('d', 'c'))
 
     def test_register_master(self):
-        '''
+        """
         Test the two-way link between the PlotPresenter and its MainViewPresenter by ensuring that the master's
         `subscribe_plot_presenter` method is called after the PlotPresenter's `register_master` method is called.
-        '''
+        """
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -78,9 +78,9 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_presenter.subscribe_plot_presenter.assert_called_once_with(plot_pres)
 
     def test_label_axes(self):
-        '''
+        """
         Test that the axes label functions are called with the expected inputs.
-        '''
+        """
 
         # Don't label the axes in the case of 1D data
         plot_pres = PlotPresenter(self.mock_plot_view)
@@ -108,10 +108,10 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[1])
 
     def test_update_plot(self):
-        '''
+        """
         Test that calling `_update_plot` in the PlotPresenter causes the PlotView to redraw the plot and causes the
         MainPresenter to update the toolbar.
-        '''
+        """
 
         self.mock_plot_view.draw_plot = mock.MagicMock()
 
@@ -128,10 +128,10 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_presenter.update_toolbar.assert_called_once()
 
     def test_create_onedim_plot(self):
-        '''
+        """
         Test that calling the 1D plot function when given a dictionary key, a dimension, and a dictionary of slices
         creates the expected array and passes it to the PlotView.
-        '''
+        """
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
@@ -165,10 +165,10 @@ class PlotPresenterTest(unittest.TestCase):
         self.mock_main_presenter.update_toolbar.assert_called_once()
 
     def test_create_twodim_plot(self):
-        '''
+        """
         Test that calling the 2D plot function when given a dictionary key, x and y dimensions, and a dictionary of
         slices creates the expected array and passes it to the PlotView.
-        '''
+        """
 
         plot_pres = PlotPresenter(self.mock_plot_view)
         plot_pres.register_master(self.mock_main_presenter)
