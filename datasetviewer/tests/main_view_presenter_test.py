@@ -79,9 +79,9 @@ class MainViewPresenterTest(unittest.TestCase):
         self.mock_plot_presenter.set_dict.assert_called_once_with(self.fake_dict)
         self.mock_stack_presenter.set_dict.assert_called_once_with(self.fake_dict)
 
-    def test_create_default_plot(self):
+    def test_change_current_key(self):
         """
-        Test that a call to the MainViewPresenter `create_default_plot` function calls another function of the same
+        Test that a call to the MainViewPresenter `change_current_key` function calls another function of the same
         name in the PlotPresenter
         """
 
@@ -94,9 +94,9 @@ class MainViewPresenterTest(unittest.TestCase):
         # Instruct the MainViewPresenter to generate the default plot from one of the elements in the data dictionary
         main_view_presenter.change_current_key("good")
 
-        # Test that the `create_default_plot` method in the PlotPresenter is called with the same key.
-        self.mock_plot_presenter.create_default_plot.assert_called_once_with("good")
-        self.mock_stack_presenter.change_stack_face.assert_called_once_with("good")
+        # Test that the `change_current_key` method in the PlotPresenter is called with the same key.
+        self.mock_plot_presenter.change_current_key.assert_called_once_with("good")
+        self.mock_stack_presenter.change_current_key.assert_called_once_with("good")
 
     def test_update_toolbar(self):
         """

@@ -15,6 +15,8 @@ class MainViewPresenter(MainViewPresenterInterface):
         _plot_presenter (PlotPresenter): The Presenter that handles the behaviour of the PlotView. Defaults to None.
         _file_loader_presenter (FileLoaderPresenter): The presenter that handles the behaviour of the FileLoaderView.
             Defaults to None.
+        _stack_presenter (StackPresenter): The Presenter that places DimensionView objects in different layers and
+            changes the visible layer depending on which dictionary element has been selected. Defaults to None.
         _dict (DataSet): An OrderedDict of Variables. Defaults to None.
 
     Raises:
@@ -42,8 +44,9 @@ class MainViewPresenter(MainViewPresenterInterface):
             presenter.register_master(self)
 
     def set_dict(self, dict):
-        """Sets the `_dict` attribute in the MainViewPresenter and other Presenters that require access to the data
-            dictionary.
+        """
+        Sets the `_dict` attribute in the MainViewPresenter and other Presenters that require access to the data
+        dictionary.
 
         Note:
             The PlotPresenter, StackPresenter, and PreviewPresenter must be registered with master before this method is
@@ -51,7 +54,6 @@ class MainViewPresenter(MainViewPresenterInterface):
 
         Args:
             dict (DataSet): The data dictionary.
-
         """
 
         self._dict = dict
@@ -60,42 +62,46 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._preview_presenter.set_dict(dict)
 
     def subscribe_preview_presenter(self, prev):
-        """Sets the preview_presenter attribute so that it can be controlled when a file has been loaded.
+        """
+        Sets the preview_presenter attribute so that it can be controlled when a file has been loaded.
 
         Args:
             prev (PreviewPresenter): An instance of a PreviewPresenter.
-
         """
+
         self._preview_presenter = prev
 
     def subscribe_plot_presenter(self, plot):
-        """Sets the plot_presenter attribute so that it can be controlled when a file has been loaded.
+        """
+        Sets the plot_presenter attribute so that it can be controlled when a file has been loaded.
 
         Args:
             plot (PlotPresenter): An instance of a PlotPresenter.
-
         """
+
         self._plot_presenter = plot
 
     def subscribe_stack_presenter(self, stack):
-        """Sets the stack_presenter attribute so that it can be controlled when a file has been loaded.
+        """
+        Sets the stack_presenter attribute so that it can be controlled when a file has been loaded.
 
         Args:
             stack (StackPresenter): An instance of a StackPresenter.
-
         """
+
         self._stack_presenter = stack
 
     def change_current_key(self, key):
-        """Calls the `create_default_plot` method in the PlotPresenter when a dictionary element has been selected.
+        """
+        Tells the PlotPresenter to create the default plot of the current dataset, and tells the StackPresenter to
+        change its visible layer.
 
         Args:
             key (str): The key of the dictionary element to be plotted.
-
         """
 
-        self._plot_presenter.create_default_plot(key)
-        self._stack_presenter.change_stack_face(key)
+        self._plot_presenter.change_current_key(key)
+        self._stack_presenter.change_current_key(key)
 
     def update_toolbar(self):
         """ Calls the `update_toolbar` function in the MainWindow so that the home button works works correctly. """
@@ -103,9 +109,28 @@ class MainViewPresenter(MainViewPresenterInterface):
         self._main_view.update_toolbar()
 
     def create_onedim_plot(self, key, x_dim, slice):
+        """
+        Instructs the PlotPresenter to create a 1D plot.
+
+        Args:
+            key (str): The key of the dataset to plot.
+            x_dim (str): The name of the dimension that should be used for the x-axis.
+            slice (dict): A dictionary of dimension-name/int pairs that indicate how the remaining dimensions should be
+                sliced in the 1D plot.
+        """
 
         self._plot_presenter.create_onedim_plot(key, x_dim, slice)
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
+        """
+        Instructs the PlotPresenter to create a 2D plot.
+
+        Args:
+            key (str): The key of the dataset to plot.
+            x_dim (str): The name of the dimension that should be used for the x-axis.
+            y_dim (str): The name of the dimension that should be used for the y-axis.
+            slice (dict): A dictionary of dimension-name/int pairs that indicate how the remaining dimensions should be
+                sliced in the 2D plot.
+        """
 
         self._plot_presenter.create_twodim_plot(key, x_dim, y_dim, slice)

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class PlotPresenterInterface(ABC):
 
     @abstractmethod
-    def create_default_plot(self, data):
+    def change_current_key(self, data):
         pass
 
     @abstractmethod

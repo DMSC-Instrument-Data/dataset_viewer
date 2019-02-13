@@ -25,17 +25,19 @@ class PlotPresenter(PlotPresenterInterface):
         self._dict = None
 
     def set_dict(self, dict):
-        """ Set the `_dict` variable to an OrderedDict and plot the first element in the dictionary.
+        """
+        Set the `_dict` variable to an OrderedDict and plot the first element in the dictionary.
 
         Args:
             dict (DataSet): An OrderedDict of xarray Datasets.
         """
 
         self._dict = dict
-        self.create_default_plot(list(dict.keys())[0])
+        self.change_current_key(list(dict.keys())[0])
 
-    def create_default_plot(self, key):
-        """Creates a default plot for different data types depending on the number of dimensions.
+    def change_current_key(self, key):
+        """
+        Creates a default plot for different data types depending on the number of dimensions.
 
         Args:
             key (str): A key corresponding with the element to be plotted.
@@ -97,12 +99,12 @@ class PlotPresenter(PlotPresenterInterface):
 
     def _update_plot(self):
         """
-            Redraw the plot in the view after an update has occurred.
+        Redraw the plot in the view after an update has occurred.
 
-            Note:
-                This function must be called every time new data has been plotted or the scale is changed. If it isn't
-                called then the previous plot will remain visible and the "Home" button on the toolbar won't work
-                correctly.
+        Note:
+            This function must be called every time new data has been plotted or the scale is changed. If it isn't
+            called then the previous plot will remain visible and the "Home" button on the toolbar won't work
+            correctly.
         """
 
         self._view.draw_plot()
@@ -110,13 +112,11 @@ class PlotPresenter(PlotPresenterInterface):
 
     def register_master(self, master):
         """
-
         Register the MainViewPresenter as the PlotPresenter's master, and subscribe the MainViewPresenter to the
         PlotPresenter.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
-
         """
 
         assert (isinstance(master, MainViewPresenterInterface))
@@ -126,14 +126,12 @@ class PlotPresenter(PlotPresenterInterface):
 
     def create_onedim_plot(self, key, x_dim, slice):
         """
-
         Create a 1D plot by using the input parameters.
 
         Args:
             key (str): The key for the dataset to be plotted.
             x_dim (str): The dimension that should be used for the x-axis.
             slice (dict): A dictionary of name-stepper value pairs indicating how the data array should be sliced.
-
         """
 
         self._clear_plot()
@@ -146,7 +144,6 @@ class PlotPresenter(PlotPresenterInterface):
 
     def create_twodim_plot(self, key, x_dim, y_dim, slice):
         """
-
         Create a 2D plot by using the input parameters.
 
         Args:
@@ -154,7 +151,6 @@ class PlotPresenter(PlotPresenterInterface):
             x_dim (str): The name of the dimension that should be used for the x-axis.
             y_dim (str): The name of the dimension that should be used for the y-axis.
             slice (dict): A dictionary of name-stepper value pairs indicating how the data array should be sliced.
-
         """
 
         self._clear_plot()

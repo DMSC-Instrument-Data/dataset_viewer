@@ -2,7 +2,8 @@ from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresente
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class StackPresenter(StackPresenterInterface):
-    """ StackPresenter that controls that appearance/disappearance of the various DimensionViews depending on which
+    """
+    StackPresenter that controls that appearance/disappearance of the various DimensionViews depending on which
     key has been selected in the PreviewView.
 
     Args:
@@ -49,14 +50,13 @@ class StackPresenter(StackPresenterInterface):
 
     def register_master(self, master):
         """
-
         Register the MainViewPresenter as the StackPresenter's master, and subscribe the MainViewPresenter to the
         StackPresenter.
 
         Args:
             master (MainViewPresenter): An instance of a MainViewPresenter.
-
         """
+
         assert (isinstance(master, MainViewPresenterInterface))
 
         self._master = master
@@ -64,13 +64,11 @@ class StackPresenter(StackPresenterInterface):
 
     def set_dict(self, dict):
         """
-
         Assigns the _dict variable in the StackPresenter, creates the required amount of Dimension widgets, and then
         places these widgets on the StackView.
 
         Args:
             dict (DataSet): An OrderedDict of xarray Datasets.
-
         """
 
         self._dict = dict
@@ -118,11 +116,10 @@ class StackPresenter(StackPresenterInterface):
         Set the current 'face' of the Stack to correspond with the first element in the dataset so that its widgets
         are visible after loading a file.
         '''
-        self.change_stack_face(first_key)
+        self.change_current_key(first_key)
 
     def create_default_button_press(self, key):
         """
-
         Create the default button-configuration for the starting plot upon loading data or changing the dictionary
         element in the PreviewView. For 1D data this does nothing. For 2D data this selects the first dimension as the X
         axis and creates a 1D plot. For data with 3+ dimensions this selects the first dimension as the X axis, the
@@ -131,19 +128,18 @@ class StackPresenter(StackPresenterInterface):
 
         Args:
             key (str): The key of the dataset for which the default plot will be generated.
-
         """
 
         dataset = self._dict[key].data
 
-        # Find the number of dimensions in the first dataset
+        # Find the number of dimensions in the dataset
         n_dims = len(dataset.dims)
 
         # Data has a single dimension - No need to configure buttons as they shouldn't exist
         if n_dims == 1:
             return
 
-        # Data has two dimensions - Press the X button of the first dimension and enable the dimension after it
+        # Data has two dimensions - Press the X button of the first dimension and enable the second dimension
         elif n_dims == 2:
 
             self._dim_presenters[key][dataset.dims[0]].set_as_x()
@@ -155,7 +151,7 @@ class StackPresenter(StackPresenterInterface):
             self._dim_presenters[key][dataset.dims[0]].set_as_x()
             self._dim_presenters[key][dataset.dims[1]].set_as_y()
 
-        # Enable the remaining dimensions and reset the sliders/steppers for every dimension
+        # Enable the remaining dimensions (if they exist)
         for dim_name in self._dim_presenters[key].keys():
 
             if dim_name in [dataset.dims[0], dataset.dims[1]]:
@@ -163,15 +159,13 @@ class StackPresenter(StackPresenterInterface):
 
             self._dim_presenters[key][dim_name].enable_dimension()
 
-    def change_stack_face(self, key):
+    def change_current_key(self, key):
         """
-
-        Change the visible face on the StackPresenter and create the default plot for that key. Called when a different
-        element has been selected on the PreviewPresenter.
+        Change the visible face on the StackPresenter and create the default button press for that key. Called when a
+        different element has been selected on the PreviewPresenter.
 
         Args:
             key (str): They key that the StackPresenter should change to.
-
         """
 
         self._view.change_stack_face(self._stack_idx[key])
@@ -180,7 +174,6 @@ class StackPresenter(StackPresenterInterface):
 
     def x_button_change(self, recent_x_button, state):
         """
-
         Manage the DimensionView changes when a new X button is checked and release the previous X button to ensure
         that only one X is checked at a time.
 
@@ -192,14 +185,13 @@ class StackPresenter(StackPresenterInterface):
         Raises:
             ValueError: If an unexpected number of X or Y buttons have been checked. Ideally this will be prevented from
                 happening in the DimensionPresenter.
-
         """
 
-        # Create a set containing the names of the dimensions for which an X or Y button has been checked.
+        # Create sets containing the names of the dimensions for which a button has been checked.
         dims_with_x_checked = self._dims_with_x_checked()
         dims_with_y_checked = self._dims_with_y_checked()
 
-        # Raise an Exception if the number of X buttons checked is not equal to 2.
+        # Raise an Exception if the number of X buttons checked is not equal to 2 (One previous and one recent).
         if len(dims_with_x_checked) != 2:
             raise ValueError("Error: Too many or too few X buttons checked: " + str(dims_with_x_checked))
 
@@ -237,9 +229,8 @@ class StackPresenter(StackPresenterInterface):
 
     def y_button_change(self, recent_y_button, state):
         """
-
-        Manage the plot change when the state of a Y button changes. This may involve releasing a previous Y button.
-        Having zero Y buttons checked is permitted as this leads to the creation of a 1D plot.
+        Manage the DimensionView changes when the state of a Y button changes. This may involve releasing a previous Y
+        button. Having zero Y buttons checked is permitted as this leads to the creation of a 1D plot.
 
         Args:
             recent_y_button (str): The name of the dimension for the Y button that had its state change.
@@ -249,7 +240,6 @@ class StackPresenter(StackPresenterInterface):
         Raises:
             ValueError: If an unexpected number of X or Y buttons have been checked. Ideally this will be prevented from
                 happening in the DimensionPresenter.
-
         """
 
         dims_with_x_checked = self._dims_with_x_checked()
@@ -357,7 +347,7 @@ class StackPresenter(StackPresenterInterface):
 
         Returns:
             dict: A dictionary consisting of elements with a dimension name as the dictionary key and the slider value
-                as the dictionary value.
+                  as the dictionary value.
         """
 
         return {dimname : self._dim_presenters[self._current_stack_face][dimname].get_slider_value()
@@ -365,7 +355,7 @@ class StackPresenter(StackPresenterInterface):
                 if self._dim_presenters[self._current_stack_face][dimname].is_enabled()}
 
     def _clear_stack(self):
-        """ Clear any previous widgets on the StackView whenever a new file has been loaded. Counts backwards. """
+        """ Clear any previous widgets on the StackView. Counts backwards. """
 
         for idx in range(self._view.count() - 1, -1, -1):
             self._view.delete_widget(idx)

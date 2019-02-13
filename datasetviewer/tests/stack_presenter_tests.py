@@ -157,10 +157,10 @@ class StackPresenterTest(unittest.TestCase):
 
         stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_view_factory)
         stack_pres.create_default_button_press = mock.Mock()
-        stack_pres.change_stack_face = mock.Mock()
+        stack_pres.change_current_key = mock.Mock()
 
         stack_pres.set_dict(self.fake_dict)
-        stack_pres.change_stack_face.assert_called_once_with(self.first_key)
+        stack_pres.change_current_key.assert_called_once_with(self.first_key)
 
     def test_default_single_button_press(self):
 

@@ -21,13 +21,12 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         label = QLabel()
         label.setText(dim_name)
         label.setFixedWidth(45)
-
         label.setAlignment(Qt.AlignCenter)
 
         self.x_button = QPushButton("X")
         self.y_button = QPushButton("Y")
-        self.x_button.setFixedWidth(70)
-        self.y_button.setFixedWidth(70)
+        self.x_button.setFixedWidth(80)
+        self.y_button.setFixedWidth(80)
 
         self.slider = QSlider(Qt.Horizontal)
         self.stepper = QSpinBox()

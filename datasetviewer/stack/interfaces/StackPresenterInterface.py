@@ -15,7 +15,7 @@ class StackPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def change_stack_face(self, key):
+    def change_current_key(self, key):
         pass
 
     @abstractmethod

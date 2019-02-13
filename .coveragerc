@@ -4,6 +4,5 @@ omit =
     */interfaces/*
     *__init__.py
     *Widget.py
-    *Widgets.py
     *MainWindow.py
 show_missing = True

@@ -55,14 +55,14 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres.register_master(self.mock_main_presenter)
         plot_pres.set_dict(self.fake_dict)
 
-        plot_pres.create_default_plot("onedim")
+        plot_pres.change_current_key("onedim")
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0], self.fake_dict["onedim"].data)
 
-        plot_pres.create_default_plot("twodims")
+        plot_pres.change_current_key("twodims")
         xr.testing.assert_identical(self.mock_plot_view.plot_line.call_args[0][0],
                                     self.fake_dict["twodims"].data.transpose()[0])
 
-        plot_pres.create_default_plot("fourdims")
+        plot_pres.change_current_key("fourdims")
         xr.testing.assert_identical(self.mock_plot_view.plot_image.call_args[0][0],
                                     self.fake_dict["fourdims"].data.isel({'e':0, 'f':0}).transpose('d', 'c'))
 
@@ -90,12 +90,12 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres._dict = self.fake_dict
 
         # Check that the axes aren't labelled when a 1D array has been plotted
-        plot_pres.create_default_plot("onedim")
+        plot_pres.change_current_key("onedim")
         self.mock_plot_view.label_x_axis.assert_not_called()
         self.mock_plot_view.label_y_axis.assert_not_called()
 
         # Label a single axes in the case of 2D data
-        plot_pres.create_default_plot("twodims")
+        plot_pres.change_current_key("twodims")
         self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_dict["twodims"].data.dims[0])
         self.mock_plot_view.label_y_axis.assert_not_called()
 
@@ -103,7 +103,7 @@ class PlotPresenterTest(unittest.TestCase):
         plot_pres._dict = self.fake_dict
 
         # Label both axes in the case of nD data with n > 2
-        plot_pres.create_default_plot("threedims")
+        plot_pres.change_current_key("threedims")
         self.mock_plot_view.label_x_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[0])
         self.mock_plot_view.label_y_axis.assert_called_once_with(self.fake_dict["threedims"].data.dims[1])
 
