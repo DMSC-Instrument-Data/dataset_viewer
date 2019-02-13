@@ -19,14 +19,14 @@ class DimensionWidget(QWidget, DimensionViewInterface):
 
         label = QLabel()
         label.setText(dim_name)
-        label.setFixedWidth(30)
+        label.setFixedWidth(45)
 
-        # label.setAlignment(Qt.AlignLeft)
+        label.setAlignment(Qt.AlignCenter)
 
         self.x_button = QPushButton("X")
         self.y_button = QPushButton("Y")
-        self.x_button.setFixedWidth(50)
-        self.y_button.setFixedWidth(50)
+        self.x_button.setFixedWidth(70)
+        self.y_button.setFixedWidth(70)
 
         self.slider = QSlider(Qt.Horizontal)
         self.stepper = QSpinBox()
@@ -43,7 +43,7 @@ class DimensionWidget(QWidget, DimensionViewInterface):
 
         # Initialise stepper
         self.stepper.setRange(0, dim_size - 1)
-        self.stepper.setFixedWidth(40)
+        self.stepper.setFixedWidth(50)
 
         # Set up signals
         self.x_button.clicked.connect(lambda: self._presenter.notify(Command.XBUTTONCHANGE))
@@ -86,16 +86,16 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         return self._presenter
 
     def enable_slider(self):
-        self.slider.show()
+        self.slider.setDisabled(False)
 
     def enable_stepper(self):
-        self.stepper.show()
+        self.stepper.setDisabled(False)
 
     def disable_slider(self):
-        self.slider.hide()
+        self.slider.setDisabled(True)
 
     def disable_stepper(self):
-        self.stepper.hide()
+        self.stepper.setDisabled(True)
 
     def get_widgets(self):
         return [self.label, self.x_button, self.y_button, self.slider, self.stepper]

@@ -9,8 +9,6 @@ class StackWidget(QStackedWidget, StackViewInterface):
         QStackedWidget.__init__(self, parent)
         self._presenter = StackPresenter(self, dim_fact)
 
-        # self.setMinimumHeight(300)
-
     def create_stack_element(self):
 
         vbox = QWidget()
