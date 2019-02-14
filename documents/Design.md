@@ -16,22 +16,26 @@ These mockups illustrate the interface for the following cases:
 ![Selecting a colour scheme](ColourScheme.png)
 ### Zooming
 ![Zooming with a region of interest](Zoom.png)  
-Note: ROI zooming and undo/redo/reset buttons are already provided by `matplotlib`.
+Note: ROI zooming and undo/redo/reset buttons are already provided by `NavigationToolbar2QT`.
 ## Class Diagram
 ![Class Diagram](ClassDiagram.png)  
 MainView: The main window that contains the different view elements in a `GridLayout`.  
-DimensionView: Contains the slider, buttons, and stepper for an individual dimension.  
+DimensionView: Contains the label, slider, buttons, and stepper for an individual dimension.  
+DimensionViewFactory: Factory for generating DimensionView objects.  
 DimensionPresenter: Manages the DimensionView by preventing an X button from being released, and by preventing both an X and Y to be checked for the same dimension.  
 StackView: The view that contains different DimensionView objects and stores them in "layers."  
-StackPresenter: Manages the StackView and controls which of its layer are visible.  
-FileLoaderView: Contains a menu with an "Open..." option.  
-FileLoaderPresenter: Receives signals from the FileLoaderView and attempts to load a file then pass this to the MainViewPresenter.  
-FileLoaderTool: Collection of functions for converting a NetCDF file to an OrderedDict of `Variable`s.
+StackPresenter: Manages the StackView and controls which one of its layer are visible. Also controls DimensionPresenters by enabling/disabling their slider and stepper and undoing user actions if they are invalid.  Creates DimensionViews when a file is loaded by using the DimensionViewFactory. Acts as the "master" of the DimensionViews.  
+FileLoaderView: Contains a menu with an "Open..." option that creates a FileDialog.  
+FileLoaderPresenter: Receives signals from the FileLoaderView and attempts to load a file then pass this to the MainViewPresenter. Displays a message on the FileLoaderView if a file couldn't be converted to a valid dataset.  
+FileLoaderTool (not in diagram): Collection of functions for converting a NetCDF file to an OrderedDict of `Variable`s. Used by the FileLoaderPresenter.  
 PlotView: Displays a plot.  
 PlotPresenter: Manages generating an array to plot, clearing previous plots, labelling axes, etc.  
-PreviewView: Displays a list of items in the dataset and their dimensions.
-PreviewPresenter: Receives a signal when an item has been selected on the PreviewView and informs the MainViewPresenter.  
-MainPresenter: Mediates between the different presenters. Receives a data dictionary from the FileLoaderPresenter and sends this to the other presenters. Receives a key from the PreviewPresenter and informs the other presenters that the selection has changed.
+PreviewView: Displays a list of items in the dataset and their dimensions.  
+PreviewPresenter: Receives a signal when an item has been selected on the PreviewView and informs the MainViewPresenter. Clears and populated the PreviewView when a new file has been loaded.  
+MainPresenter: Mediates between the different presenters. Receives a data dictionary from the FileLoaderPresenter and sends this to the other presenters. Receives a key from the PreviewPresenter and informs the other presenters that the selection has changed. Receives information from the StackPresenter and sends this to the PlotPresenter.  
+  
+Note: The `NavigationToolbar2QT` that allows for redo/undo/etc is placed in the MainView.
+
 ## Sequence Diagrams
 These sequence diagrams illustrate the object interactions that occur in the case of the following user actions: 
 * Pressing an X button for one of the dimensions
