@@ -35,7 +35,7 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         self.y_button.setCheckable(True)
 
         # Create a spacer to fill gap when slider and stepper are made invisible
-        self.spacer = QSpacerItem(0,0,hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)
+        self.spacer = QSpacerItem(0, 0, hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)
 
         # Initialise slider
         self.slider.setMinimum(0)
@@ -100,13 +100,18 @@ class DimensionWidget(QWidget, DimensionViewInterface):
     def disable_stepper(self):
         self.stepper.setVisible(False)
 
-    def block_signal(self, bool):
+    def block_signal(self):
 
-        self.slider.blockSignals(bool)
-        self.stepper.blockSignals(bool)
+        self.slider.blockSignals(True)
+        self.stepper.blockSignals(True)
+
+    def unblock_signal(self):
+
+        self.slider.blockSignals(False)
+        self.stepper.blockSignals(False)
 
     def show_spacer(self):
         self.spacer.changeSize(1, 1, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
 
     def hide_spacer(self):
-        self.spacer.changeSize(0,0,hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)
+        self.spacer.changeSize(0, 0, hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)

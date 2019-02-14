@@ -195,20 +195,10 @@ class DimensionPresenter(DimensionPresenterInterface):
         view this as an action from the user and call notify.
         """
 
-        self._block_signal(True)
+        self._view.block_signal()
         self._view.set_slider_value(0)
         self._view.set_stepper_value(0)
-        self._block_signal(False)
-
-    def _block_signal(self, bool):
-        """
-        Blocks or unblocks signals from the slider and stepper.
-
-        Args:
-            bool (bool): Indicates if the slider and stepper's ability to send signals should be switched on or off.
-        """
-
-        self._view.block_signal(bool)
+        self._view.unblock_signal()
 
     def set_as_x(self):
         """

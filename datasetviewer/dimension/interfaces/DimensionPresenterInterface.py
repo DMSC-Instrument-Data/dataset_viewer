@@ -47,10 +47,6 @@ class DimensionPresenterInterface(ABC):
         pass
 
     @abstractmethod
-    def _block_signal(self, bool):
-        pass
-
-    @abstractmethod
     def set_as_x(self):
         pass
 

@@ -61,7 +61,11 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def block_signal(self, bool):
+    def block_signal(self):
+        pass
+
+    @abstractmethod
+    def unblock_signal(self):
         pass
 
     @abstractmethod

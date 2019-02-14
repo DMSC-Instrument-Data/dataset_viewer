@@ -257,7 +257,8 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.set_stepper_value.assert_called_once_with(0)
 
         # Check that the signal was blocked while the slider and stepper values were modified
-        self.mock_dim_view.block_signal.assert_has_calls([mock.call(True), mock.call(False)])
+        self.mock_dim_view.block_signal.assert_called_once()
+        self.mock_dim_view.unblock_signal.assert_called_once()
 
     def test_set_as_x(self):
         """ Test that selecting a dimension as the x-axis causes it's X button to be pressed, disables its
