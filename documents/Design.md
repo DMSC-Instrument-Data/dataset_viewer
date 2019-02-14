@@ -1,7 +1,7 @@
 # Dataset Viewer Design
 
 Programming Language: Python 3.6  
-Coding Style: PEP8  
+Coding Style: [PEP8](https://github.com/DMSC-Instrument-Data/dataset_viewer/blob/master/.flake8)  
 Design Pattern: Model View Presenter (Passive View)
 
 The [MSlice](https://github.com/mantidproject/mslice) tool served as a guideline when designing the Dataset Viewer and informed the choice of design pattern.
@@ -15,15 +15,23 @@ These mockups illustrate the interface for the following cases:
 ### Selecting a Colour Scheme
 ![Selecting a colour scheme](ColourScheme.png)
 ### Zooming
-![Zooming with a region of interest](Zoom.png)
-
+![Zooming with a region of interest](Zoom.png)  
+Note: ROI zooming and undo/redo/reset buttons are already provided by `matplotlib`.
 ## Class Diagram
 ![Class Diagram](ClassDiagram.png)  
+MainView: The main window that contains the different view elements in a `GridLayout`.  
 DimensionView: Contains the slider, buttons, and stepper for an individual dimension.  
-DimensionPresenter: Manages the behavior of the DimensionView.  
-MainView: Contains the individual DimensionViews and the central plot.  
-MainPresenter: Manages the behavior of the MainView and retrieves data from the MainModel.  
-MainModel: Contains the data array. 
+DimensionPresenter: Manages the DimensionView by preventing an X button from being released, and by preventing both an X and Y to be checked for the same dimension.  
+StackView: The view that contains different DimensionView objects and stores them in "layers."  
+StackPresenter: Manages the StackView and controls which of its layer are visible.  
+FileLoaderView: Contains a menu with an "Open..." option.  
+FileLoaderPresenter: Receives signals from the FileLoaderView and attempts to load a file then pass this to the MainViewPresenter.  
+FileLoaderTool: Collection of functions for converting a NetCDF file to an OrderedDict of `Variable`s.
+PlotView: Displays a plot.  
+PlotPresenter: Manages generating an array to plot, clearing previous plots, labelling axes, etc.  
+PreviewView: Displays a list of items in the dataset and their dimensions.
+PreviewPresenter: Receives a signal when an item has been selected on the PreviewView and informs the MainViewPresenter.  
+MainPresenter: Mediates between the different presenters. Receives a data dictionary from the FileLoaderPresenter and sends this to the other presenters. Receives a key from the PreviewPresenter and informs the other presenters that the selection has changed.
 ## Sequence Diagrams
 These sequence diagrams illustrate the object interactions that occur in the case of the following user actions: 
 * Pressing an X button for one of the dimensions
