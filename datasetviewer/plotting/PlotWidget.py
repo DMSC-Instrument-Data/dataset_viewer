@@ -2,8 +2,8 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 
-from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
-from datasetviewer.plot.PlotPresenter import PlotPresenter
+from datasetviewer.plotting.interfaces.PlotViewInterface import PlotViewInterface
+from datasetviewer.plotting.PlotPresenter import PlotPresenter
 
 class PlotWidget(FigureCanvas, PlotViewInterface):
 

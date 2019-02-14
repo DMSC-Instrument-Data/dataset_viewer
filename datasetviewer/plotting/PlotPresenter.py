@@ -1,4 +1,4 @@
-from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterInterface
+from datasetviewer.plotting.interfaces.PlotPresenterInterface import PlotPresenterInterface
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
 
 class PlotPresenter(PlotPresenterInterface):

@@ -5,7 +5,7 @@ from datasetviewer.stack.StackWidget import StackWidget
 from datasetviewer.dimension.DimensionViewFactory import DimensionViewFactory
 from datasetviewer.preview.PreviewWidget import PreviewWidget
 from PyQt5.QtWidgets import QMainWindow, QAction, QGridLayout, QWidget
-from datasetviewer.plot.PlotWidget import PlotWidget
+from datasetviewer.plotting.PlotWidget import PlotWidget
 
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 

@@ -7,7 +7,7 @@ import xarray as xr
 from datasetviewer.mainview.MainViewPresenter import MainViewPresenter
 from datasetviewer.mainview.interfaces.MainViewInterface import MainViewInterface
 from datasetviewer.preview.interfaces.PreviewPresenterInterface import PreviewPresenterInterface
-from datasetviewer.plot.interfaces.PlotPresenterInterface import PlotPresenterInterface
+from datasetviewer.plotting.interfaces.PlotPresenterInterface import PlotPresenterInterface
 from datasetviewer.fileloader.interfaces.FileLoaderPresenterInterface import FileLoaderPresenterInterface
 from datasetviewer.stack.interfaces.StackPresenterInterface import StackPresenterInterface
 from datasetviewer.dataset.Variable import Variable

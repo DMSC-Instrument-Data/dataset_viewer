@@ -5,8 +5,8 @@ import xarray as xr
 import numpy as np
 
 from datasetviewer.mainview.interfaces.MainViewPresenterInterface import MainViewPresenterInterface
-from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
-from datasetviewer.plot.PlotPresenter import PlotPresenter
+from datasetviewer.plotting.interfaces.PlotViewInterface import PlotViewInterface
+from datasetviewer.plotting.PlotPresenter import PlotPresenter
 
 from collections import OrderedDict as DataSet
 from datasetviewer.dataset.Variable import Variable

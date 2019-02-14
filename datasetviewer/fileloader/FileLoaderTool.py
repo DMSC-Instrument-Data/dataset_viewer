@@ -6,7 +6,7 @@ from datasetviewer.dataset.Variable import Variable
 
 def invalid_dataset(data):
     """
-    Determines if a data array is suitable for plotting by checking the contents of its elements. Empty arrays cause the
+    Determines if a data array is suitable for plot by checking the contents of its elements. Empty arrays cause the
     function to return True.
 
     Args:
