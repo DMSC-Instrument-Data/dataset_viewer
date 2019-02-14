@@ -47,14 +47,14 @@ These sequence diagrams illustrate the object interactions that occur in the cas
 * Changing a selection on the Preview
 ### Pressing an X Button
 ![X Button Press Sequence Diagram](XButtonPress.png)
+This diagram depicts the sequence of events that take place when an X button is checked. In the case when an X button is unchecked, this action is always reversed by the `DimensionPresenter`. "Visible Dimensions" refers to the dimensions that belong to the dataset that is currently being plotted.
 ### Stepper Change
-![Stepper Change Sequence Diagram](StepperChange.png)
+![Stepper Change Sequence Diagram](StepperChange.png)  
+A slider change has a similar result with the exception that the `DimensionPresenter` updates the stepper so that its value matches the slider.
 ### Loading a File 
 ![Loading a File Sequence Diagram](FileLoad.png)
 ### Stack Preparation
 ![Stack Presenter Diagram](LoadDatatoStackPresenter.png)  
-Note: As the `DimensionView` doesn't inherit from `QWidget` but simply stores the Dimension View elements (label, buttons, etc), it can't be placed on the Stack. Instead the widgets it contains are retrieved from the `DimensionView` via a call to `get_widgets` and the items this method returns are placed in the Stack one-by-one.
-Afterwards the `StackPresenter` instructs the Stack to set the face corresponding with the first dataset to be visible, as this will contain the sliders for the first dataset.
 ### Default Button/Slider/Stepper Configuration
 ![Default Button Diagram](DefaultButtons.png)  
 Note: This takes place after loading a file or selecting a different element from the preview. If the data only has a single dimension then nothing takes place.
