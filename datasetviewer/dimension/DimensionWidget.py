@@ -1,7 +1,7 @@
 from datasetviewer.dimension.interfaces.DimensionViewInterface import DimensionViewInterface
 from datasetviewer.dimension.DimensionPresenter import DimensionPresenter
 from datasetviewer.dimension.Command import Command
-from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QLabel, QPushButton, QSlider, QSpinBox, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtCore import Qt
 
 class DimensionWidget(QWidget, DimensionViewInterface):
@@ -21,7 +21,6 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         label = QLabel()
         label.setText(dim_name)
         label.setFixedWidth(45)
-        label.setAlignment(Qt.AlignCenter)
 
         self.x_button = QPushButton("X")
         self.y_button = QPushButton("Y")
@@ -34,6 +33,9 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         # Initialise buttons
         self.x_button.setCheckable(True)
         self.y_button.setCheckable(True)
+
+        # Create a spacer to fill gap when slider and stepper are made invisible
+        self.spacer = QSpacerItem(0,0,hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)
 
         # Initialise slider
         self.slider.setMinimum(0)
@@ -56,6 +58,7 @@ class DimensionWidget(QWidget, DimensionViewInterface):
         layout.addWidget(self.y_button)
         layout.addWidget(self.slider)
         layout.addWidget(self.stepper)
+        layout.addItem(self.spacer)
         self.setLayout(layout)
 
     def get_x_state(self):
@@ -97,10 +100,13 @@ class DimensionWidget(QWidget, DimensionViewInterface):
     def disable_stepper(self):
         self.stepper.setVisible(False)
 
-    def get_widgets(self):
-        return [self.label, self.x_button, self.y_button, self.slider, self.stepper]
-
     def block_signal(self, bool):
 
         self.slider.blockSignals(bool)
         self.stepper.blockSignals(bool)
+
+    def show_spacer(self):
+        self.spacer.changeSize(1, 1, hPolicy=QSizePolicy.Expanding, vPolicy=QSizePolicy.Fixed)
+
+    def hide_spacer(self):
+        self.spacer.changeSize(0,0,hPolicy=QSizePolicy.Fixed, vPolicy=QSizePolicy.Fixed)

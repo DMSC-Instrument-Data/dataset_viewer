@@ -147,6 +147,7 @@ class DimensionPresenter(DimensionPresenterInterface):
         Enable a dimension by making its slider and stepper usable, and by unchecking its X and Y buttons.
         """
 
+        self._view.hide_spacer()
         self._view.enable_slider()
         self._view.enable_stepper()
         self._reset_slice()
@@ -162,6 +163,7 @@ class DimensionPresenter(DimensionPresenterInterface):
 
         self._view.disable_slider()
         self._view.disable_stepper()
+        self._view.show_spacer()
         self._enabled = False
 
     def is_enabled(self):

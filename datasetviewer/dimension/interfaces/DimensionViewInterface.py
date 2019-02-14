@@ -61,9 +61,13 @@ class DimensionViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def get_widgets(self):
+    def block_signal(self, bool):
         pass
 
     @abstractmethod
-    def block_signal(self, bool):
+    def show_spacer(self):
+        pass
+
+    @abstractmethod
+    def hide_spacer(self):
         pass

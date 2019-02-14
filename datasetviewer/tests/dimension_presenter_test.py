@@ -216,6 +216,7 @@ class DimensionPresenterTest(unittest.TestCase):
 
         # Check that the slider and stepper have become visible, and that the X and Y states are now False/unchecked
         dim_pres.enable_dimension()
+        self.mock_dim_view.hide_spacer.assert_called_once()
         self.mock_dim_view.enable_slider.assert_called_once()
         self.mock_dim_view.enable_stepper.assert_called_once()
         self.mock_dim_view.set_slider_value.assert_called_once_with(0)
@@ -231,6 +232,7 @@ class DimensionPresenterTest(unittest.TestCase):
         dim_pres.disable_dimension()
         self.mock_dim_view.disable_slider.assert_called_once()
         self.mock_dim_view.disable_stepper.assert_called_once()
+        self.mock_dim_view.show_spacer.assert_called_once()
         self.mock_dim_view.set_x_state.assert_not_called()
         self.mock_dim_view.set_y_state.assert_not_called()
         self.assertFalse(dim_pres.is_enabled())
@@ -269,6 +271,7 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.set_y_state.assert_called_once_with(False)
         self.mock_dim_view.disable_slider.assert_called_once()
         self.mock_dim_view.disable_stepper.assert_called_once()
+        self.mock_dim_view.show_spacer.assert_called_once()
 
     def test_set_as_y(self):
         """ Test that selecting a dimension as the x-axis causes it's Y button to be pressed, disables its
@@ -282,3 +285,4 @@ class DimensionPresenterTest(unittest.TestCase):
         self.mock_dim_view.set_x_state.assert_called_once_with(False)
         self.mock_dim_view.disable_slider.assert_called_once()
         self.mock_dim_view.disable_stepper.assert_called_once()
+        self.mock_dim_view.show_spacer.assert_called_once()
