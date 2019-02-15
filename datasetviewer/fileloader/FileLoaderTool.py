@@ -6,8 +6,8 @@ from datasetviewer.dataset.Variable import Variable
 
 def invalid_dataset(data):
     """
-    Determines if a data array is suitable for plot by checking the contents of its elements. Empty arrays cause the
-    function to return True.
+    Determines if a data array is suitable for plotting by checking the contents of its elements. Empty arrays and
+    datasets with no dimensions cause the function to return True.
 
     Args:
         data (xarray.core.utils.Dataset): An xarray dataset.
@@ -17,7 +17,29 @@ def invalid_dataset(data):
     """
 
     for key in data.variables:
+        if not data[key].shape:
+            return True
         if len(data[key]) < 1:
+            return True
+
+    return False
+
+def invalid_dict(data):
+    """
+    Determines if an OrderedDict is suitable for plotting by checking the contents of its elements. Empty arrays and
+    datasets with no elements cause the function to return True.
+
+    Args:
+        data (DataSet): An xarray dataset.
+
+    Returns:
+        bool: True if any of the elements are empty, False otherwise.
+    """
+
+    for key in data.keys():
+        if not data[key].data.shape:
+            return True
+        if len(data[key].data) < 1:
             return True
 
     return False

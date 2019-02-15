@@ -27,3 +27,7 @@ class StackViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def get_presenter(self):
         pass
+
+    @abstractmethod
+    def prevent_stretch(self):
+        pass

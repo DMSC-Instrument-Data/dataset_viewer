@@ -202,8 +202,8 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def set_as_x(self):
         """
-        Sets a dimension as the x-axis by checking the X button, unchecking the Y button, and then resetting and
-        disabling the slider and stepper.
+        Sets a dimension as the x-axis by checking the X button, unchecking the Y button, and then disabling the slider
+        and stepper.
         """
 
         self._view.set_x_state(True)
@@ -212,8 +212,8 @@ class DimensionPresenter(DimensionPresenterInterface):
 
     def set_as_y(self):
         """
-        Sets a dimension as the y-axis by checking the Y button, unchecking the X button, and then resetting and
-        disabling the slider and stepper.
+        Sets a dimension as the y-axis by checking the Y button, unchecking the X button, and then disabling the slider
+        and stepper.
         """
 
         self._view.set_y_state(True)

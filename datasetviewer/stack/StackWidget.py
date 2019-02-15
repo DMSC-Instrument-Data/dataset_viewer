@@ -31,3 +31,6 @@ class StackWidget(QStackedWidget, StackViewInterface):
 
     def get_presenter(self):
         return self._presenter
+
+    def prevent_stretch(self, idx):
+        pass

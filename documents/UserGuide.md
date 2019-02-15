@@ -19,3 +19,13 @@ ds["fourdims"] = Variable("fourdims", xr.DataArray(np.random.rand(3, 4, 5, 6), d
 
 plot(ds)
 ```
+
+```python
+import xarray as xr
+import numpy as np
+from datasetviewer import plot
+
+ds = xr.Dataset({'foo': np.arange(10), 'bar': ('x', [1, 2])})
+
+plot(ds)
+```
