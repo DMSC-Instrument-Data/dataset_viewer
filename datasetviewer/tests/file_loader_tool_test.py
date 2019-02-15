@@ -20,9 +20,9 @@ class FileLoaderTest(unittest.TestCase):
         self.fake_data_path = "madeuppath"
 
     def test_empty_file_throws(self):
-        '''
+        """
         Test that an empty data array is rejected by the FileLoaderTool.
-        '''
+        """
         empty_data = xr.Dataset()
 
         # Patch the `open_dataset` function so that it returns an empty data file
@@ -32,21 +32,21 @@ class FileLoaderTest(unittest.TestCase):
                 FileLoaderTool.file_to_dict(self.fake_data_path)
 
     def test_bad_dimensions_rejected(self):
-        '''
+        """
         Test that a data array containing elements with no data is deemed invalid by the FileLoaderTool
-        '''
+        """
         self.assertTrue(FileLoaderTool.invalid_dataset(self.bad_data))
 
     def test_good_dimensions_accepted(self):
-        '''
+        """
         Test that a data array containing no empty elements is deemed valid by the FileLoaderTool.
-        '''
+        """
         self.assertFalse(FileLoaderTool.invalid_dataset(self.good_data))
 
     def test_file_read_success(self):
-        '''
+        """
         Test that FileLoaderTool calls the `open_dataset` function.
-        '''
+        """
 
         # Patch the `open_dataset` so that it returns good data
         with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.good_data) \
@@ -60,9 +60,9 @@ class FileLoaderTest(unittest.TestCase):
             dummy_data_loader.assert_called_once_with(self.fake_data_path)
 
     def test_bad_data_raises(self):
-        '''
+        """
         Test that bad data being returned by the `open_dataset` function raises an Exception.
-        '''
+        """
 
         # Patch the `open_dataset` function so that it returns invalid data.
         with patch('datasetviewer.fileloader.FileLoaderTool.open_dataset', side_effect = lambda path: self.bad_data):

@@ -2,16 +2,18 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 
-from datasetviewer.plot.interfaces.PlotViewInterface import PlotViewInterface
-from datasetviewer.plot.PlotPresenter import PlotPresenter
+from datasetviewer.plotting.interfaces.PlotViewInterface import PlotViewInterface
+from datasetviewer.plotting.PlotPresenter import PlotPresenter
 
 class PlotWidget(FigureCanvas, PlotViewInterface):
 
     def __init__(self):
+
         self.figure = Figure()
         self.ax = self.figure.add_subplot(1, 1, 1)
         FigureCanvas.__init__(self, self.figure)
 
+        # Create a PlotPresenter and give it a reference to the PlotView
         self._presenter = PlotPresenter(self)
 
         self.line = None

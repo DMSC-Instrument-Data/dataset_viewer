@@ -33,17 +33,17 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.empty_dict = DataSet()
 
     def test_presenter_throws_if_view_none(self):
-        '''
+        """
         Test that the FileLoaderPresenter throws an Exception when the FileLoaderView is None.
-        '''
+        """
         with self.assertRaises(ValueError):
             FileLoaderPresenter(None)
 
     def test_file_selection_calls_get_path_on_view(self):
-        '''
+        """
         Test that a FILEOPENREQUEST in the FileLoaderPresenter's `notify` function causes the `get_selected_file_path`
         method on the FileLoaderView to be called.
-        '''
+        """
         fl_presenter = FileLoaderPresenter(self.mock_view)
         fl_presenter.register_master(self.mock_main_presenter)
 
@@ -55,9 +55,9 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.mock_view.get_selected_file_path.assert_called_once()
 
     def test_bad_file_shows_message_on_view(self):
-        '''
+        """
         Test that the request to open a bad file causes the view to display a message.
-        '''
+        """
 
         fl_presenter = FileLoaderPresenter(self.mock_view)
         fl_presenter.register_master(self.mock_main_presenter)
@@ -81,10 +81,10 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.mock_main_presenter.set_dict.assert_not_called()
 
     def test_closing_filedialog_does_nothing(self):
-        '''
+        """
         Test that closing the FileDialog without choosing a file causes the presenter to return without attempting
         to open/interpret a file.
-        '''
+        """
 
         mock_view = mock.create_autospec(FileLoaderViewInterface)
 
@@ -107,9 +107,9 @@ class FileLoaderPresenterTest(unittest.TestCase):
         self.mock_main_presenter.set_dict.assert_not_called()
 
     def test_load_file(self):
-        '''
+        """
         Test that a FILEOPENREQUEST in `notify` causes the `_load_data` method to be called with the expected argument.
-        '''
+        """
         fl_presenter = FileLoaderPresenter(self.mock_view)
         fl_presenter.register_master(self.mock_main_presenter)
 
@@ -125,10 +125,10 @@ class FileLoaderPresenterTest(unittest.TestCase):
         fl_presenter._load_data.assert_called_once_with(self.fake_file_path[0])
 
     def test_file_open_success_informs_main_presenter(self):
-        '''
+        """
         Test that successfully opening a file in the FileLoaderPresenter causes the resulting DataSet to be sent to the
         MainViewPresenter.
-        '''
+        """
 
         fl_presenter = FileLoaderPresenter(self.mock_view)
         fl_presenter.register_master(self.mock_main_presenter)
@@ -143,9 +143,9 @@ class FileLoaderPresenterTest(unittest.TestCase):
             self.mock_main_presenter.set_dict.assert_called_once_with(self.empty_dict)
 
     def test_notify_raises_if_command_unknown(self):
-        '''
+        """
         Test that an exception is thrown if notify is called with a command it does not recognise.
-        '''
+        """
         fl_presenter = FileLoaderPresenter(self.mock_view)
 
         # Create a fake command/enum

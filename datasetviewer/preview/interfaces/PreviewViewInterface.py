@@ -35,3 +35,7 @@ class PreviewViewInterface(with_metaclass(Meta)):
     @abstractmethod
     def select_first_item(self):
         pass
+
+    @abstractmethod
+    def block_signal(self, bool):
+        pass

@@ -1,11 +1,11 @@
 class Variable(object):
-    """Data Structure for storing an array and a name/key.
+    """
+    Data Structure for storing an array and a name/key.
 
     Args:
         name (str): The name/key associated with the data.
-        data (xarray.core.variable.Variable): An xarray data structure that contains a key, dimension names, dimension
+        data (xarray.core.dataarray.DataArray): An xarray data structure that contains a key, dimension names, dimension
         sizes, and a data array.
-
     """
 
     def __init__(self, name, data):
@@ -21,7 +21,7 @@ class Variable(object):
 
     @property
     def data(self):
-        """xarray.core.variable.Variable: An xarray data structure."""
+        """xarray.core.dataarray.DataArray: An xarray data structure."""
 
         return self._data
 
@@ -29,7 +29,6 @@ class Variable(object):
         """
         Returns:
             tuple: The dimensions of the data array.
-
         """
 
         return self._data.shape

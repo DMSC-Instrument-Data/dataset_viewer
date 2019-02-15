@@ -18,16 +18,17 @@ class FileLoaderWidget(QAction, FileLoaderViewInterface):
         # Action for opening a file
         self.triggered.connect(self.open_file)
 
+        # Create a FileLoaderPresenter and give it a reference to the FileLoaderView
         self._presenter = FileLoaderPresenter(self)
 
     def get_selected_file_path(self):
         return self.fname
 
     def show_reject_file_message(self, error_msg):
-        '''
+        """
         Error message displayed when the chosen file couldn't be read into an xarray. Simply a copy of the exception
         thrown during file reading.
-        '''
+        """
 
         error_dialog = QErrorMessage()
         error_dialog.showMessage(error_msg)

@@ -11,13 +11,25 @@ class MainViewPresenterInterface(ABC):
         pass
 
     @abstractmethod
+    def subscribe_stack_presenter(self, stack):
+        pass
+
+    @abstractmethod
     def set_dict(self, dict):
         pass
 
     @abstractmethod
-    def create_default_plot(self, key):
+    def change_current_key(self, key):
         pass
 
     @abstractmethod
     def update_toolbar(self):
+        pass
+
+    @abstractmethod
+    def create_onedim_plot(self, key, x_dim, slice):
+        pass
+
+    @abstractmethod
+    def create_twodim_plot(self, key, x_dim, y_dim, slice):
         pass
