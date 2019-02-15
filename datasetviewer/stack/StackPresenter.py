@@ -110,6 +110,8 @@ class StackPresenter(StackPresenterInterface):
                     # Place the widget in the StackView's VBoxLayout
                     self._view.add_dimension_widget(idx, w)
 
+                self._view.prevent_stretch(self._stack_idx[key])
+
         first_key = list(dict.keys())[0]
 
         '''

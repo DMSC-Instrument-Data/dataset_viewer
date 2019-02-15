@@ -1,6 +1,6 @@
 from datasetviewer.stack.interfaces.StackViewInterface import StackViewInterface
 from datasetviewer.stack.StackPresenter import StackPresenter
-from PyQt5.QtWidgets import QStackedWidget, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QStackedWidget, QWidget, QVBoxLayout, QSpacerItem, QSizePolicy
 
 class StackWidget(QStackedWidget, StackViewInterface):
 
@@ -33,4 +33,7 @@ class StackWidget(QStackedWidget, StackViewInterface):
         return self._presenter
 
     def prevent_stretch(self, idx):
-        pass
+
+        layout = self.widget(idx).layout()
+        layout.addItem(QSpacerItem(1, 1, QSizePolicy.Fixed, QSizePolicy.Expanding))
+        layout.setSpacing(0)

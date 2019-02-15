@@ -730,3 +730,15 @@ class StackPresenterTest(unittest.TestCase):
         self.assertEquals(len(stack_pres._dim_presenters), len(new_dict.keys()))
         self.assertEquals(len(stack_pres._dim_presenters["twodims"]), 2)
         self.assertEquals(len(stack_pres._dim_presenters["fourdims"]), 4)
+
+    def test_prevent_stretch(self):
+        """Tets that populating the Stack makes calls to the `prevent_stretch` function in the StackView. """
+
+        stack_pres = StackPresenter(self.mock_stack_view, self.mock_dim_view_factory)
+        stack_pres.register_master(self.mock_main_presenter)
+        stack_pres.set_dict(self.fake_dict)
+
+        # Make this more general
+        prevent_calls = [mock.call(i) for i in [0,2,3]]
+
+        self.mock_stack_view.prevent_stretch.assert_has_calls(prevent_calls)

@@ -29,5 +29,5 @@ class StackViewInterface(with_metaclass(Meta)):
         pass
 
     @abstractmethod
-    def prevent_stretch(self):
+    def prevent_stretch(self, idx):
         pass

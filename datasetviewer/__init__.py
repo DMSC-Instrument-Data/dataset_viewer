@@ -3,17 +3,17 @@ name = "datasetviewer"
 
 def plot(ds):
 
-    import collections
+    from collections import OrderedDict
     from datasetviewer.app.MainWindow import MainWindow
     from datasetviewer.fileloader.FileLoaderTool import dataset_to_dict, invalid_dict
     from PyQt5 import QtWidgets
     import sys
-    import xarray
+    from xarray.core.dataset import Dataset
 
-    if type(ds) is xarray.core.dataset.Dataset:
+    if type(ds) is Dataset:
         ds = dataset_to_dict(ds)
 
-    elif type(ds) is not collections.OrderedDict:
+    elif type(ds) is not OrderedDict:
         raise ValueError("Error: Argument is not a Dataset.")
 
     if invalid_dict(ds):
