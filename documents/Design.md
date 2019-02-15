@@ -60,7 +60,7 @@ A slider change has a similar result with the exception that the `DimensionPrese
 Note: This takes place after loading a file or selecting a different element from the preview. If the data only has a single dimension then nothing takes place.
 ### Default Plot Preparation
 ![Default Plot](DefaultPlot.png)  
-Note: The toolbar that allows zooming and resetting the plot is in the MainView, so it must be informed whenever a new dataset is loaded or an existing dataset is sliced in a new way.
+Note: The toolbar that allows zooming and resetting the plot is in the MainView, so it must be informed whenever a new dataset is loaded.
 ### Selection Change
 ![Selection Change](SelectionChange.png)  
 Note: The `PreviewPresenter` must call `text()` on the object returned by the `PreviewView` as it is a type of `QWidget`. This is then sent to the `MainViewPresenter`. The creation of a default button arrangement and a default plot follows the sequence of events shown above.
